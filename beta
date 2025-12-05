@@ -475,32 +475,37 @@ function library:set_open(bool)
         self.holder.Visible = bool
         local ContextActionService = game:GetService("ContextActionService")
         local InputService = game:GetService('UserInputService')
-        local originalState = InputService.MouseIconEnabled
+        
         if bool then
             library.open_windows = library.open_windows + 1
-            local ContextActionService = game:GetService("ContextActionService")
-            ContextActionService:BindAction(
-                "Scrolling",
-                function ()
-                    return Enum.ContextActionResult.Sink
-                end,
-                false,
-                Enum.UserInputType.MouseWheel
-            );
-            ContextActionService:BindAction(
-                "Input",
-                function()
-                    return Enum.ContextActionResult.Sink
-                end,
-                false,
-                Enum.UserInputType.MouseButton1
-            );
-            InputService.MouseIconEnabled = false
+            -- Only hide mouse/bind keys if this is the FIRST window opening
+            if library.open_windows == 1 then
+                ContextActionService:BindAction(
+                    "Scrolling",
+                    function ()
+                        return Enum.ContextActionResult.Sink
+                    end,
+                    false,
+                    Enum.UserInputType.MouseWheel
+                );
+                ContextActionService:BindAction(
+                    "Input",
+                    function()
+                        return Enum.ContextActionResult.Sink
+                    end,
+                    false,
+                    Enum.UserInputType.MouseButton1
+                );
+                InputService.MouseIconEnabled = false
+            end
         else
             library.open_windows = library.open_windows - 1
-            InputService.MouseIconEnabled = true
-            ContextActionService:UnbindAction("Scrolling");
-            ContextActionService:UnbindAction("Input");
+            -- Only show mouse/unbind keys if ALL windows are closed (count is 0)
+            if library.open_windows <= 0 then
+                InputService.MouseIconEnabled = true
+                ContextActionService:UnbindAction("Scrolling");
+                ContextActionService:UnbindAction("Input");
+            end
         end;
     end
 end;
@@ -6010,10 +6015,23 @@ function library:new(cfg)
         function playerlist:setopen(bool)
             list_holder.Visible = bool
             playerlist.open = bool
+            local ContextActionService = game:GetService("ContextActionService")
+            local InputService = game:GetService('UserInputService')
+
             if bool then
                 library.open_windows += 1
+                if library.open_windows == 1 then
+                    InputService.MouseIconEnabled = false
+                    ContextActionService:BindAction("Scrolling", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseWheel)
+                    ContextActionService:BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
+                end
             else
                 library.open_windows -= 1
+                if library.open_windows <= 0 then
+                    InputService.MouseIconEnabled = true
+                    ContextActionService:UnbindAction("Scrolling")
+                    ContextActionService:UnbindAction("Input")
+                end
             end
         end
         --
@@ -6551,10 +6569,23 @@ function library:new(cfg)
         function serverlist:setopen(bool)
             list_holder.Visible = bool
             serverlist.open = bool
+            local ContextActionService = game:GetService("ContextActionService")
+            local InputService = game:GetService('UserInputService')
+
             if bool then
                 library.open_windows = library.open_windows + 1
+                if library.open_windows == 1 then
+                    InputService.MouseIconEnabled = false
+                    ContextActionService:BindAction("Scrolling", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseWheel)
+                    ContextActionService:BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
+                end
             else
                 library.open_windows = library.open_windows - 1
+                if library.open_windows <= 0 then
+                    InputService.MouseIconEnabled = true
+                    ContextActionService:UnbindAction("Scrolling")
+                    ContextActionService:UnbindAction("Input")
+                end
             end
         end
         --
