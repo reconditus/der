@@ -6792,8 +6792,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         refreshscroll()
         return serverlist
     end;
--- // New Standalone ESP Preview Window //
-    -- // New Standalone ESP Preview Window (FIXED) //
+-- // New Standalone ESP Preview Window (Fixed Position & Saving) //
     function window:esp_preview_window(cfg)
         local preview_obj = { open = false }
         local flag = cfg.flag or utility.nextflag()
@@ -6802,7 +6801,10 @@ if not library.particle_cache.bg then library:InitParticles() end
         local maincolor = cfg.main_color or Color3.fromRGB(0, 255, 0)
         local emptycolor = cfg.empty_color or Color3.fromRGB(255, 0, 0)
         local healthamount = 100
-        local default_pos = UDim2.new(0, 500, 0, 300) -- Default spawn location
+        
+        -- FIX 1: Adjusted Spawn Position to be to the right of Player/Server lists
+        -- (Player list starts at 860 and is 500 wide, so 1360 is the edge. 1380 adds padding.)
+        local default_pos = UDim2.new(0, 1380, 0, 268) 
 
         -- 1. Create the Window Frame
         local preview_holder = library:create("Square", {
@@ -6819,7 +6821,8 @@ if not library.particle_cache.bg then library:InitParticles() end
         local outline = library:outline(preview_holder, Color3.fromRGB(37,37,37), 14)
         library:outline(outline, Color3.fromRGB(0,0,0), 14)
 
-        utility.dragify(preview_holder, 'esp preview window')
+        -- FIX 2: Passed 'flag' instead of a hardcoded name so drag position saves correctly
+        utility.dragify(preview_holder, flag)
 
         -- Title & Accent Line
         library:create("Text", {
@@ -6935,13 +6938,13 @@ if not library.particle_cache.bg then library:InitParticles() end
             end
         end
 
-        -- 6. SetOpen (FIXED LOGIC)
+        -- 6. SetOpen (Uses Fixed Flag for Position)
         function preview_obj:setopen(bool)
             preview_obj.open = bool
             local ContextActionService = game:GetService("ContextActionService")
             local InputService = game:GetService('UserInputService')
 
-            -- FIX: Use default_pos if drag flag doesn't exist yet
+            -- Use the saved position from the flag we passed to dragify
             local targetPos = library.flags[flag .. ' position'] or default_pos
             local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset - 10000, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
 
