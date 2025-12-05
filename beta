@@ -476,20 +476,18 @@ function library:set_open(bool)
         local ContextActionService = game:GetService("ContextActionService")
         local InputService = game:GetService('UserInputService')
         
-        -- Get the saved position or current position
+        -- Grab the last saved position, or use the current position if it hasn't moved
         local targetPos = library.flags['window position'] or self.holder.Position
         
-        -- DEFINITION: The off-screen position (1.5 Y means way below the screen)
-        -- Change 1.5 to -0.5 if you want it to drop from the top!
-        local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, 1.5, 0)
+        -- 10,000 pixels DOWN. Change the '+' to '-' if you want it to go UP.
+        local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
         
         if bool then
+            -- OPENING
             self.holder.Visible = true
+            self.holder.Position = offScreenPos -- Snap to bottom
             
-            -- 1. Snap to off-screen
-            self.holder.Position = offScreenPos
-            
-            -- 2. Tween to actual position
+            -- Slide Up
             tween.new(self.holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
 
             library.open_windows = library.open_windows + 1
@@ -499,10 +497,11 @@ function library:set_open(bool)
                 InputService.MouseIconEnabled = false
             end
         else
-            -- 1. Tween to off-screen
+            -- CLOSING
+            -- Slide Down
             tween.new(self.holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Position = offScreenPos}):Play()
             
-            -- 2. Wait for tween to finish, then hide
+            -- Wait for animation then hide
             task.delay(0.6, function()
                 if not self.open then
                     self.holder.Visible = false
@@ -6023,13 +6022,13 @@ function library:new(cfg)
 
         function playerlist:setopen(bool)
             playerlist.open = bool
-            
             local ContextActionService = game:GetService("ContextActionService")
             local InputService = game:GetService('UserInputService')
             
-            -- Grab saved position for player list
+            -- Get position
             local targetPos = library.flags['player list position'] or list_holder.Position
-            local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, 1.5, 0) -- 1.5 = Below screen
+            -- 10,000 pixels DOWN
+            local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
 
             if bool then
                 list_holder.Visible = true
@@ -6596,9 +6595,10 @@ function library:new(cfg)
             local ContextActionService = game:GetService("ContextActionService")
             local InputService = game:GetService('UserInputService')
 
-            -- Grab saved position for server list
+            -- Get position
             local targetPos = library.flags['server list position'] or list_holder.Position
-            local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, 1.5, 0) -- 1.5 = Below screen
+            -- 10,000 pixels DOWN
+            local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
 
             if bool then
                 list_holder.Visible = true
