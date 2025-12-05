@@ -472,35 +472,47 @@ end)
 function library:set_open(bool)
     if typeof(bool) == 'boolean' then
         self.open = bool;
-        self.holder.Visible = bool
+        
         local ContextActionService = game:GetService("ContextActionService")
         local InputService = game:GetService('UserInputService')
         
+        -- Get the saved position or use the current one if not saved
+        local targetPos = library.flags['window position'] or self.holder.Position
+        
         if bool then
+            -- // OPENING ANIMATION //
+            self.holder.Visible = true
+            
+            -- Set start position slightly lower (offset by 50 pixels on Y axis)
+            local startPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, targetPos.Y.Scale, targetPos.Y.Offset + 50)
+            self.holder.Position = startPos
+            
+            -- Tween to the correct position (Pop Up)
+            tween.new(self.holder, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
+
             library.open_windows = library.open_windows + 1
-            -- Only hide mouse/bind keys if this is the FIRST window opening
             if library.open_windows == 1 then
-                ContextActionService:BindAction(
-                    "Scrolling",
-                    function ()
-                        return Enum.ContextActionResult.Sink
-                    end,
-                    false,
-                    Enum.UserInputType.MouseWheel
-                );
-                ContextActionService:BindAction(
-                    "Input",
-                    function()
-                        return Enum.ContextActionResult.Sink
-                    end,
-                    false,
-                    Enum.UserInputType.MouseButton1
-                );
+                ContextActionService:BindAction("Scrolling", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseWheel);
+                ContextActionService:BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1);
                 InputService.MouseIconEnabled = false
             end
         else
+            -- // CLOSING ANIMATION //
+            
+            -- Calculate drop down position
+            local dropPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, targetPos.Y.Scale, targetPos.Y.Offset + 50)
+            
+            -- Tween down
+            tween.new(self.holder, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = dropPos}):Play()
+            
+            -- Wait for animation to finish before hiding
+            task.delay(0.5, function()
+                if not self.open then -- Check if user didn't re-open it quickly
+                    self.holder.Visible = false
+                end
+            end)
+
             library.open_windows = library.open_windows - 1
-            -- Only show mouse/unbind keys if ALL windows are closed (count is 0)
             if library.open_windows <= 0 then
                 InputService.MouseIconEnabled = true
                 ContextActionService:UnbindAction("Scrolling");
