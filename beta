@@ -261,92 +261,6 @@ local utility = handler.createModule("Utility"); do
         return table.concat(text, ", ")
     end
 end;
--- // Particle Logic //
-    library.particle_cache = { dots = {}, lines = {}, bg = nil, connection = nil }
-    
-    function library:InitParticles()
-        local VP = workspace.CurrentCamera.ViewportSize
-        -- 1. Dark Background
-        local bg = drawing:new("Square")
-        bg.Visible = false; bg.Filled = true; bg.Thickness = 0; bg.Color = Color3.fromRGB(10, 10, 10); bg.Transparency = 0.85; bg.Size = Vector2.new(VP.X, VP.Y); bg.Position = Vector2.new(0,0); bg.ZIndex = 0
-        library.particle_cache.bg = bg
-
-        -- 2. Create Dots
-        for i = 1, 40 do
-            local dot = drawing:new("Square")
-            dot.Visible = false; dot.Filled = true; dot.Thickness = 0; dot.Color = Color3.fromRGB(255, 255, 255); dot.Size = Vector2.new(3, 3); dot.ZIndex = 1
-            local pos = Vector2.new(math.random(0, VP.X), math.random(0, VP.Y))
-            local vel = Vector2.new(math.random() * 2 - 1, math.random() * 2 - 1) * 0.5
-            table.insert(library.particle_cache.dots, {Obj = dot, Pos = pos, Vel = vel})
-        end
-
-        -- 3. Create Line Pool
-        for i = 1, 800 do -- Cap lines to save memory
-            local line = drawing:new("Line")
-            line.Visible = false; line.Color = Color3.fromRGB(255, 255, 255); line.Thickness = 1; line.Transparency = 0.5; line.ZIndex = 0
-            table.insert(library.particle_cache.lines, line)
-        end
-    end
-
-    function library:ToggleParticles(state)
-        local cache = library.particle_cache
-        local VP = workspace.CurrentCamera.ViewportSize
-        
-        -- Toggle Background
-        if cache.bg then cache.bg.Visible = state; cache.bg.Size = Vector2.new(VP.X, VP.Y) end
-
-        -- If turning ON:
-        if state then
-            if cache.connection then cache.connection:Disconnect() end -- Reset connection
-            
-            -- Show Dots
-            for _, dot in pairs(cache.dots) do dot.Obj.Visible = true end
-            
-            -- Start Calculation Loop
-            cache.connection = game:GetService("RunService").RenderStepped:Connect(function()
-                local lineIdx = 1
-                local maxDist = 150
-                VP = workspace.CurrentCamera.ViewportSize
-                if cache.bg then cache.bg.Size = VP end -- Resize bg if resolution changes
-
-                for i, dot in ipairs(cache.dots) do
-                    -- Movement
-                    dot.Pos = dot.Pos + dot.Vel
-                    if dot.Pos.X < 0 or dot.Pos.X > VP.X then dot.Vel = Vector2.new(-dot.Vel.X, dot.Vel.Y) end
-                    if dot.Pos.Y < 0 or dot.Pos.Y > VP.Y then dot.Vel = Vector2.new(dot.Vel.X, -dot.Vel.Y) end
-                    dot.Obj.Position = dot.Pos
-
-                    -- Lines
-                    for j = i + 1, #cache.dots do
-                        local other = cache.dots[j]
-                        local dist = (other.Pos - dot.Pos).Magnitude
-                        if dist < maxDist then
-                            local line = cache.lines[lineIdx]
-                            if line then
-                                line.Visible = true
-                                line.From = dot.Pos + Vector2.new(1,1)
-                                line.To = other.Pos + Vector2.new(1,1)
-                                line.Transparency = 1 - (dist / maxDist)
-                                lineIdx = lineIdx + 1
-                            end
-                        end
-                    end
-                end
-                
-                -- Hide unused lines
-                for k = lineIdx, #cache.lines do
-                    cache.lines[k].Visible = false
-                end
-            end)
-
-        -- If turning OFF:
-        else
-            if cache.connection then cache.connection:Disconnect() end
-            -- Hide everything immediately
-            for _, dot in pairs(cache.dots) do dot.Obj.Visible = false end
-            for _, line in pairs(cache.lines) do line.Visible = false end
-        end
-    end
 -- // Library
 local themes = { -- ignore
     ["Default"] = {
@@ -2823,6 +2737,92 @@ function library.object_textbox(box, text, callback, finishedcallback)
         end
     end)
 end
+-- // Particle Logic //
+    library.particle_cache = { dots = {}, lines = {}, bg = nil, connection = nil }
+    
+    function library:InitParticles()
+        local VP = workspace.CurrentCamera.ViewportSize
+        -- 1. Dark Background
+        local bg = drawing:new("Square")
+        bg.Visible = false; bg.Filled = true; bg.Thickness = 0; bg.Color = Color3.fromRGB(10, 10, 10); bg.Transparency = 0.85; bg.Size = Vector2.new(VP.X, VP.Y); bg.Position = Vector2.new(0,0); bg.ZIndex = 0
+        library.particle_cache.bg = bg
+
+        -- 2. Create Dots
+        for i = 1, 40 do
+            local dot = drawing:new("Square")
+            dot.Visible = false; dot.Filled = true; dot.Thickness = 0; dot.Color = Color3.fromRGB(255, 255, 255); dot.Size = Vector2.new(3, 3); dot.ZIndex = 1
+            local pos = Vector2.new(math.random(0, VP.X), math.random(0, VP.Y))
+            local vel = Vector2.new(math.random() * 2 - 1, math.random() * 2 - 1) * 0.5
+            table.insert(library.particle_cache.dots, {Obj = dot, Pos = pos, Vel = vel})
+        end
+
+        -- 3. Create Line Pool
+        for i = 1, 800 do -- Cap lines to save memory
+            local line = drawing:new("Line")
+            line.Visible = false; line.Color = Color3.fromRGB(255, 255, 255); line.Thickness = 1; line.Transparency = 0.5; line.ZIndex = 0
+            table.insert(library.particle_cache.lines, line)
+        end
+    end
+
+    function library:ToggleParticles(state)
+        local cache = library.particle_cache
+        local VP = workspace.CurrentCamera.ViewportSize
+        
+        -- Toggle Background
+        if cache.bg then cache.bg.Visible = state; cache.bg.Size = Vector2.new(VP.X, VP.Y) end
+
+        -- If turning ON:
+        if state then
+            if cache.connection then cache.connection:Disconnect() end -- Reset connection
+            
+            -- Show Dots
+            for _, dot in pairs(cache.dots) do dot.Obj.Visible = true end
+            
+            -- Start Calculation Loop
+            cache.connection = game:GetService("RunService").RenderStepped:Connect(function()
+                local lineIdx = 1
+                local maxDist = 150
+                VP = workspace.CurrentCamera.ViewportSize
+                if cache.bg then cache.bg.Size = VP end -- Resize bg if resolution changes
+
+                for i, dot in ipairs(cache.dots) do
+                    -- Movement
+                    dot.Pos = dot.Pos + dot.Vel
+                    if dot.Pos.X < 0 or dot.Pos.X > VP.X then dot.Vel = Vector2.new(-dot.Vel.X, dot.Vel.Y) end
+                    if dot.Pos.Y < 0 or dot.Pos.Y > VP.Y then dot.Vel = Vector2.new(dot.Vel.X, -dot.Vel.Y) end
+                    dot.Obj.Position = dot.Pos
+
+                    -- Lines
+                    for j = i + 1, #cache.dots do
+                        local other = cache.dots[j]
+                        local dist = (other.Pos - dot.Pos).Magnitude
+                        if dist < maxDist then
+                            local line = cache.lines[lineIdx]
+                            if line then
+                                line.Visible = true
+                                line.From = dot.Pos + Vector2.new(1,1)
+                                line.To = other.Pos + Vector2.new(1,1)
+                                line.Transparency = 1 - (dist / maxDist)
+                                lineIdx = lineIdx + 1
+                            end
+                        end
+                    end
+                end
+                
+                -- Hide unused lines
+                for k = lineIdx, #cache.lines do
+                    cache.lines[k].Visible = false
+                end
+            end)
+
+        -- If turning OFF:
+        else
+            if cache.connection then cache.connection:Disconnect() end
+            -- Hide everything immediately
+            for _, dot in pairs(cache.dots) do dot.Obj.Visible = false end
+            for _, line in pairs(cache.lines) do line.Visible = false end
+        end
+    end
 --
 function library:new(cfg)
 if not library.particle_cache.bg then library:InitParticles() end
