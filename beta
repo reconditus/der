@@ -2744,7 +2744,7 @@ end
         local VP = workspace.CurrentCamera.ViewportSize
         -- 1. Dark Background
         local bg = drawing:new("Square")
-        bg.Visible = false; bg.Filled = true; bg.Thickness = 0; bg.Color = Color3.fromRGB(10, 10, 10); bg.Transparency = 0.85; bg.Size = Vector2.new(VP.X, VP.Y); bg.Position = Vector2.new(0,0); bg.ZIndex = 0
+        bg.Visible = false; bg.Filled = true; bg.Thickness = 0; bg.Color = Color3.fromRGB(10, 10, 10); bg.Transparency = 0.45; bg.Size = Vector2.new(VP.X, VP.Y); bg.Position = Vector2.new(0,0); bg.ZIndex = 0
         library.particle_cache.bg = bg
 
         -- 2. Create Dots
