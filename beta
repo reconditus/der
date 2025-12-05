@@ -6792,6 +6792,191 @@ if not library.particle_cache.bg then library:InitParticles() end
         refreshscroll()
         return serverlist
     end;
+-- // New Standalone ESP Preview Window //
+    function window:esp_preview_window(cfg)
+        local preview_obj = { open = false }
+        local flag = cfg.flag or utility.nextflag()
+        
+        -- Defaults
+        local maincolor = cfg.main_color or Color3.fromRGB(0, 255, 0)
+        local emptycolor = cfg.empty_color or Color3.fromRGB(255, 0, 0)
+        local healthamount = 100
+
+        -- 1. Create the Window Frame (Like Server List)
+        local preview_holder = library:create("Square", {
+            Visible = false, 
+            Transparency = 1, 
+            Color = Color3.fromRGB(13,13,13), 
+            Size = UDim2.new(0, 250, 0, 360), -- Size of the window
+            Position = UDim2.new(0, 500, 0, 300), -- Default spawn position
+            Thickness = 1, 
+            Filled = true, 
+            ZIndex = 14
+        }) 
+        
+        -- Add Outlines
+        local outline = library:outline(preview_holder, Color3.fromRGB(37,37,37), 14)
+        library:outline(outline, Color3.fromRGB(0,0,0), 14)
+
+        -- Make it draggable
+        utility.dragify(preview_holder, 'esp preview window')
+
+        -- Title & Accent Line
+        library:create("Text", {
+            Text = "esp preview", 
+            Parent = preview_holder, 
+            Visible = true, 
+            Transparency = 1, 
+            Theme = "Text", 
+            Size = 14, 
+            Center = true, 
+            Outline = false, 
+            Font = Drawing.Fonts.Plex, 
+            Position = UDim2.new(0.5,0,0,5), 
+            ZIndex = 14
+        })
+        
+        library:create("Square", {
+            Parent = preview_holder, 
+            Visible = true, 
+            Transparency = 1, 
+            Theme = "Accent", 
+            Size = UDim2.new(1,-30,0,2), 
+            Position = UDim2.new(0,16,0,25), 
+            Thickness = 1, 
+            Filled = true, 
+            ZIndex = 14
+        })
+
+        -- 2. Create the Dummy Container
+        local preview_frame = library:create("Square", {
+            Parent = preview_holder, 
+            Visible = true, 
+            Transparency = 1, 
+            Color = Color3.fromRGB(13,13,13), 
+            Size = UDim2.new(1,0,1,-30), 
+            Position = UDim2.new(0, 0, 0, 30), 
+            Thickness = 0, 
+            Filled = false, 
+            ZIndex = 15
+        })
+
+        -- 3. Draw the Body Parts (Centered in the new window)
+        -- We apply offsets to center the dummy in the 250px wide window
+        local x_offset = 20 -- Shift dummy right
+        local y_offset = 10 -- Shift dummy down
+
+        local esp_head = library:create("Square", {Parent = preview_frame, Size = UDim2.new(0, 44, 0, 39), Position = UDim2.new(0, 86 + x_offset, 0, 45 + y_offset), Color = Color3.fromRGB(245, 245, 245), Thickness = 1, Filled = true, ZIndex = 16})
+        library:outline(esp_head, Color3.fromRGB(0, 0, 0), 15)
+
+        local esp_torso = library:create("Square", {Parent = preview_frame, Size = UDim2.new(0, 146, 0, 77), Position = UDim2.new(0, 34 + x_offset, 0, 85 + y_offset), Color = Color3.fromRGB(245, 245, 245), Thickness = 1, Filled = true, ZIndex = 16})
+        library:outline(esp_torso, Color3.fromRGB(0, 0, 0), 15)
+
+        local esp_legs = library:create("Square", {Parent = preview_frame, Size = UDim2.new(0, 72, 0, 78), Position = UDim2.new(0, 72 + x_offset, 0, 163 + y_offset), Color = Color3.fromRGB(245, 245, 245), Thickness = 1, Filled = true, ZIndex = 16})
+        library:outline(esp_legs, Color3.fromRGB(0, 0, 0), 15)
+
+        -- 4. Draw ESP Visuals (Box, Health, Text)
+        local esp_bounding_box = library:create("Square", {Visible = false, Parent = preview_frame, Size = UDim2.new(0, 195, 0, 240), Position = UDim2.new(0, 13 + x_offset, 0, 20 + y_offset), Color = Color3.fromRGB(255, 255, 255), Thickness = 1, Filled = false, ZIndex = 16})
+        local esp_bounding_box_outline = library:outline(esp_bounding_box, Color3.fromRGB(0, 0, 0), 16)
+
+        local esp_health_bar_outline = library:create("Square", {Visible = false, Parent = preview_frame, Size = UDim2.new(0, 3, 0, 240), Position = UDim2.new(0, 6 + x_offset, 0, 20 + y_offset), Color = Color3.fromRGB(0, 0, 0), Thickness = 1, Filled = true, ZIndex = 16})
+        local esp_health_bar_outline_2 = library:outline(esp_health_bar_outline, Color3.new(0,0,0), 16)
+        
+        local esp_health_bar = library:create("Square", {Parent = esp_health_bar_outline, Size = UDim2.new(1,0,1,0), Color = Color3.fromRGB(0, 255, 42), Thickness = 1, Filled = true, ZIndex = 16, Position = UDim2.new(0,0,1,0)})
+        
+        local esp_health_text = library:create("Text", {Text = tostring("<- "..healthamount), Parent = esp_health_bar, Visible = true, Transparency = 1, Color = maincolor, Size = 13, Center = false, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(1,0,0,0), ZIndex = 16})
+        
+        local esp_name = library:create("Text", {Text = "player", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110 + x_offset, 0, 3 + y_offset), ZIndex = 16})
+        
+        local esp_distance = library:create("Text", {Text = "0 meters", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110 + x_offset, 0, 260 + y_offset), ZIndex = 16})
+        
+        local esp_weapon = library:create("Text", {Text = "weapon", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110 + x_offset, 0, 270 + y_offset), ZIndex = 16})
+
+        -- 5. Helper Functions (Logic)
+        function preview_obj:set_health(amount)
+            local value = amount/100
+            healthamount = amount/100
+            esp_health_bar.Size = UDim2.new(1,0,0,-(esp_health_bar_outline.Size.Y.Offset * value))
+            esp_health_bar.Color = emptycolor:Lerp(maincolor, amount/100)
+            esp_health_text.Text = tostring("<- "..math.floor(amount/100 * 100))
+            esp_health_text.Color = emptycolor:Lerp(maincolor, amount/100)
+            esp_health_text.Position = UDim2.new(1,0,0,-(esp_health_bar_outline.Size.Y.Offset * value) - 6)
+        end
+
+        function preview_obj:set_color(element, state)
+            if element == "box" then esp_bounding_box.Color = state
+            elseif element == "box outline" then esp_bounding_box_outline.Color = state
+            elseif element == "healthbar outline" then esp_health_bar_outline.Color = state; esp_health_bar_outline_2.Color = state
+            elseif element == "name" then esp_name.Color = state
+            elseif element == "name outline" then esp_name.OutlineColor = state
+            elseif element == "distance" then esp_distance.Color = state
+            elseif element == "distance outline" then esp_distance.OutlineColor = state
+            elseif element == "weapon" then esp_weapon.Color = state
+            elseif element == "weapon outline" then esp_weapon.OutlineColor = state end
+        end
+
+        function preview_obj:set_visibility(element, state)
+            if element == "box" then esp_bounding_box.Visible = state
+            elseif element == "healthbar" then esp_health_bar_outline.Visible = state
+            elseif element == "name" then esp_name.Visible = state
+            elseif element == "distance" then 
+                esp_distance.Visible = state
+                if esp_weapon.Visible and not esp_distance.Visible then
+                    esp_weapon.Position = UDim2.new(0, 110 + x_offset, 0, 260 + y_offset)
+                else
+                    esp_weapon.Position = UDim2.new(0, 110 + x_offset, 0, 270 + y_offset)
+                end
+            elseif element == "weapon" then 
+                esp_weapon.Visible = state 
+                if esp_weapon.Visible and not esp_distance.Visible then
+                    esp_weapon.Position = UDim2.new(0, 110 + x_offset, 0, 260 + y_offset)
+                else
+                    esp_weapon.Position = UDim2.new(0, 110 + x_offset, 0, 270 + y_offset)
+                end
+            end
+        end
+
+        -- 6. SetOpen Animation (Matching your previous request: Diagonal Bottom-Left)
+        function preview_obj:setopen(bool)
+            preview_obj.open = bool
+            local ContextActionService = game:GetService("ContextActionService")
+            local InputService = game:GetService('UserInputService')
+
+            local targetPos = library.flags[flag .. ' position'] or preview_holder.Position
+            -- Animation Offset: -10000 Left, +10000 Down (Diagonal Bottom-Left)
+            local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset - 10000, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
+
+            if bool then
+                preview_holder.Visible = true
+                preview_holder.Position = offScreenPos
+                tween.new(preview_holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
+
+                library.open_windows = library.open_windows + 1
+                if library.open_windows == 1 then
+                    InputService.MouseIconEnabled = false
+                    ContextActionService:BindAction("Scrolling", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseWheel)
+                    ContextActionService:BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
+                end
+            else
+                tween.new(preview_holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Position = offScreenPos}):Play()
+                
+                task.delay(0.6, function()
+                    if not preview_obj.open then
+                        preview_holder.Visible = false
+                    end
+                end)
+
+                library.open_windows = library.open_windows - 1
+                if library.open_windows <= 0 then
+                    InputService.MouseIconEnabled = true
+                    ContextActionService:UnbindAction("Scrolling")
+                    ContextActionService:UnbindAction("Input")
+                end
+            end
+        end
+
+        return preview_obj
+    end
     --
     function window:update_title(a, b)
         if type(b) == 'string' then
