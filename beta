@@ -6793,6 +6793,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         return serverlist
     end;
 -- // New Standalone ESP Preview Window //
+    -- // New Standalone ESP Preview Window (FIXED) //
     function window:esp_preview_window(cfg)
         local preview_obj = { open = false }
         local flag = cfg.flag or utility.nextflag()
@@ -6801,24 +6802,23 @@ if not library.particle_cache.bg then library:InitParticles() end
         local maincolor = cfg.main_color or Color3.fromRGB(0, 255, 0)
         local emptycolor = cfg.empty_color or Color3.fromRGB(255, 0, 0)
         local healthamount = 100
+        local default_pos = UDim2.new(0, 500, 0, 300) -- Default spawn location
 
-        -- 1. Create the Window Frame (Like Server List)
+        -- 1. Create the Window Frame
         local preview_holder = library:create("Square", {
             Visible = false, 
             Transparency = 1, 
             Color = Color3.fromRGB(13,13,13), 
-            Size = UDim2.new(0, 250, 0, 360), -- Size of the window
-            Position = UDim2.new(0, 500, 0, 300), -- Default spawn position
+            Size = UDim2.new(0, 250, 0, 360), 
+            Position = default_pos, 
             Thickness = 1, 
             Filled = true, 
             ZIndex = 14
         }) 
         
-        -- Add Outlines
         local outline = library:outline(preview_holder, Color3.fromRGB(37,37,37), 14)
         library:outline(outline, Color3.fromRGB(0,0,0), 14)
 
-        -- Make it draggable
         utility.dragify(preview_holder, 'esp preview window')
 
         -- Title & Accent Line
@@ -6861,10 +6861,9 @@ if not library.particle_cache.bg then library:InitParticles() end
             ZIndex = 15
         })
 
-        -- 3. Draw the Body Parts (Centered in the new window)
-        -- We apply offsets to center the dummy in the 250px wide window
-        local x_offset = 20 -- Shift dummy right
-        local y_offset = 10 -- Shift dummy down
+        -- 3. Draw the Body Parts
+        local x_offset = 20 
+        local y_offset = 10
 
         local esp_head = library:create("Square", {Parent = preview_frame, Size = UDim2.new(0, 44, 0, 39), Position = UDim2.new(0, 86 + x_offset, 0, 45 + y_offset), Color = Color3.fromRGB(245, 245, 245), Thickness = 1, Filled = true, ZIndex = 16})
         library:outline(esp_head, Color3.fromRGB(0, 0, 0), 15)
@@ -6875,7 +6874,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         local esp_legs = library:create("Square", {Parent = preview_frame, Size = UDim2.new(0, 72, 0, 78), Position = UDim2.new(0, 72 + x_offset, 0, 163 + y_offset), Color = Color3.fromRGB(245, 245, 245), Thickness = 1, Filled = true, ZIndex = 16})
         library:outline(esp_legs, Color3.fromRGB(0, 0, 0), 15)
 
-        -- 4. Draw ESP Visuals (Box, Health, Text)
+        -- 4. Draw ESP Visuals
         local esp_bounding_box = library:create("Square", {Visible = false, Parent = preview_frame, Size = UDim2.new(0, 195, 0, 240), Position = UDim2.new(0, 13 + x_offset, 0, 20 + y_offset), Color = Color3.fromRGB(255, 255, 255), Thickness = 1, Filled = false, ZIndex = 16})
         local esp_bounding_box_outline = library:outline(esp_bounding_box, Color3.fromRGB(0, 0, 0), 16)
 
@@ -6892,7 +6891,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         
         local esp_weapon = library:create("Text", {Text = "weapon", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110 + x_offset, 0, 270 + y_offset), ZIndex = 16})
 
-        -- 5. Helper Functions (Logic)
+        -- 5. Helper Functions
         function preview_obj:set_health(amount)
             local value = amount/100
             healthamount = amount/100
@@ -6936,14 +6935,14 @@ if not library.particle_cache.bg then library:InitParticles() end
             end
         end
 
-        -- 6. SetOpen Animation (Matching your previous request: Diagonal Bottom-Left)
+        -- 6. SetOpen (FIXED LOGIC)
         function preview_obj:setopen(bool)
             preview_obj.open = bool
             local ContextActionService = game:GetService("ContextActionService")
             local InputService = game:GetService('UserInputService')
 
-            local targetPos = library.flags[flag .. ' position'] or preview_holder.Position
-            -- Animation Offset: -10000 Left, +10000 Down (Diagonal Bottom-Left)
+            -- FIX: Use default_pos if drag flag doesn't exist yet
+            local targetPos = library.flags[flag .. ' position'] or default_pos
             local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset - 10000, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
 
             if bool then
