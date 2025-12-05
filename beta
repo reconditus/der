@@ -6802,6 +6802,38 @@ if not library.particle_cache.bg then library:InitParticles() end
             end
         end
     end
+-- // Fix: Add set_open method to individual windows //
+    local saved_window_pos = window_outline.Position -- Store position
+
+    function window:set_open(bool)
+        if bool then
+            -- OPENING
+            -- Update saved position if it was moved while open
+            if window_outline.Visible then saved_window_pos = window_outline.Position end
+            
+            -- Calculate Off-Screen Position (Diagonal Bottom-Left)
+            local offScreenPos = UDim2.new(saved_window_pos.X.Scale, saved_window_pos.X.Offset - 10000, saved_window_pos.Y.Scale, saved_window_pos.Y.Offset + 10000)
+            
+            window_outline.Visible = true
+            window_outline.Position = offScreenPos
+            
+            -- Animate In
+            tween.new(window_outline, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = saved_window_pos}):Play()
+        else
+            -- CLOSING
+            saved_window_pos = window_outline.Position -- Save where it is now
+            
+            -- Calculate Off-Screen Position
+            local offScreenPos = UDim2.new(saved_window_pos.X.Scale, saved_window_pos.X.Offset - 10000, saved_window_pos.Y.Scale, saved_window_pos.Y.Offset + 10000)
+            
+            -- Animate Out
+            tween.new(window_outline, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Position = offScreenPos}):Play()
+            
+            task.delay(0.6, function()
+                window_outline.Visible = false
+            end)
+        end
+    end
     -- // Return
     return window;
 end;
