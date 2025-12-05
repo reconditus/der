@@ -479,8 +479,8 @@ function library:set_open(bool)
         -- Grab the last saved position, or use the current position if it hasn't moved
         local targetPos = library.flags['window position'] or self.holder.Position
         
-        -- 10,000 pixels DOWN. Change the '+' to '-' if you want it to go UP.
-        local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
+        -- 10,000 pixels LD.
+        local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset - 10000, targetPos.Y.Scale, targetPos.Y.Offset - 10000)
         
         if bool then
             -- OPENING
@@ -6027,8 +6027,8 @@ function library:new(cfg)
             
             -- Get position
             local targetPos = library.flags['player list position'] or list_holder.Position
-            -- 10,000 pixels DOWN
-            local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
+            -- 10,000 pixels LD
+            local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset - 10000, targetPos.Y.Scale, targetPos.Y.Offset - 10000)
 
             if bool then
                 list_holder.Visible = true
@@ -6597,8 +6597,8 @@ function library:new(cfg)
 
             -- Get position
             local targetPos = library.flags['server list position'] or list_holder.Position
-            -- 10,000 pixels DOWN
-            local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
+            -- 10,000 pixels LD
+            local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset - 10000, targetPos.Y.Scale, targetPos.Y.Offset - 10000)
 
             if bool then
                 list_holder.Visible = true
