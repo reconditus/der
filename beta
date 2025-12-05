@@ -498,7 +498,7 @@ function library:set_open(bool)
             InputService.MouseIconEnabled = false
         else
             library.open_windows = library.open_windows - 1
-            InputService.MouseIconEnabled = originalState
+            InputService.MouseIconEnabled = true
             ContextActionService:UnbindAction("Scrolling");
             ContextActionService:UnbindAction("Input");
         end;
