@@ -2737,14 +2737,14 @@ function library.object_textbox(box, text, callback, finishedcallback)
         end
     end)
 end
--- // Particle Logic //
-    library.particle_cache = { dots = {}, lines = {}, bg = nil, connection = nil }
+-- // Particle Logic (Updated with Fade Out) //
+    library.particle_cache = { dots = {}, lines = {}, bg = nil, connection = nil, global_alpha = 1, is_fading = false }
     
     function library:InitParticles()
         local VP = workspace.CurrentCamera.ViewportSize
         -- 1. Dark Background
         local bg = drawing:new("Square")
-        bg.Visible = false; bg.Filled = true; bg.Thickness = 0; bg.Color = Color3.fromRGB(10, 10, 10); bg.Transparency = 0.45; bg.Size = Vector2.new(VP.X, VP.Y); bg.Position = Vector2.new(0,0); bg.ZIndex = 0
+        bg.Visible = false; bg.Filled = true; bg.Thickness = 0; bg.Color = Color3.fromRGB(10, 10, 10); bg.Transparency = 0.4; bg.Size = Vector2.new(VP.X, VP.Y); bg.Position = Vector2.new(0,0); bg.ZIndex = 0
         library.particle_cache.bg = bg
 
         -- 2. Create Dots
@@ -2757,7 +2757,7 @@ end
         end
 
         -- 3. Create Line Pool
-        for i = 1, 800 do -- Cap lines to save memory
+        for i = 1, 800 do 
             local line = drawing:new("Line")
             line.Visible = false; line.Color = Color3.fromRGB(255, 255, 255); line.Thickness = 1; line.Transparency = 0.5; line.ZIndex = 0
             table.insert(library.particle_cache.lines, line)
@@ -2767,23 +2767,29 @@ end
     function library:ToggleParticles(state)
         local cache = library.particle_cache
         local VP = workspace.CurrentCamera.ViewportSize
-        
-        -- Toggle Background
-        if cache.bg then cache.bg.Visible = state; cache.bg.Size = Vector2.new(VP.X, VP.Y) end
+        local targetBgAlpha = 0.4 -- CONFIG: Set your preferred background darkness here
 
-        -- If turning ON:
         if state then
-            if cache.connection then cache.connection:Disconnect() end -- Reset connection
+            -- // OPENING //
+            cache.is_fading = false -- Stop fade out if user re-opens quickly
+            cache.global_alpha = 1  -- Reset visibility to full
             
-            -- Show Dots
+            if cache.connection then cache.connection:Disconnect() end
+            
+            -- Show Elements
+            if cache.bg then cache.bg.Visible = true; cache.bg.Size = Vector2.new(VP.X, VP.Y) end
             for _, dot in pairs(cache.dots) do dot.Obj.Visible = true end
             
-            -- Start Calculation Loop
+            -- Start Logic Loop
             cache.connection = game:GetService("RunService").RenderStepped:Connect(function()
                 local lineIdx = 1
                 local maxDist = 150
                 VP = workspace.CurrentCamera.ViewportSize
-                if cache.bg then cache.bg.Size = VP end -- Resize bg if resolution changes
+                if cache.bg then 
+                    cache.bg.Size = VP 
+                    -- Apply Fade to Background
+                    cache.bg.Transparency = targetBgAlpha * cache.global_alpha
+                end
 
                 for i, dot in ipairs(cache.dots) do
                     -- Movement
@@ -2791,6 +2797,9 @@ end
                     if dot.Pos.X < 0 or dot.Pos.X > VP.X then dot.Vel = Vector2.new(-dot.Vel.X, dot.Vel.Y) end
                     if dot.Pos.Y < 0 or dot.Pos.Y > VP.Y then dot.Vel = Vector2.new(dot.Vel.X, -dot.Vel.Y) end
                     dot.Obj.Position = dot.Pos
+                    
+                    -- Apply Fade to Dots
+                    dot.Obj.Transparency = 1 * cache.global_alpha
 
                     -- Lines
                     for j = i + 1, #cache.dots do
@@ -2802,25 +2811,44 @@ end
                                 line.Visible = true
                                 line.From = dot.Pos + Vector2.new(1,1)
                                 line.To = other.Pos + Vector2.new(1,1)
-                                line.Transparency = 1 - (dist / maxDist)
+                                -- Apply Fade to Lines (Distance fade * Global fade)
+                                line.Transparency = (1 - (dist / maxDist)) * cache.global_alpha
                                 lineIdx = lineIdx + 1
                             end
                         end
                     end
                 end
                 
-                -- Hide unused lines
                 for k = lineIdx, #cache.lines do
                     cache.lines[k].Visible = false
                 end
             end)
 
-        -- If turning OFF:
         else
-            if cache.connection then cache.connection:Disconnect() end
-            -- Hide everything immediately
-            for _, dot in pairs(cache.dots) do dot.Obj.Visible = false end
-            for _, line in pairs(cache.lines) do line.Visible = false end
+            -- // CLOSING (Fade Out Animation) //
+            cache.is_fading = true
+            
+            task.spawn(function()
+                local duration = 0.3 -- 300ms
+                local startTime = tick()
+                
+                while tick() - startTime < duration do
+                    if not cache.is_fading then return end -- Stop if user re-opened menu
+                    
+                    -- Calculate Alpha (1.0 -> 0.0)
+                    local progress = (tick() - startTime) / duration
+                    cache.global_alpha = math.clamp(1 - progress, 0, 1)
+                    
+                    game:GetService("RunService").RenderStepped:Wait()
+                end
+                
+                -- Final Cleanup
+                if not cache.is_fading then return end
+                if cache.connection then cache.connection:Disconnect() end
+                if cache.bg then cache.bg.Visible = false end
+                for _, dot in pairs(cache.dots) do dot.Obj.Visible = false end
+                for _, line in pairs(cache.lines) do line.Visible = false end
+            end)
         end
     end
 --
