@@ -1,7 +1,5 @@
 --// dreya
 
--- fixed the position and stuff
-
 local startUpArgs = getgenv().startUpArgs or { 'universal', 'public' }
 -- [[
     --obleus remake
@@ -114,7 +112,6 @@ local utility = handler.createModule("Utility"); do
 		return text
 	end
     function utility.getcenter(sizeX, sizeY)
-
         return UDim2.new(0.5, -(sizeX / 2), 0.5, -(sizeY / 2))
     end;
     function utility.table(tbl, usemt)
@@ -344,12 +341,8 @@ function utility.dragify(object, title)
         tween.new(object, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(a, b, c, d)}):Play()
     end
 
-    if not library.flags[title .. ' position'] then
-        task.defer(function()
-            local size = object.AbsoluteSize
-           -- object.Position = utility.getcenter(size.X, size.Y)
-        end)
-    end    
+    flags[title .. ' position'] = set
+    library.flags[title .. ' position'] = object.Position
 
     local windowdrag = library:create("Square", { Parent = object, Visible = true, Transparency = 0, Size = UDim2.new(1, 0, 0, 20), Position = UDim2.new(0, 0, 0, 0), Thickness = 1, Filled = true, ZIndex = 50 })
     local dragoutline = library:create("Square", { Size = object.Size, Position = utility.getcenter(size.X, size.Y), Filled = false, Thickness = 1, Theme = "Accent", ZIndex = 100, Visible = false })
@@ -818,7 +811,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
         set(option)
     end
 
-    function dropdowntypes:refresh(tbl, val)
+    function dropdowntypes:refresh(tbl)
         content = table.clone(tbl)
         count = 0
 
@@ -842,7 +835,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
         if max then
             table.clear(chosen)
         else
-            chosen = val or nil
+            chosen = nil
         end
 
         library.flags[flag] = chosen
@@ -2764,10 +2757,7 @@ function library:new(cfg)
     local window_title = library:create("Text", {Text = name_white, Parent = window_outline, Visible = true, Transparency = 1, Theme = "Accent", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,10,0,7), ZIndex = 13});
     local window_title_accent = library:create("Text", {Text = name_color, Parent = window_outline, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,utility.textlength(name_white, 2, 13).X + 10,0,7), ZIndex = 13});
     --
-    local size = window_outline.AbsoluteSize
-    window_outline.Position = utility.getcenter(size.X, size.Y) + UDim2.new(0,-100,0,0)
     utility.dragify(window_outline, 'window');
-    library.flags["window_outline"] = window_outline;
     -- // Pages
     function window:page(cfg)
         -- // Configuration
@@ -5766,12 +5756,11 @@ function library:new(cfg)
         local flag = cfg.flag or cfg.Flag or utility.nextflag();
         local players = game:GetService("Players");
         -- // Drawings
-        local list_holder = library:create("Square", { Visible = false, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(0,500,0,265), Position = UDim2.new(0, 860, 0, 365), Thickness = 1, Filled = true, ZIndex = 14}) do
+        local list_holder = library:create("Square", { Visible = false, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(0,500,0,265), Position = UDim2.new(0, 860, 0, 268), Thickness = 1, Filled = true, ZIndex = 14}) do
             local outline = library:outline(list_holder, Color3.fromRGB(37,37,37), 14);
             library:outline(outline, Color3.fromRGB(0,0,0), 14);
         end;
-        local size = list_holder.AbsoluteSize
-        list_holder.Position = utility.getcenter(size.X, size.Y) + UDim2.new(0,500,0,100)
+
         utility.dragify(list_holder, 'player list')
 
         local list_title = library:create("Text", {Text = "players", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 14, Center = true, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
@@ -6099,10 +6088,7 @@ function library:new(cfg)
             library:outline(outline, Color3.fromRGB(0,0,0), 14);
         end;
         --
-        local size = list_holder.AbsoluteSize
-        list_holder.Position = utility.getcenter(size.X, size.Y) + UDim2.new(0,500,0,-208)
         utility.dragify(list_holder, 'server list')
-
 
         --
         local list_title = library:create("Text", {Text = "servers", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 14, Center = true, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
@@ -6617,7 +6603,7 @@ end;
 --
 function library:notify(info)
     local ntif = {instances = {},create_tick = tick()};
-    local name = info.title or info.Title or 'dreya.blank '
+    local name = info.title or info.Title or 'I dont like BBC.. Im too fragile'
     local title = info.text or info.Text or "something happened.";
     local time = info.time or info.Time or 5;
     local z = 10;
@@ -6724,10 +6710,7 @@ function library:createwatermark()
         if (tick() - watermark_init) * 1000 > watermark.tickrate then
             watermark_init = tick()
             if watermark.objects.background.Visible then
-                local title = string.lower(
-                    utility.findtriggers(watermark.title) .. " " .. utility.findtriggers(watermark.domain)
-                )
-
+                local title = string.lower(utility.findtriggers(watermark.title))
                 local newSize = UDim2.new(0, utility.textlength(title, 2, 13).X + utility.textlength('dreya', 2, 13).X + 10, 0, 19)
 
                 watermark.objects.background.Size = newSize
@@ -6742,3 +6725,5 @@ function library:createwatermark()
 
     return watermark
 end
+
+return library;
