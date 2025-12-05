@@ -2737,8 +2737,8 @@ function library.object_textbox(box, text, callback, finishedcallback)
         end
     end)
 end
--- // Particle Logic (Updated with Fade Out) //
-    library.particle_cache = { dots = {}, lines = {}, bg = nil, connection = nil, global_alpha = 1, is_fading = false }
+-- // Particle Logic (Updated with 200ms Fade In + Fade Out) //
+    library.particle_cache = { dots = {}, lines = {}, bg = nil, connection = nil, global_alpha = 0, fade_id = 0 }
     
     function library:InitParticles()
         local VP = workspace.CurrentCamera.ViewportSize
@@ -2767,27 +2767,47 @@ end
     function library:ToggleParticles(state)
         local cache = library.particle_cache
         local VP = workspace.CurrentCamera.ViewportSize
-        local targetBgAlpha = 0.4 -- CONFIG: Set your preferred background darkness here
+        local targetBgAlpha = 0.4 -- CONFIG: Background Darkness
+        
+        -- Create a unique ID for this specific toggle action to prevent animation conflicts
+        local current_fade_id = tick()
+        cache.fade_id = current_fade_id
 
         if state then
-            -- // OPENING //
-            cache.is_fading = false -- Stop fade out if user re-opens quickly
-            cache.global_alpha = 1  -- Reset visibility to full
+            -- // OPENING (Fade In) //
+            cache.global_alpha = 0 -- Start invisible
             
             if cache.connection then cache.connection:Disconnect() end
             
-            -- Show Elements
+            -- Show Elements (Visually they are hidden by global_alpha = 0)
             if cache.bg then cache.bg.Visible = true; cache.bg.Size = Vector2.new(VP.X, VP.Y) end
             for _, dot in pairs(cache.dots) do dot.Obj.Visible = true end
             
-            -- Start Logic Loop
+            -- 1. Animation Loop (Fade In: 0 -> 1 in 200ms)
+            task.spawn(function()
+                local duration = 0.2 -- 200ms fade in
+                local startTime = tick()
+                
+                while tick() - startTime < duration do
+                    if cache.fade_id ~= current_fade_id then return end -- Stop if user closed menu mid-fade
+                    
+                    local progress = (tick() - startTime) / duration
+                    cache.global_alpha = math.clamp(progress, 0, 1)
+                    game:GetService("RunService").RenderStepped:Wait()
+                end
+                
+                if cache.fade_id == current_fade_id then 
+                    cache.global_alpha = 1 
+                end
+            end)
+
+            -- 2. Logic Loop (Movement & Connections)
             cache.connection = game:GetService("RunService").RenderStepped:Connect(function()
                 local lineIdx = 1
                 local maxDist = 150
                 VP = workspace.CurrentCamera.ViewportSize
                 if cache.bg then 
                     cache.bg.Size = VP 
-                    -- Apply Fade to Background
                     cache.bg.Transparency = targetBgAlpha * cache.global_alpha
                 end
 
@@ -2798,7 +2818,7 @@ end
                     if dot.Pos.Y < 0 or dot.Pos.Y > VP.Y then dot.Vel = Vector2.new(dot.Vel.X, -dot.Vel.Y) end
                     dot.Obj.Position = dot.Pos
                     
-                    -- Apply Fade to Dots
+                    -- Apply Global Alpha
                     dot.Obj.Transparency = 1 * cache.global_alpha
 
                     -- Lines
@@ -2811,7 +2831,7 @@ end
                                 line.Visible = true
                                 line.From = dot.Pos + Vector2.new(1,1)
                                 line.To = other.Pos + Vector2.new(1,1)
-                                -- Apply Fade to Lines (Distance fade * Global fade)
+                                -- Fade based on Distance AND Global Alpha
                                 line.Transparency = (1 - (dist / maxDist)) * cache.global_alpha
                                 lineIdx = lineIdx + 1
                             end
@@ -2825,25 +2845,23 @@ end
             end)
 
         else
-            -- // CLOSING (Fade Out Animation) //
-            cache.is_fading = true
-            
+            -- // CLOSING (Fade Out: 1 -> 0 in 300ms) //
             task.spawn(function()
-                local duration = 0.3 -- 300ms
+                local duration = 0.3 
                 local startTime = tick()
+                local startAlpha = cache.global_alpha -- Fade from current alpha (in case it wasn't fully visible yet)
                 
                 while tick() - startTime < duration do
-                    if not cache.is_fading then return end -- Stop if user re-opened menu
+                    if cache.fade_id ~= current_fade_id then return end -- Stop if user re-opened menu
                     
-                    -- Calculate Alpha (1.0 -> 0.0)
                     local progress = (tick() - startTime) / duration
-                    cache.global_alpha = math.clamp(1 - progress, 0, 1)
+                    cache.global_alpha = math.clamp(startAlpha * (1 - progress), 0, 1)
                     
                     game:GetService("RunService").RenderStepped:Wait()
                 end
                 
                 -- Final Cleanup
-                if not cache.is_fading then return end
+                if cache.fade_id ~= current_fade_id then return end
                 if cache.connection then cache.connection:Disconnect() end
                 if cache.bg then cache.bg.Visible = false end
                 for _, dot in pairs(cache.dots) do dot.Obj.Visible = false end
