@@ -476,19 +476,21 @@ function library:set_open(bool)
         local ContextActionService = game:GetService("ContextActionService")
         local InputService = game:GetService('UserInputService')
         
-        -- Get the saved position or use the current one if not saved
+        -- Get the saved position or current position
         local targetPos = library.flags['window position'] or self.holder.Position
         
+        -- DEFINITION: The off-screen position (1.5 Y means way below the screen)
+        -- Change 1.5 to -0.5 if you want it to drop from the top!
+        local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, 1.5, 0)
+        
         if bool then
-            -- // OPENING ANIMATION //
             self.holder.Visible = true
             
-            -- Set start position slightly lower (offset by 50 pixels on Y axis)
-            local startPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, targetPos.Y.Scale, targetPos.Y.Offset + 50)
-            self.holder.Position = startPos
+            -- 1. Snap to off-screen
+            self.holder.Position = offScreenPos
             
-            -- Tween to the correct position (Pop Up)
-            tween.new(self.holder, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
+            -- 2. Tween to actual position
+            tween.new(self.holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
 
             library.open_windows = library.open_windows + 1
             if library.open_windows == 1 then
@@ -497,17 +499,12 @@ function library:set_open(bool)
                 InputService.MouseIconEnabled = false
             end
         else
-            -- // CLOSING ANIMATION //
+            -- 1. Tween to off-screen
+            tween.new(self.holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Position = offScreenPos}):Play()
             
-            -- Calculate drop down position
-            local dropPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, targetPos.Y.Scale, targetPos.Y.Offset + 50)
-            
-            -- Tween down
-            tween.new(self.holder, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = dropPos}):Play()
-            
-            -- Wait for animation to finish before hiding
-            task.delay(0.5, function()
-                if not self.open then -- Check if user didn't re-open it quickly
+            -- 2. Wait for tween to finish, then hide
+            task.delay(0.6, function()
+                if not self.open then
                     self.holder.Visible = false
                 end
             end)
@@ -6025,20 +6022,36 @@ function library:new(cfg)
         end
 
         function playerlist:setopen(bool)
-            list_holder.Visible = bool
             playerlist.open = bool
+            
             local ContextActionService = game:GetService("ContextActionService")
             local InputService = game:GetService('UserInputService')
+            
+            -- Grab saved position for player list
+            local targetPos = library.flags['player list position'] or list_holder.Position
+            local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, 1.5, 0) -- 1.5 = Below screen
 
             if bool then
-                library.open_windows += 1
+                list_holder.Visible = true
+                list_holder.Position = offScreenPos
+                tween.new(list_holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
+
+                library.open_windows = library.open_windows + 1
                 if library.open_windows == 1 then
                     InputService.MouseIconEnabled = false
                     ContextActionService:BindAction("Scrolling", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseWheel)
                     ContextActionService:BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
                 end
             else
-                library.open_windows -= 1
+                tween.new(list_holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Position = offScreenPos}):Play()
+                
+                task.delay(0.6, function()
+                    if not playerlist.open then
+                        list_holder.Visible = false
+                    end
+                end)
+
+                library.open_windows = library.open_windows - 1
                 if library.open_windows <= 0 then
                     InputService.MouseIconEnabled = true
                     ContextActionService:UnbindAction("Scrolling")
@@ -6579,12 +6592,19 @@ function library:new(cfg)
         end
         --
         function serverlist:setopen(bool)
-            list_holder.Visible = bool
             serverlist.open = bool
             local ContextActionService = game:GetService("ContextActionService")
             local InputService = game:GetService('UserInputService')
 
+            -- Grab saved position for server list
+            local targetPos = library.flags['server list position'] or list_holder.Position
+            local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset, 1.5, 0) -- 1.5 = Below screen
+
             if bool then
+                list_holder.Visible = true
+                list_holder.Position = offScreenPos
+                tween.new(list_holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
+
                 library.open_windows = library.open_windows + 1
                 if library.open_windows == 1 then
                     InputService.MouseIconEnabled = false
@@ -6592,6 +6612,14 @@ function library:new(cfg)
                     ContextActionService:BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
                 end
             else
+                tween.new(list_holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Position = offScreenPos}):Play()
+                
+                task.delay(0.6, function()
+                    if not serverlist.open then
+                        list_holder.Visible = false
+                    end
+                end)
+
                 library.open_windows = library.open_windows - 1
                 if library.open_windows <= 0 then
                     InputService.MouseIconEnabled = true
