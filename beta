@@ -7017,9 +7017,15 @@ if not library.particle_cache.bg then library:InitParticles() end
             Size = UDim2.new(1,-30,0,2), Position = UDim2.new(0,16,0,25), 
             Thickness = 1, Filled = true, ZIndex = 14
         })
-
+-- Money Display
+        local money_txt = library:create("Text", {
+            Text = "Money: $1000", Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(46, 204, 113), 
+            Size = 14, Center = false, Outline = true, Font = Drawing.Fonts.Plex, 
+            Position = UDim2.new(0, 20, 0, 35), ZIndex = 15
+        })
         -- // 2. Game State & Config //
         plinko_obj.config = {
+            money = 1000, -- Added Money
             rows = 12, spacing = 28, gravity = 700, dampening = 0.6, bet = 100, risk = "Medium",
             multipliers = {
                 Low = {5, 3, 1.5, 1, 0.7, 0.7, 1, 1.5, 3, 5},
@@ -7114,6 +7120,20 @@ if not library.particle_cache.bg then library:InitParticles() end
         end
 
         function plinko_obj:SpawnBall()
+            if plinko_obj.config.money < plinko_obj.config.bet then return end -- Check funds
+            
+            plinko_obj.config.money = plinko_obj.config.money - plinko_obj.config.bet
+            money_txt.Text = "Money: $"..tostring(plinko_obj.config.money)
+
+            local ball = CreateObj("Square", {
+                Size = UDim2.new(0, 6, 0, 6), Color = Color3.fromRGB(255, 60, 60),
+                Filled = true, Thickness = 0, ZIndex = 18, Transparency = 1
+            })
+            table.insert(p_state.balls, {
+                obj = ball, rel_pos = Vector2.new(250 + math.random(-5, 5), 20),
+                vel = Vector2.new(0, 0), active = true, bet = plinko_obj.config.bet
+            })
+        end
             local ball = CreateObj("Square", {
                 Size = UDim2.new(0, 6, 0, 6), Color = Color3.fromRGB(255, 60, 60),
                 Filled = true, Thickness = 0, ZIndex = 18, Transparency = 1
@@ -7177,7 +7197,11 @@ if not library.particle_cache.bg then library:InitParticles() end
                         -- Determine win
                         for _, slot in pairs(p_state.slots) do
                             if math.abs(b.rel_pos.X - slot.rel_pos.X) < (slot.width/2) then
-                                library:notify({text = string.format("hit %sx multiplier", slot.val), time = 2})
+                                local win = b.bet * slot.val
+                                plinko_obj.config.money = plinko_obj.config.money + win
+                                money_txt.Text = "Money: $"..tostring(plinko_obj.config.money)
+                                
+                                library:notify({text = string.format("hit %sx | won $%s", slot.val, win), time = 2})
                                 break
                             end
                         end
