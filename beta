@@ -7130,54 +7130,45 @@ if not library.particle_cache.bg then library:InitParticles() end
         end
 
         -- // 4. Physics Loop //
-game:GetService("RunService").RenderStepped:Connect(function(dt)
+-- // 4. Physics Loop //
+        game:GetService("RunService").RenderStepped:Connect(function(dt)
             if not holder.Visible then return end
             
-            local win_x, win_y = holder.Position.X.Offset, holder.Position.Y.Offset
+            -- FIX: Removed manual updates for Pegs, Slots, and Walls.
+            -- The library handles their position relative to the window automatically.
 
-            -- Visual Update (Static Objects follow window)
-            for _, peg in pairs(p_state.pegs) do peg.obj.Position = UDim2.new(0, win_x + peg.rel_pos.X - 2, 0, win_y + peg.rel_pos.Y - 2) end
-            for _, slot in pairs(p_state.slots) do
-                slot.bg.Position = UDim2.new(0, win_x + slot.rel_pos.X - (slot.width/2) + 2, 0, win_y + slot.rel_pos.Y)
-                slot.text.Position = UDim2.new(0, win_x + slot.rel_pos.X, 0, win_y + slot.rel_pos.Y + 3)
-            end
-            
-            -- Border Visual Update
-            if p_state.walls[1] then p_state.walls[1].Position = UDim2.new(0, win_x + 10, 0, win_y + 45) end
-            if p_state.walls[2] then p_state.walls[2].Position = UDim2.new(0, win_x + 10, 0, win_y + 45) end
-            if p_state.walls[3] then p_state.walls[3].Position = UDim2.new(0, win_x + 488, 0, win_y + 45) end
-
+            -- Ball Physics
             for i = #p_state.balls, 1, -1 do
                 local b = p_state.balls[i]
                 if b.active then
--- Physics (Gravity)
+                    -- Gravity
                     b.vel = b.vel + Vector2.new(0, plinko_obj.config.gravity * dt)
                     local next_pos = b.rel_pos + (b.vel * dt)
 
-                    -- Wall Collisions (Borders)
+                    -- Wall Collisions
                     if next_pos.X < 15 or next_pos.X > 485 then
-                        b.vel = Vector2.new(-b.vel.X * 0.5, b.vel.Y) -- Bounce off wall
+                        b.vel = Vector2.new(-b.vel.X * 0.5, b.vel.Y)
                         next_pos = Vector2.new(math.clamp(next_pos.X, 15, 485), next_pos.Y)
                     end
 
-                    -- Physics (Collisions)
+                    -- Peg Collisions
                     for _, peg in pairs(p_state.pegs) do
                         local diff = next_pos - peg.rel_pos
                         local dist = diff.Magnitude
-                        if dist < (3 + peg.radius) then
+                        if dist < (4 + peg.radius) then
                             local norm = diff.Unit
                             b.vel = b.vel - (2 * b.vel:Dot(norm) * norm)
                             b.vel = b.vel * plinko_obj.config.dampening
-                            b.vel = b.vel + Vector2.new(math.random(-20, 20), 0)
-                            next_pos = peg.rel_pos + (norm * (3 + peg.radius + 1))
+                            b.vel = b.vel + Vector2.new(math.random(-30, 30), 0)
+                            next_pos = peg.rel_pos + (norm * (4 + peg.radius + 1))
                         end
                     end
                     b.rel_pos = next_pos
                     
-                    -- Visual Update: Apply relative position directly
-                    b.obj.Position = UDim2.new(0, b.rel_pos.X, 0, b.rel_pos.Y)
+                    -- FIX: Update Ball Visual using RELATIVE position only (No win_x/win_y)
+                    b.obj.Position = UDim2.new(0, b.rel_pos.X - 4, 0, b.rel_pos.Y - 4)
 
-                    -- End condition
+                    -- Floor / Scoring
                     local finish_y = 50 + (plinko_obj.config.rows * plinko_obj.config.spacing) + 15
                     if b.rel_pos.Y > finish_y then
                         b.active = false
