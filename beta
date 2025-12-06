@@ -6985,7 +6985,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         return preview_obj
     end
     --
--- // PLINKO WINDOW (Fixed Size + Integrated Controls) //
+-- // PLINKO WINDOW (Resized to 500x750, No Controls) //
     function window:plinko_window(cfg)
         local plinko_obj = { open = false }
         local flag = cfg.flag or utility.nextflag()
@@ -6993,7 +6993,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         -- Default Position
         local default_pos = UDim2.new(0, 1380, 0, 600) 
 
-        -- // 1. Create Window Frame (Bigger Size: 500x750) //
+        -- // 1. Create Window Frame (Resized to 500x750) //
         local holder = library:create("Square", {
             Visible = false, Transparency = 1, Color = Color3.fromRGB(13,13,13), 
             Size = UDim2.new(0, 500, 0, 750), Position = default_pos, 
@@ -7037,7 +7037,6 @@ if not library.particle_cache.bg then library:InitParticles() end
             return obj
         end
 
-        -- Generate Board Logic (Centered for 500px width)
         function plinko_obj:GenerateBoard()
             for _, p in pairs(p_state.pegs) do p.obj:Remove() end
             for _, s in pairs(p_state.slots) do s.bg:Remove(); s.text:Remove() end
@@ -7045,7 +7044,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             p_state.slots = {}
 
             local start_y = 50
-            local center_x = 250 -- Centered in new width
+            local center_x = 250 -- Updated center for 500px width
 
             -- Pegs
             for row = 1, plinko_obj.config.rows do
@@ -7103,7 +7102,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 Filled = true, Thickness = 0, ZIndex = 18
             })
             table.insert(p_state.balls, {
-                obj = ball, rel_pos = Vector2.new(250 + math.random(-5, 5), 30),
+                obj = ball, rel_pos = Vector2.new(250 + math.random(-5, 5), 30), -- 250 Center
                 vel = Vector2.new(0, 0), active = true
             })
         end
@@ -7113,89 +7112,12 @@ if not library.particle_cache.bg then library:InitParticles() end
             p_state.balls = {}
         end
 
-        -- // 4. INTEGRATED CONTROLS (Bottom Panel) //
-        local panel_y = 580 -- Start of controls
-        
-        -- Divider
-        CreateObj("Square", { Size = UDim2.new(1, -20, 0, 1), Position = UDim2.new(0, 10, 0, panel_y), Color = Color3.fromRGB(50,50,50), Filled = true, ZIndex = 15 })
-
-        -- RISK SELECTION
-        local risks = {"Low", "Medium", "High"}
-        local risk_buttons = {}
-        for i, r in ipairs(risks) do
-            local btn = CreateObj("Square", {
-                Size = UDim2.new(0, 80, 0, 20), Position = UDim2.new(0, 60 + (i-1)*90, 0, panel_y + 15),
-                Color = r == plinko_obj.config.risk and Color3.fromRGB(35,35,35) or Color3.fromRGB(25,25,25), 
-                Filled = true, ZIndex = 15
-            })
-            library:outline(btn, Color3.fromRGB(44,44,44), 15); library:outline(library:outline(btn, Color3.fromRGB(44,44,44), 15), Color3.new(0,0,0), 15)
-            
-            local txt = CreateObj("Text", { Text = r, Parent = btn, Center = true, Size = 13, Position = UDim2.new(0.5,0,0,3), ZIndex = 16, Theme = r == plinko_obj.config.risk and "Accent" or "Text" })
-            
-            btn.MouseButton1Click:Connect(function()
-                plinko_obj.config.risk = r
-                plinko_obj:GenerateBoard()
-                -- Update visual selection
-                for _, b in pairs(risk_buttons) do 
-                    b.bg.Color = Color3.fromRGB(25,25,25)
-                    library:change_object_theme(b.txt, "Text")
-                end
-                btn.Color = Color3.fromRGB(35,35,35)
-                library:change_object_theme(txt, "Accent")
-            end)
-            table.insert(risk_buttons, {bg = btn, txt = txt})
-        end
-
-        -- ROWS SELECTION
-        CreateObj("Text", { Text = "Rows:", Size = 13, Position = UDim2.new(0, 360, 0, panel_y + 18), ZIndex = 16, Theme = "Text" })
-        local row_val = CreateObj("Text", { Text = tostring(plinko_obj.config.rows), Size = 13, Position = UDim2.new(0, 420, 0, panel_y + 18), ZIndex = 16, Theme = "Accent", Center = true })
-        
-        local btn_minus = CreateObj("Square", { Size = UDim2.new(0, 20, 0, 20), Position = UDim2.new(0, 400, 0, panel_y + 15), Color = Color3.fromRGB(25,25,25), Filled = true, ZIndex = 15 })
-        library:outline(btn_minus, Color3.fromRGB(44,44,44), 15)
-        CreateObj("Text", { Text = "-", Parent = btn_minus, Center = true, Size = 13, Position = UDim2.new(0.5,0,0,3), ZIndex = 16, Theme = "Text" })
-        
-        local btn_plus = CreateObj("Square", { Size = UDim2.new(0, 20, 0, 20), Position = UDim2.new(0, 440, 0, panel_y + 15), Color = Color3.fromRGB(25,25,25), Filled = true, ZIndex = 15 })
-        library:outline(btn_plus, Color3.fromRGB(44,44,44), 15)
-        CreateObj("Text", { Text = "+", Parent = btn_plus, Center = true, Size = 13, Position = UDim2.new(0.5,0,0,3), ZIndex = 16, Theme = "Text" })
-
-        btn_minus.MouseButton1Click:Connect(function()
-            if plinko_obj.config.rows > 8 then plinko_obj.config.rows = plinko_obj.config.rows - 1; row_val.Text = tostring(plinko_obj.config.rows); plinko_obj:GenerateBoard() end
-        end)
-        btn_plus.MouseButton1Click:Connect(function()
-            if plinko_obj.config.rows < 16 then plinko_obj.config.rows = plinko_obj.config.rows + 1; row_val.Text = tostring(plinko_obj.config.rows); plinko_obj:GenerateBoard() end
-        end)
-
-        -- BET INPUT
-        local bet_bg = CreateObj("Square", { Size = UDim2.new(0, 100, 0, 20), Position = UDim2.new(0.5, -50, 0, panel_y + 50), Color = Color3.fromRGB(25,25,25), Filled = true, ZIndex = 15 })
-        library:outline(bet_bg, Color3.fromRGB(44,44,44), 15); library:outline(library:outline(bet_bg, Color3.fromRGB(44,44,44), 15), Color3.new(0,0,0), 15)
-        local bet_txt = CreateObj("Text", { Text = "100", Parent = bet_bg, Center = true, Size = 13, Position = UDim2.new(0.5,0,0,3), ZIndex = 16, Theme = "Text" })
-        CreateObj("Text", { Text = "Bet:", Size = 13, Position = UDim2.new(0.5, -80, 0, panel_y + 53), ZIndex = 16, Theme = "Text", Center = true })
-        
-        library.object_textbox(bet_bg, bet_txt, function(str) end, function(str)
-            plinko_obj.config.bet = tonumber(str) or 100
-            bet_txt.Text = tostring(plinko_obj.config.bet)
-        end)
-
-        -- DROP & CLEAR BUTTONS
-        local btn_drop = CreateObj("Square", { Size = UDim2.new(0, 150, 0, 30), Position = UDim2.new(0.5, -160, 0, panel_y + 90), Color = Color3.fromRGB(35,80,35), Filled = true, ZIndex = 15 })
-        library:outline(btn_drop, Color3.fromRGB(44,44,44), 15); library:outline(library:outline(btn_drop, Color3.fromRGB(44,44,44), 15), Color3.new(0,0,0), 15)
-        CreateObj("Text", { Text = "DROP", Parent = btn_drop, Center = true, Size = 14, Position = UDim2.new(0.5,0,0,7), ZIndex = 16, Color = Color3.new(1,1,1) })
-        
-        local btn_clear = CreateObj("Square", { Size = UDim2.new(0, 150, 0, 30), Position = UDim2.new(0.5, 10, 0, panel_y + 90), Color = Color3.fromRGB(80,35,35), Filled = true, ZIndex = 15 })
-        library:outline(btn_clear, Color3.fromRGB(44,44,44), 15); library:outline(library:outline(btn_clear, Color3.fromRGB(44,44,44), 15), Color3.new(0,0,0), 15)
-        CreateObj("Text", { Text = "CLEAR", Parent = btn_clear, Center = true, Size = 14, Position = UDim2.new(0.5,0,0,7), ZIndex = 16, Color = Color3.new(1,1,1) })
-
-        btn_drop.MouseButton1Click:Connect(function() plinko_obj:SpawnBall() end)
-        btn_clear.MouseButton1Click:Connect(function() plinko_obj:Clear() end)
-
-
-        -- // 5. Physics Loop //
+        -- // 4. Physics Loop //
         game:GetService("RunService").RenderStepped:Connect(function(dt)
             if not holder.Visible then return end
             
             local win_x, win_y = holder.Position.X.Offset, holder.Position.Y.Offset
 
-            -- Visually update static parts
             for _, peg in pairs(p_state.pegs) do peg.obj.Position = UDim2.new(0, win_x + peg.rel_pos.X, 0, win_y + peg.rel_pos.Y) end
             for _, slot in pairs(p_state.slots) do
                 slot.bg.Position = UDim2.new(0, win_x + slot.rel_pos.X, 0, win_y + slot.rel_pos.Y)
@@ -7240,27 +7162,23 @@ if not library.particle_cache.bg then library:InitParticles() end
 
         plinko_obj:GenerateBoard()
 
-        -- // 6. SetOpen //
+        -- // 5. SetOpen //
         function plinko_obj:setopen(bool)
             plinko_obj.open = bool
-            local ContextActionService = game:GetService("ContextActionService")
-            local InputService = game:GetService('UserInputService')
-
             local targetPos = library.flags[flag .. ' position'] or default_pos
             if math.abs(targetPos.Y.Offset) > 2000 or math.abs(targetPos.X.Offset) > 5000 then targetPos = default_pos end
             local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset - 10000, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
 
             if bool then
                 holder.Visible = true
-                plinko_obj:GenerateBoard() -- Force regen on open
+                plinko_obj:GenerateBoard() 
                 holder.Position = offScreenPos
                 tween.new(holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
                 
                 library.open_windows = library.open_windows + 1
                 if library.open_windows == 1 then
-                    InputService.MouseIconEnabled = false
-                    ContextActionService:BindAction("Scrolling", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseWheel)
-                    ContextActionService:BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
+                    game:GetService('UserInputService').MouseIconEnabled = false
+                    game:GetService("ContextActionService"):BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
                 end
             else
                 tween.new(holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Position = offScreenPos}):Play()
@@ -7268,9 +7186,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                 
                 library.open_windows = library.open_windows - 1
                 if library.open_windows <= 0 then
-                    InputService.MouseIconEnabled = true
-                    ContextActionService:UnbindAction("Scrolling")
-                    ContextActionService:UnbindAction("Input")
+                    game:GetService('UserInputService').MouseIconEnabled = true
+                    game:GetService("ContextActionService"):UnbindAction("Input")
                 end
             end
         end
