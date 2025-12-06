@@ -7038,13 +7038,18 @@ if not library.particle_cache.bg then library:InitParticles() end
         end
 
         function plinko_obj:GenerateBoard()
-            -- Cleanup old objects
+-- Cleanup old objects
             for _, p in pairs(p_state.pegs) do p.obj:Remove() end
             for _, s in pairs(p_state.slots) do s.bg:Remove(); s.text:Remove() end
-            for _, w in pairs(p_state.walls) do w:Remove() end
+            
+            -- FAIL-SAFE: Check if walls exists before looping
+            if p_state.walls then
+                for _, w in pairs(p_state.walls) do w:Remove() end
+            end
+
             p_state.pegs = {}
             p_state.slots = {}
-            p_state.walls = {}
+            p_state.walls = {} -- Initialize it here for sure
 
             local start_y = 60
             local center_x = 250
