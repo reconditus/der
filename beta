@@ -4673,8 +4673,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                                 callback(false)
                             end
                         end
-
                         local function setkey(newkey)
+
                             if tostring(newkey):find("Enum.KeyCode.") then
                                 newkey = Enum.KeyCode[tostring(newkey):gsub("Enum.KeyCode.", "")]
                             elseif tostring(newkey):find("Enum.UserInputType.") then
@@ -7041,11 +7041,21 @@ if not library.particle_cache.bg then library:InitParticles() end
             -- Cleanup old objects
             for _, p in pairs(p_state.pegs) do p.obj:Remove() end
             for _, s in pairs(p_state.slots) do s.bg:Remove(); s.text:Remove() end
+            for _, w in pairs(p_state.walls) do w:Remove() end
             p_state.pegs = {}
             p_state.slots = {}
+            p_state.walls = {}
 
-            local start_y = 50
-            local center_x = 250 -- [NEW CENTER: Half of 500 width]
+            local start_y = 60
+            local center_x = 250
+
+            -- 1. Create Borders
+            local wall_color = Color3.fromRGB(40, 40, 40)
+            local top_wall = CreateObj("Square", { Size = UDim2.new(1, -20, 0, 2), Position = UDim2.new(0, 10, 0, 45), Theme = "Accent", Filled = true, Thickness = 0, ZIndex = 15 })
+            local left_wall = CreateObj("Square", { Size = UDim2.new(0, 2, 1, -60), Position = UDim2.new(0, 10, 0, 45), Color = wall_color, Filled = true, Thickness = 0, ZIndex = 15 })
+            local right_wall = CreateObj("Square", { Size = UDim2.new(0, 2, 1, -60), Position = UDim2.new(1, -12, 0, 45), Color = wall_color, Filled = true, Thickness = 0, ZIndex = 15 })
+            
+            table.insert(p_state.walls, top_wall); table.insert(p_state.walls, left_wall); table.insert(p_state.walls, right_wall)
 
             -- Pegs
             for row = 1, plinko_obj.config.rows do
@@ -7104,7 +7114,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 Filled = true, Thickness = 0, ZIndex = 18
             })
             table.insert(p_state.balls, {
-                obj = ball, rel_pos = Vector2.new(250 + math.random(-5, 5), 30),
+                obj = ball, rel_pos = Vector2.new(250 + math.random(-5, 5), 20),
                 vel = Vector2.new(0, 0), active = true
             })
         end
@@ -7117,12 +7127,19 @@ if not library.particle_cache.bg then library:InitParticles() end
         -- // 4. Physics Loop //
         game:GetService("RunService").RenderStepped:Connect(function(dt)
             if not holder.Visible then return end
-            
-            -- NOTE: Pegs and Slots are static relative to the window.
-            -- The library handles their visual movement when the window drags.
-            -- We DO NOT need to update their .Position here manually.
+local win_x, win_y = holder.Position.X.Offset, holder.Position.Y.Offset
 
-            -- Update Balls (Physics + Visuals)
+            -- Visual Update (Static Objects follow window)
+            for _, peg in pairs(p_state.pegs) do peg.obj.Position = UDim2.new(0, win_x + peg.rel_pos.X - 2, 0, win_y + peg.rel_pos.Y - 2) end
+            for _, slot in pairs(p_state.slots) do
+                slot.bg.Position = UDim2.new(0, win_x + slot.rel_pos.X - (slot.width/2) + 2, 0, win_y + slot.rel_pos.Y)
+                slot.text.Position = UDim2.new(0, win_x + slot.rel_pos.X, 0, win_y + slot.rel_pos.Y + 3)
+            end
+            
+            -- Border Visual Update
+            if p_state.walls[1] then p_state.walls[1].Position = UDim2.new(0, win_x + 10, 0, win_y + 45) end
+            if p_state.walls[2] then p_state.walls[2].Position = UDim2.new(0, win_x + 10, 0, win_y + 45) end
+            if p_state.walls[3] then p_state.walls[3].Position = UDim2.new(0, win_x + 488, 0, win_y + 45) end
             for i = #p_state.balls, 1, -1 do
                 local b = p_state.balls[i]
                 if b.active then
