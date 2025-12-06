@@ -6986,11 +6986,12 @@ if not library.particle_cache.bg then library:InitParticles() end
     end
     --
 -- // PLINKO WINDOW (Updated: External Control) //
+    -- // PLINKO WINDOW (Fixed: Force Refresh on Open) //
     function window:plinko_window(cfg)
         local plinko_obj = { open = false }
         local flag = cfg.flag or utility.nextflag()
         
-        -- Default Position
+        -- Position: To the right of the other windows
         local default_pos = UDim2.new(0, 1380, 0, 600) 
 
         -- // 1. Create Window Frame //
@@ -7018,7 +7019,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             Thickness = 1, Filled = true, ZIndex = 14
         })
 
-        -- // 2. Game State & Config (Exposed) //
+        -- // 2. Game State & Config //
         plinko_obj.config = {
             rows = 12, spacing = 28, gravity = 700, dampening = 0.6, bet = 100, risk = "Medium",
             multipliers = {
@@ -7032,12 +7033,13 @@ if not library.particle_cache.bg then library:InitParticles() end
         -- // 3. Helper Functions //
         local function CreateObj(type, props)
             local obj = library:create(type, props)
-            obj.Parent = holder 
+            obj.Parent = holder
+            obj.Visible = true -- Force visible
             return obj
         end
 
-        -- Exposed Function: Generate Board
         function plinko_obj:GenerateBoard()
+            -- Cleanup old objects
             for _, p in pairs(p_state.pegs) do p.obj:Remove() end
             for _, s in pairs(p_state.slots) do s.bg:Remove(); s.text:Remove() end
             p_state.pegs = {}
@@ -7046,7 +7048,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             local start_y = 50
             local center_x = 200
 
-            -- Pegs
+            -- Create Pegs
             for row = 1, plinko_obj.config.rows do
                 local pegs_in_row = row + 2
                 local width = (pegs_in_row - 1) * plinko_obj.config.spacing
@@ -7055,22 +7057,23 @@ if not library.particle_cache.bg then library:InitParticles() end
                 for col = 1, pegs_in_row do
                     local rx = offset_x + ((col - 1) * plinko_obj.config.spacing)
                     local ry = start_y + ((row - 1) * plinko_obj.config.spacing)
+                    
                     local peg = CreateObj("Square", {
                         Size = UDim2.new(0, 4, 0, 4), Position = UDim2.new(0, rx, 0, ry),
                         Color = Color3.fromRGB(200, 200, 200), Filled = true, Thickness = 0, ZIndex = 16
                     })
+                    
                     table.insert(p_state.pegs, { obj = peg, rel_pos = Vector2.new(rx, ry), radius = 3 })
                 end
             end
 
-            -- Slots
+            -- Create Slots
             local current_mults = plinko_obj.config.multipliers[plinko_obj.config.risk] or plinko_obj.config.multipliers.Medium
             local last_row_y = start_y + (plinko_obj.config.rows * plinko_obj.config.spacing)
             local total_width = (plinko_obj.config.rows + 2) * plinko_obj.config.spacing
             local start_x = center_x - (total_width / 2) + (plinko_obj.config.spacing/2)
 
             for i = 1, plinko_obj.config.rows + 1 do
-                -- Map multiplier to row count
                 local mid = math.ceil((plinko_obj.config.rows + 1)/2)
                 local dist = math.abs(i - mid)
                 local idx = math.clamp(math.floor(dist/(mid/#current_mults)) + 1, 1, #current_mults)
@@ -7096,7 +7099,6 @@ if not library.particle_cache.bg then library:InitParticles() end
             end
         end
 
-        -- Exposed Function: Spawn Ball
         function plinko_obj:SpawnBall()
             local ball = CreateObj("Square", {
                 Size = UDim2.new(0, 6, 0, 6), Color = Color3.fromRGB(255, 60, 60),
@@ -7108,7 +7110,6 @@ if not library.particle_cache.bg then library:InitParticles() end
             })
         end
         
-        -- Exposed Function: Clear
         function plinko_obj:Clear()
             for _, b in pairs(p_state.balls) do b.obj:Remove() end
             p_state.balls = {}
@@ -7117,6 +7118,8 @@ if not library.particle_cache.bg then library:InitParticles() end
         -- // 4. Physics Loop //
         game:GetService("RunService").RenderStepped:Connect(function(dt)
             if not holder.Visible then return end
+            
+            -- Keep visuals attached to window frame
             local win_x, win_y = holder.Position.X.Offset, holder.Position.Y.Offset
 
             for _, peg in pairs(p_state.pegs) do peg.obj.Position = UDim2.new(0, win_x + peg.rel_pos.X, 0, win_y + peg.rel_pos.Y) end
@@ -7161,30 +7164,42 @@ if not library.particle_cache.bg then library:InitParticles() end
             end
         end)
 
+        -- Initial generation (Might be hidden)
         plinko_obj:GenerateBoard()
 
-        -- // 5. SetOpen (Diagonal Animation) //
+        -- // 5. SetOpen //
         function plinko_obj:setopen(bool)
             plinko_obj.open = bool
+            local ContextActionService = game:GetService("ContextActionService")
+            local InputService = game:GetService('UserInputService')
+
             local targetPos = library.flags[flag .. ' position'] or default_pos
             if math.abs(targetPos.Y.Offset) > 2000 or math.abs(targetPos.X.Offset) > 5000 then targetPos = default_pos end
             local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset - 10000, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
 
             if bool then
-                holder.Visible = true; holder.Position = offScreenPos
+                holder.Visible = true
+                -- FORCE REGENERATE BOARD ON OPEN TO ENSURE VISIBILITY
+                plinko_obj:GenerateBoard()
+                
+                holder.Position = offScreenPos
                 tween.new(holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
+                
                 library.open_windows = library.open_windows + 1
                 if library.open_windows == 1 then
-                    game:GetService('UserInputService').MouseIconEnabled = false
-                    game:GetService("ContextActionService"):BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
+                    InputService.MouseIconEnabled = false
+                    ContextActionService:BindAction("Scrolling", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseWheel)
+                    ContextActionService:BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
                 end
             else
                 tween.new(holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Position = offScreenPos}):Play()
                 task.delay(0.6, function() if not plinko_obj.open then holder.Visible = false end end)
+                
                 library.open_windows = library.open_windows - 1
                 if library.open_windows <= 0 then
-                    game:GetService('UserInputService').MouseIconEnabled = true
-                    game:GetService("ContextActionService"):UnbindAction("Input")
+                    InputService.MouseIconEnabled = true
+                    ContextActionService:UnbindAction("Scrolling")
+                    ContextActionService:UnbindAction("Input")
                 end
             end
         end
