@@ -6985,7 +6985,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         return preview_obj
     end
     --
--- // PLINKO WINDOW (Resized to 500x750, No Controls) //
+-- // PLINKO WINDOW (Fixed: Removed Double Positioning Logic) //
     function window:plinko_window(cfg)
         local plinko_obj = { open = false }
         local flag = cfg.flag or utility.nextflag()
@@ -6993,10 +6993,10 @@ if not library.particle_cache.bg then library:InitParticles() end
         -- Default Position
         local default_pos = UDim2.new(0, 1380, 0, 600) 
 
-        -- // 1. Create Window Frame (Resized to 500x750) //
+        -- // 1. Create Window Frame (Resized) //
         local holder = library:create("Square", {
             Visible = false, Transparency = 1, Color = Color3.fromRGB(13,13,13), 
-            Size = UDim2.new(0, 500, 0, 750), Position = default_pos, 
+            Size = UDim2.new(0, 500, 0, 750), Position = default_pos, -- [NEW SIZE: 500x750]
             Thickness = 1, Filled = true, ZIndex = 14
         })
         
@@ -7038,13 +7038,14 @@ if not library.particle_cache.bg then library:InitParticles() end
         end
 
         function plinko_obj:GenerateBoard()
+            -- Cleanup old objects
             for _, p in pairs(p_state.pegs) do p.obj:Remove() end
             for _, s in pairs(p_state.slots) do s.bg:Remove(); s.text:Remove() end
             p_state.pegs = {}
             p_state.slots = {}
 
             local start_y = 50
-            local center_x = 250 -- Updated center for 500px width
+            local center_x = 250 -- [NEW CENTER: Half of 500 width]
 
             -- Pegs
             for row = 1, plinko_obj.config.rows do
@@ -7060,6 +7061,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         Size = UDim2.new(0, 4, 0, 4), Position = UDim2.new(0, rx, 0, ry),
                         Color = Color3.fromRGB(200, 200, 200), Filled = true, Thickness = 0, ZIndex = 16
                     })
+                    
                     table.insert(p_state.pegs, { obj = peg, rel_pos = Vector2.new(rx, ry), radius = 3 })
                 end
             end
@@ -7102,7 +7104,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 Filled = true, Thickness = 0, ZIndex = 18
             })
             table.insert(p_state.balls, {
-                obj = ball, rel_pos = Vector2.new(250 + math.random(-5, 5), 30), -- 250 Center
+                obj = ball, rel_pos = Vector2.new(250 + math.random(-5, 5), 30),
                 vel = Vector2.new(0, 0), active = true
             })
         end
@@ -7116,20 +7118,19 @@ if not library.particle_cache.bg then library:InitParticles() end
         game:GetService("RunService").RenderStepped:Connect(function(dt)
             if not holder.Visible then return end
             
-            local win_x, win_y = holder.Position.X.Offset, holder.Position.Y.Offset
+            -- NOTE: Pegs and Slots are static relative to the window.
+            -- The library handles their visual movement when the window drags.
+            -- We DO NOT need to update their .Position here manually.
 
-            for _, peg in pairs(p_state.pegs) do peg.obj.Position = UDim2.new(0, win_x + peg.rel_pos.X, 0, win_y + peg.rel_pos.Y) end
-            for _, slot in pairs(p_state.slots) do
-                slot.bg.Position = UDim2.new(0, win_x + slot.rel_pos.X, 0, win_y + slot.rel_pos.Y)
-                slot.text.Position = UDim2.new(0, win_x + slot.rel_pos.X + (slot.width/2) - 2, 0, win_y + slot.rel_pos.Y + 3)
-            end
-
+            -- Update Balls (Physics + Visuals)
             for i = #p_state.balls, 1, -1 do
                 local b = p_state.balls[i]
                 if b.active then
+                    -- Physics (Gravity)
                     b.vel = b.vel + Vector2.new(0, plinko_obj.config.gravity * dt)
                     local next_pos = b.rel_pos + (b.vel * dt)
 
+                    -- Physics (Collisions)
                     for _, peg in pairs(p_state.pegs) do
                         local diff = next_pos - peg.rel_pos
                         local dist = diff.Magnitude
@@ -7142,13 +7143,17 @@ if not library.particle_cache.bg then library:InitParticles() end
                         end
                     end
                     b.rel_pos = next_pos
-                    b.obj.Position = UDim2.new(0, win_x + b.rel_pos.X, 0, win_y + b.rel_pos.Y)
+                    
+                    -- Visual Update: Apply relative position directly
+                    b.obj.Position = UDim2.new(0, b.rel_pos.X, 0, b.rel_pos.Y)
 
+                    -- End condition
                     local finish_y = 50 + (plinko_obj.config.rows * plinko_obj.config.spacing) + 15
                     if b.rel_pos.Y > finish_y then
                         b.active = false
                         b.obj:Remove()
                         table.remove(p_state.balls, i)
+                        -- Determine win
                         for _, slot in pairs(p_state.slots) do
                             if math.abs(b.rel_pos.X - slot.rel_pos.X) < (slot.width/2) then
                                 library:notify({text = string.format("hit %sx multiplier", slot.val), time = 2})
@@ -7171,7 +7176,6 @@ if not library.particle_cache.bg then library:InitParticles() end
 
             if bool then
                 holder.Visible = true
-                plinko_obj:GenerateBoard() 
                 holder.Position = offScreenPos
                 tween.new(holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
                 
