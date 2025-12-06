@@ -7125,9 +7125,10 @@ if not library.particle_cache.bg then library:InitParticles() end
         end
 
         -- // 4. Physics Loop //
-        game:GetService("RunService").RenderStepped:Connect(function(dt)
+game:GetService("RunService").RenderStepped:Connect(function(dt)
             if not holder.Visible then return end
-local win_x, win_y = holder.Position.X.Offset, holder.Position.Y.Offset
+            
+            local win_x, win_y = holder.Position.X.Offset, holder.Position.Y.Offset
 
             -- Visual Update (Static Objects follow window)
             for _, peg in pairs(p_state.pegs) do peg.obj.Position = UDim2.new(0, win_x + peg.rel_pos.X - 2, 0, win_y + peg.rel_pos.Y - 2) end
@@ -7140,12 +7141,19 @@ local win_x, win_y = holder.Position.X.Offset, holder.Position.Y.Offset
             if p_state.walls[1] then p_state.walls[1].Position = UDim2.new(0, win_x + 10, 0, win_y + 45) end
             if p_state.walls[2] then p_state.walls[2].Position = UDim2.new(0, win_x + 10, 0, win_y + 45) end
             if p_state.walls[3] then p_state.walls[3].Position = UDim2.new(0, win_x + 488, 0, win_y + 45) end
+
             for i = #p_state.balls, 1, -1 do
                 local b = p_state.balls[i]
                 if b.active then
-                    -- Physics (Gravity)
+-- Physics (Gravity)
                     b.vel = b.vel + Vector2.new(0, plinko_obj.config.gravity * dt)
                     local next_pos = b.rel_pos + (b.vel * dt)
+
+                    -- Wall Collisions (Borders)
+                    if next_pos.X < 15 or next_pos.X > 485 then
+                        b.vel = Vector2.new(-b.vel.X * 0.5, b.vel.Y) -- Bounce off wall
+                        next_pos = Vector2.new(math.clamp(next_pos.X, 15, 485), next_pos.Y)
+                    end
 
                     -- Physics (Collisions)
                     for _, peg in pairs(p_state.pegs) do
