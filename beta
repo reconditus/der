@@ -6985,13 +6985,12 @@ if not library.particle_cache.bg then library:InitParticles() end
         return preview_obj
     end
     --
--- // PLINKO WINDOW (Updated: External Control) //
-    -- // PLINKO WINDOW (Fixed: Force Refresh on Open) //
+-- // PLINKO WINDOW (Fixed: Removed Double Positioning Logic) //
     function window:plinko_window(cfg)
         local plinko_obj = { open = false }
         local flag = cfg.flag or utility.nextflag()
         
-        -- Position: To the right of the other windows
+        -- Default Position
         local default_pos = UDim2.new(0, 1380, 0, 600) 
 
         -- // 1. Create Window Frame //
@@ -7034,7 +7033,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         local function CreateObj(type, props)
             local obj = library:create(type, props)
             obj.Parent = holder
-            obj.Visible = true -- Force visible
+            obj.Visible = true 
             return obj
         end
 
@@ -7048,7 +7047,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             local start_y = 50
             local center_x = 200
 
-            -- Create Pegs
+            -- Pegs
             for row = 1, plinko_obj.config.rows do
                 local pegs_in_row = row + 2
                 local width = (pegs_in_row - 1) * plinko_obj.config.spacing
@@ -7067,7 +7066,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 end
             end
 
-            -- Create Slots
+            -- Slots
             local current_mults = plinko_obj.config.multipliers[plinko_obj.config.risk] or plinko_obj.config.multipliers.Medium
             local last_row_y = start_y + (plinko_obj.config.rows * plinko_obj.config.spacing)
             local total_width = (plinko_obj.config.rows + 2) * plinko_obj.config.spacing
@@ -7119,21 +7118,19 @@ if not library.particle_cache.bg then library:InitParticles() end
         game:GetService("RunService").RenderStepped:Connect(function(dt)
             if not holder.Visible then return end
             
-            -- Keep visuals attached to window frame
-            local win_x, win_y = holder.Position.X.Offset, holder.Position.Y.Offset
+            -- NOTE: Pegs and Slots are static relative to the window.
+            -- The library handles their visual movement when the window drags.
+            -- We DO NOT need to update their .Position here manually.
 
-            for _, peg in pairs(p_state.pegs) do peg.obj.Position = UDim2.new(0, win_x + peg.rel_pos.X, 0, win_y + peg.rel_pos.Y) end
-            for _, slot in pairs(p_state.slots) do
-                slot.bg.Position = UDim2.new(0, win_x + slot.rel_pos.X, 0, win_y + slot.rel_pos.Y)
-                slot.text.Position = UDim2.new(0, win_x + slot.rel_pos.X + (slot.width/2) - 2, 0, win_y + slot.rel_pos.Y + 3)
-            end
-
+            -- Update Balls (Physics + Visuals)
             for i = #p_state.balls, 1, -1 do
                 local b = p_state.balls[i]
                 if b.active then
+                    -- Physics (Gravity)
                     b.vel = b.vel + Vector2.new(0, plinko_obj.config.gravity * dt)
                     local next_pos = b.rel_pos + (b.vel * dt)
 
+                    -- Physics (Collisions)
                     for _, peg in pairs(p_state.pegs) do
                         local diff = next_pos - peg.rel_pos
                         local dist = diff.Magnitude
@@ -7146,13 +7143,17 @@ if not library.particle_cache.bg then library:InitParticles() end
                         end
                     end
                     b.rel_pos = next_pos
-                    b.obj.Position = UDim2.new(0, win_x + b.rel_pos.X, 0, win_y + b.rel_pos.Y)
+                    
+                    -- Visual Update: Apply relative position directly
+                    b.obj.Position = UDim2.new(0, b.rel_pos.X, 0, b.rel_pos.Y)
 
+                    -- End condition
                     local finish_y = 50 + (plinko_obj.config.rows * plinko_obj.config.spacing) + 15
                     if b.rel_pos.Y > finish_y then
                         b.active = false
                         b.obj:Remove()
                         table.remove(p_state.balls, i)
+                        -- Determine win
                         for _, slot in pairs(p_state.slots) do
                             if math.abs(b.rel_pos.X - slot.rel_pos.X) < (slot.width/2) then
                                 library:notify({text = string.format("hit %sx multiplier", slot.val), time = 2})
@@ -7164,32 +7165,24 @@ if not library.particle_cache.bg then library:InitParticles() end
             end
         end)
 
-        -- Initial generation (Might be hidden)
         plinko_obj:GenerateBoard()
 
         -- // 5. SetOpen //
         function plinko_obj:setopen(bool)
             plinko_obj.open = bool
-            local ContextActionService = game:GetService("ContextActionService")
-            local InputService = game:GetService('UserInputService')
-
             local targetPos = library.flags[flag .. ' position'] or default_pos
             if math.abs(targetPos.Y.Offset) > 2000 or math.abs(targetPos.X.Offset) > 5000 then targetPos = default_pos end
             local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset - 10000, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
 
             if bool then
                 holder.Visible = true
-                -- FORCE REGENERATE BOARD ON OPEN TO ENSURE VISIBILITY
-                plinko_obj:GenerateBoard()
-                
                 holder.Position = offScreenPos
                 tween.new(holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
                 
                 library.open_windows = library.open_windows + 1
                 if library.open_windows == 1 then
-                    InputService.MouseIconEnabled = false
-                    ContextActionService:BindAction("Scrolling", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseWheel)
-                    ContextActionService:BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
+                    game:GetService('UserInputService').MouseIconEnabled = false
+                    game:GetService("ContextActionService"):BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
                 end
             else
                 tween.new(holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Position = offScreenPos}):Play()
@@ -7197,9 +7190,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                 
                 library.open_windows = library.open_windows - 1
                 if library.open_windows <= 0 then
-                    InputService.MouseIconEnabled = true
-                    ContextActionService:UnbindAction("Scrolling")
-                    ContextActionService:UnbindAction("Input")
+                    game:GetService('UserInputService').MouseIconEnabled = true
+                    game:GetService("ContextActionService"):UnbindAction("Input")
                 end
             end
         end
