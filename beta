@@ -7056,9 +7056,9 @@ if not library.particle_cache.bg then library:InitParticles() end
 
             -- 1. Create Borders
             local wall_color = Color3.fromRGB(40, 40, 40)
-            local top_wall = CreateObj("Square", { Size = UDim2.new(1, -20, 0, 2), Position = UDim2.new(0, 10, 0, 45), Theme = "Accent", Filled = true, Thickness = 0, ZIndex = 15 })
-            local left_wall = CreateObj("Square", { Size = UDim2.new(0, 2, 1, -60), Position = UDim2.new(0, 10, 0, 45), Color = wall_color, Filled = true, Thickness = 0, ZIndex = 15 })
-            local right_wall = CreateObj("Square", { Size = UDim2.new(0, 2, 1, -60), Position = UDim2.new(1, -12, 0, 45), Color = wall_color, Filled = true, Thickness = 0, ZIndex = 15 })
+            local top_wall = CreateObj("Square", { Size = UDim2.new(1, -20, 0, 2), Position = UDim2.new(0, 10, 0, 45), Theme = "Accent", Filled = true, Thickness = 0, ZIndex = 15, Transparency = 1 })
+            local left_wall = CreateObj("Square", { Size = UDim2.new(0, 2, 1, -60), Position = UDim2.new(0, 10, 0, 45), Color = wall_color, Filled = true, Thickness = 0, ZIndex = 15, Transparency = 1 })
+            local right_wall = CreateObj("Square", { Size = UDim2.new(0, 2, 1, -60), Position = UDim2.new(1, -12, 0, 45), Color = wall_color, Filled = true, Thickness = 0, ZIndex = 15, Transparency = 1 })
             
             table.insert(p_state.walls, top_wall); table.insert(p_state.walls, left_wall); table.insert(p_state.walls, right_wall)
 
@@ -7074,7 +7074,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     
                     local peg = CreateObj("Square", {
                         Size = UDim2.new(0, 4, 0, 4), Position = UDim2.new(0, rx, 0, ry),
-                        Color = Color3.fromRGB(200, 200, 200), Filled = true, Thickness = 0, ZIndex = 16
+                        Color = Color3.fromRGB(200, 200, 200), Filled = true, Thickness = 0, ZIndex = 16, Transparency = 1
                     })
                     
                     table.insert(p_state.pegs, { obj = peg, rel_pos = Vector2.new(rx, ry), radius = 3 })
@@ -7102,7 +7102,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 local bg = CreateObj("Square", {
                     Size = UDim2.new(0, plinko_obj.config.spacing - 4, 0, 20),
                     Position = UDim2.new(0, sx, 0, last_row_y + 15),
-                    Color = color, Filled = true, Thickness = 0, ZIndex = 15
+                    Color = color, Filled = true, Thickness = 0, ZIndex = 15, Transparency = 1
                 })
                 local txt = CreateObj("Text", {
                     Text = tostring(mult).."x", Size = 10, Center = true, Outline = true, Theme = "Text",
@@ -7116,7 +7116,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         function plinko_obj:SpawnBall()
             local ball = CreateObj("Square", {
                 Size = UDim2.new(0, 6, 0, 6), Color = Color3.fromRGB(255, 60, 60),
-                Filled = true, Thickness = 0, ZIndex = 18
+                Filled = true, Thickness = 0, ZIndex = 18, Transparency = 1
             })
             table.insert(p_state.balls, {
                 obj = ball, rel_pos = Vector2.new(250 + math.random(-5, 5), 20),
