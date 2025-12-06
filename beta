@@ -7106,7 +7106,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 })
                 local txt = CreateObj("Text", {
                     Text = tostring(mult).."x", Size = 10, Center = true, Outline = true, Theme = "Text",
-                    Position = UDim2.new(0, sx + (plinko_obj.config.spacing/2) - 2, 0, last_row_y + 18), ZIndex = 17
+                    Position = UDim2.new(0, sx + (plinko_obj.config.spacing/2) - 2, 0, last_row_y + 18), ZIndex = 17, Transparency = 1
                 })
 
                 table.insert(p_state.slots, { bg = bg, text = txt, val = mult, rel_pos = Vector2.new(sx, last_row_y + 15), width = plinko_obj.config.spacing })
