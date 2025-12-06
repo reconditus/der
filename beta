@@ -6985,12 +6985,12 @@ if not library.particle_cache.bg then library:InitParticles() end
         return preview_obj
     end
     --
--- // PLINKO WINDOW (Standalone Game) //
+-- // PLINKO WINDOW (Updated: External Control) //
     function window:plinko_window(cfg)
         local plinko_obj = { open = false }
         local flag = cfg.flag or utility.nextflag()
         
-        -- Default Position (Next to ESP Preview/Server List)
+        -- Default Position
         local default_pos = UDim2.new(0, 1380, 0, 600) 
 
         -- // 1. Create Window Frame //
@@ -7003,7 +7003,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         local outline = library:outline(holder, Color3.fromRGB(37,37,37), 14)
         library:outline(outline, Color3.fromRGB(0,0,0), 14)
         
-        utility.dragify(holder, flag) -- Save position
+        utility.dragify(holder, flag)
 
         -- Title
         library:create("Text", {
@@ -7018,129 +7018,117 @@ if not library.particle_cache.bg then library:InitParticles() end
             Thickness = 1, Filled = true, ZIndex = 14
         })
 
-        -- // 2. Game State & Config //
-        local p_config = {
-            rows = 12, spacing = 28, gravity = 700, dampening = 0.6, bet = 100,
-            multipliers = {10, 5, 2, 0.5, 0.2, 0.2, 0.5, 2, 5, 10}
+        -- // 2. Game State & Config (Exposed) //
+        plinko_obj.config = {
+            rows = 12, spacing = 28, gravity = 700, dampening = 0.6, bet = 100, risk = "Medium",
+            multipliers = {
+                Low = {5, 3, 1.5, 1, 0.7, 0.7, 1, 1.5, 3, 5},
+                Medium = {10, 5, 2, 0.5, 0.2, 0.2, 0.5, 2, 5, 10},
+                High = {25, 10, 5, 0, 0, 0, 0, 5, 10, 25}
+            }
         }
         local p_state = { pegs = {}, balls = {}, slots = {}, active = false }
 
         -- // 3. Helper Functions //
         local function CreateObj(type, props)
             local obj = library:create(type, props)
-            obj.Parent = holder -- Bind visibility/destruction to window
+            obj.Parent = holder 
             return obj
         end
 
-        local function GenerateBoard()
-            -- Cleanup old
+        -- Exposed Function: Generate Board
+        function plinko_obj:GenerateBoard()
             for _, p in pairs(p_state.pegs) do p.obj:Remove() end
             for _, s in pairs(p_state.slots) do s.bg:Remove(); s.text:Remove() end
             p_state.pegs = {}
             p_state.slots = {}
 
             local start_y = 50
-            local center_x = 200 -- Half of 400 width
+            local center_x = 200
 
             -- Pegs
-            for row = 1, p_config.rows do
+            for row = 1, plinko_obj.config.rows do
                 local pegs_in_row = row + 2
-                local width = (pegs_in_row - 1) * p_config.spacing
+                local width = (pegs_in_row - 1) * plinko_obj.config.spacing
                 local offset_x = center_x - (width / 2)
 
                 for col = 1, pegs_in_row do
-                    local rx = offset_x + ((col - 1) * p_config.spacing)
-                    local ry = start_y + ((row - 1) * p_config.spacing)
-                    
+                    local rx = offset_x + ((col - 1) * plinko_obj.config.spacing)
+                    local ry = start_y + ((row - 1) * plinko_obj.config.spacing)
                     local peg = CreateObj("Square", {
                         Size = UDim2.new(0, 4, 0, 4), Position = UDim2.new(0, rx, 0, ry),
                         Color = Color3.fromRGB(200, 200, 200), Filled = true, Thickness = 0, ZIndex = 16
                     })
-                    
                     table.insert(p_state.pegs, { obj = peg, rel_pos = Vector2.new(rx, ry), radius = 3 })
                 end
             end
 
             -- Slots
-            local last_row_y = start_y + (p_config.rows * p_config.spacing)
-            local total_width = (p_config.rows + 2) * p_config.spacing
-            local start_x = center_x - (total_width / 2) + (p_config.spacing/2)
+            local current_mults = plinko_obj.config.multipliers[plinko_obj.config.risk] or plinko_obj.config.multipliers.Medium
+            local last_row_y = start_y + (plinko_obj.config.rows * plinko_obj.config.spacing)
+            local total_width = (plinko_obj.config.rows + 2) * plinko_obj.config.spacing
+            local start_x = center_x - (total_width / 2) + (plinko_obj.config.spacing/2)
 
-            for i = 1, #p_config.multipliers do
-                local mult = p_config.multipliers[i]
-                local sx = start_x + ((i - 1) * p_config.spacing)
+            for i = 1, plinko_obj.config.rows + 1 do
+                -- Map multiplier to row count
+                local mid = math.ceil((plinko_obj.config.rows + 1)/2)
+                local dist = math.abs(i - mid)
+                local idx = math.clamp(math.floor(dist/(mid/#current_mults)) + 1, 1, #current_mults)
+                local mult = current_mults[idx] or 1
+
+                local sx = start_x + ((i - 1) * plinko_obj.config.spacing)
                 
                 local color = Color3.fromRGB(80, 80, 200)
                 if mult >= 5 then color = Color3.fromRGB(200, 50, 50) 
                 elseif mult < 1 then color = Color3.fromRGB(80, 80, 80) end
 
                 local bg = CreateObj("Square", {
-                    Size = UDim2.new(0, p_config.spacing - 4, 0, 20),
+                    Size = UDim2.new(0, plinko_obj.config.spacing - 4, 0, 20),
                     Position = UDim2.new(0, sx, 0, last_row_y + 15),
                     Color = color, Filled = true, Thickness = 0, ZIndex = 15
                 })
                 local txt = CreateObj("Text", {
                     Text = tostring(mult).."x", Size = 10, Center = true, Outline = true, Theme = "Text",
-                    Position = UDim2.new(0, sx + (p_config.spacing/2) - 2, 0, last_row_y + 18), ZIndex = 17
+                    Position = UDim2.new(0, sx + (plinko_obj.config.spacing/2) - 2, 0, last_row_y + 18), ZIndex = 17
                 })
 
-                table.insert(p_state.slots, { bg = bg, text = txt, val = mult, rel_pos = Vector2.new(sx, last_row_y + 15), width = p_config.spacing })
+                table.insert(p_state.slots, { bg = bg, text = txt, val = mult, rel_pos = Vector2.new(sx, last_row_y + 15), width = plinko_obj.config.spacing })
             end
         end
 
-        local function SpawnBall()
+        -- Exposed Function: Spawn Ball
+        function plinko_obj:SpawnBall()
             local ball = CreateObj("Square", {
                 Size = UDim2.new(0, 6, 0, 6), Color = Color3.fromRGB(255, 60, 60),
                 Filled = true, Thickness = 0, ZIndex = 18
             })
-            
             table.insert(p_state.balls, {
-                obj = ball,
-                rel_pos = Vector2.new(200 + math.random(-5, 5), 30),
-                vel = Vector2.new(0, 0),
-                active = true
+                obj = ball, rel_pos = Vector2.new(200 + math.random(-5, 5), 30),
+                vel = Vector2.new(0, 0), active = true
             })
         end
-
-        -- // 4. Controls (Buttons) //
-        local btn_drop = library:create("Square", {
-            Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(25,25,25),
-            Size = UDim2.new(0, 100, 0, 25), Position = UDim2.new(0.5, -50, 1, -40),
-            Thickness = 1, Filled = true, ZIndex = 15
-        })
-        library:outline(btn_drop, Color3.fromRGB(44,44,44), 15); library:outline(library:outline(btn_drop, Color3.fromRGB(44,44,44), 15), Color3.new(0,0,0), 15)
         
-        library:create("Text", {
-            Text = "drop", Parent = btn_drop, Visible = true, Transparency = 1, Theme = "Text",
-            Size = 13, Center = true, Outline = false, Font = Drawing.Fonts.Plex,
-            Position = UDim2.new(0.5, 0, 0, 5), ZIndex = 16
-        })
+        -- Exposed Function: Clear
+        function plinko_obj:Clear()
+            for _, b in pairs(p_state.balls) do b.obj:Remove() end
+            p_state.balls = {}
+        end
 
-        btn_drop.MouseEnter:Connect(function() btn_drop.Color = Color3.fromRGB(35,35,35) end)
-        btn_drop.MouseLeave:Connect(function() btn_drop.Color = Color3.fromRGB(25,25,25) end)
-        btn_drop.MouseButton1Click:Connect(SpawnBall)
-
-        -- // 5. Physics Loop //
+        -- // 4. Physics Loop //
         game:GetService("RunService").RenderStepped:Connect(function(dt)
             if not holder.Visible then return end
-            
-            -- Keep visuals attached to window
-            local win_x = holder.Position.X.Offset
-            local win_y = holder.Position.Y.Offset
+            local win_x, win_y = holder.Position.X.Offset, holder.Position.Y.Offset
 
-            for _, peg in pairs(p_state.pegs) do
-                peg.obj.Position = UDim2.new(0, win_x + peg.rel_pos.X, 0, win_y + peg.rel_pos.Y)
-            end
+            for _, peg in pairs(p_state.pegs) do peg.obj.Position = UDim2.new(0, win_x + peg.rel_pos.X, 0, win_y + peg.rel_pos.Y) end
             for _, slot in pairs(p_state.slots) do
                 slot.bg.Position = UDim2.new(0, win_x + slot.rel_pos.X, 0, win_y + slot.rel_pos.Y)
                 slot.text.Position = UDim2.new(0, win_x + slot.rel_pos.X + (slot.width/2) - 2, 0, win_y + slot.rel_pos.Y + 3)
             end
 
-            -- Ball Physics
             for i = #p_state.balls, 1, -1 do
                 local b = p_state.balls[i]
                 if b.active then
-                    b.vel = b.vel + Vector2.new(0, p_config.gravity * dt)
+                    b.vel = b.vel + Vector2.new(0, plinko_obj.config.gravity * dt)
                     local next_pos = b.rel_pos + (b.vel * dt)
 
                     for _, peg in pairs(p_state.pegs) do
@@ -7149,22 +7137,19 @@ if not library.particle_cache.bg then library:InitParticles() end
                         if dist < (3 + peg.radius) then
                             local norm = diff.Unit
                             b.vel = b.vel - (2 * b.vel:Dot(norm) * norm)
-                            b.vel = b.vel * p_config.dampening
+                            b.vel = b.vel * plinko_obj.config.dampening
                             b.vel = b.vel + Vector2.new(math.random(-20, 20), 0)
                             next_pos = peg.rel_pos + (norm * (3 + peg.radius + 1))
                         end
                     end
-
                     b.rel_pos = next_pos
                     b.obj.Position = UDim2.new(0, win_x + b.rel_pos.X, 0, win_y + b.rel_pos.Y)
 
-                    -- End condition
-                    local finish_y = 50 + (p_config.rows * p_config.spacing) + 15
+                    local finish_y = 50 + (plinko_obj.config.rows * plinko_obj.config.spacing) + 15
                     if b.rel_pos.Y > finish_y then
                         b.active = false
                         b.obj:Remove()
                         table.remove(p_state.balls, i)
-                        -- Determine win
                         for _, slot in pairs(p_state.slots) do
                             if math.abs(b.rel_pos.X - slot.rel_pos.X) < (slot.width/2) then
                                 library:notify({text = string.format("hit %sx multiplier", slot.val), time = 2})
@@ -7176,38 +7161,30 @@ if not library.particle_cache.bg then library:InitParticles() end
             end
         end)
 
-        GenerateBoard()
+        plinko_obj:GenerateBoard()
 
-        -- // 6. SetOpen (Diagonal Animation) //
+        -- // 5. SetOpen (Diagonal Animation) //
         function plinko_obj:setopen(bool)
             plinko_obj.open = bool
-            local ContextActionService = game:GetService("ContextActionService")
-            local InputService = game:GetService('UserInputService')
-
             local targetPos = library.flags[flag .. ' position'] or default_pos
             if math.abs(targetPos.Y.Offset) > 2000 or math.abs(targetPos.X.Offset) > 5000 then targetPos = default_pos end
             local offScreenPos = UDim2.new(targetPos.X.Scale, targetPos.X.Offset - 10000, targetPos.Y.Scale, targetPos.Y.Offset + 10000)
 
             if bool then
-                holder.Visible = true
-                holder.Position = offScreenPos
+                holder.Visible = true; holder.Position = offScreenPos
                 tween.new(holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
-                
                 library.open_windows = library.open_windows + 1
                 if library.open_windows == 1 then
-                    InputService.MouseIconEnabled = false
-                    ContextActionService:BindAction("Scrolling", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseWheel)
-                    ContextActionService:BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
+                    game:GetService('UserInputService').MouseIconEnabled = false
+                    game:GetService("ContextActionService"):BindAction("Input", function() return Enum.ContextActionResult.Sink end, false, Enum.UserInputType.MouseButton1)
                 end
             else
                 tween.new(holder, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Position = offScreenPos}):Play()
                 task.delay(0.6, function() if not plinko_obj.open then holder.Visible = false end end)
-                
                 library.open_windows = library.open_windows - 1
                 if library.open_windows <= 0 then
-                    InputService.MouseIconEnabled = true
-                    ContextActionService:UnbindAction("Scrolling")
-                    ContextActionService:UnbindAction("Input")
+                    game:GetService('UserInputService').MouseIconEnabled = true
+                    game:GetService("ContextActionService"):UnbindAction("Input")
                 end
             end
         end
