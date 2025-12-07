@@ -6996,7 +6996,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         -- // 1. Create Window Frame (Resized) //
         local holder = library:create("Square", {
             Visible = false, Transparency = 1, Color = Color3.fromRGB(13,13,13), 
-            Size = UDim2.new(0, 500, 0, 750), Position = default_pos, -- [NEW SIZE: 500x750]
+            Size = UDim2.new(0, 500, 0, 600), Position = default_pos, -- [NEW SIZE: 500x750]
             Thickness = 1, Filled = true, ZIndex = 14
         })
         
