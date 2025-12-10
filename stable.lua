@@ -7108,14 +7108,25 @@ function library:createwatermark()
         if (tick() - watermark_init) * 1000 > watermark.tickrate then
             watermark_init = tick()
             if watermark.objects.background.Visible then
-                local title = string.lower(utility.findtriggers(watermark.title))
-                local newSize = UDim2.new(0, utility.textlength(title, 2, 13).X + utility.textlength('dreya', 2, 13).X + 10, 0, 19)
+    
+    local title_text = string.lower(utility.findtriggers(watermark.title))
+    local domain_text = watermark.domain
 
-                watermark.objects.background.Size = newSize
-                watermark.objects.text2.Text = watermark.title
-                watermark.objects.text3.Text = watermark.domain
-                watermark.objects.text3.Position = UDim2.new(0, utility.textlength(watermark.objects.text2.Text, 2, 13).X + 5, 0, 2)
-            end
+    
+    local width_title = utility.textlength(title_text, 2, 13).X
+    local width_domain = utility.textlength(domain_text, 2, 13).X
+
+    
+    local newSize = UDim2.new(0, width_title + width_domain + 8, 0, 19)
+
+    
+    watermark.objects.background.Size = newSize
+    watermark.objects.text2.Text = title_text
+    watermark.objects.text3.Text = domain_text
+    
+
+    watermark.objects.text3.Position = UDim2.new(0, width_title + 5, 0, 2)
+			end
         end
     end)
 
