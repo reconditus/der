@@ -3567,7 +3567,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 end
 
                 if size == "auto" then
-                    side.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 55);
+                    section_holder.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 55);
                 end;
 
                 return slider;
@@ -4771,7 +4771,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     end;
                     --
                     if size == "auto" then
-                        side.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 55);
+                        section_holder.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 55);
                     end;
                     --
                     return toggle;
@@ -5190,7 +5190,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     end
                     --
                     if size == "auto" then
-                        side.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 20);
+                        section_holder.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 20);
                     end;
                     --
                     return library.createdropdown(holder, content, flag, callback, default, max, scrollable, scrollingmax)
@@ -5312,7 +5312,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     end
                     --
                     if size == "auto" then
-                        side.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 55);
+                        section_holder.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 55);
                     end;
                     --
                     return library.createmultibox(holder, content, flag, callback, default, max, scrollable, scrollingmax)
@@ -5523,7 +5523,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         colorpickertypes:set(color, false, true)
                     end
                     if size == "auto" then
-                        side.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 55);
+                        section_holder.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 55);
                     end;
                     return colorpicker_tbl
                 end;
@@ -5705,7 +5705,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     end
 
                     if size == "auto" then
-                        side.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 55);
+                        section_holder.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 55);
                     end;
 
                     return keybindtypes
@@ -5766,7 +5766,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     end
 
                     if size == "auto" then
-                        side.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 55);
+                        section_holder.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 55);
                     end;
                     return textbox_tbl
                 end;
