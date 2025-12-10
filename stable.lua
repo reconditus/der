@@ -7106,28 +7106,24 @@ function library:createwatermark()
     end
     game:GetService("RunService").Heartbeat:Connect(function()
         if (tick() - watermark_init) * 1000 > watermark.tickrate then
-            watermark_init = tick()
-            if watermark.objects.background.Visible then
-    
-    local title_text = string.lower(utility.findtriggers(watermark.title))
-    local domain_text = watermark.domain
+    watermark_init = tick()
+    if watermark.objects.background.Visible then
 
-    
-    local width_title = utility.textlength(title_text, 2, 13).X
-    local width_domain = utility.textlength(domain_text, 2, 13).X
+                local stats_text = " | " .. string.lower(utility.findtriggers(watermark.title)) 
+                local name_text = watermark.domain -- Your Name
 
-    
-    local newSize = UDim2.new(0, width_title + width_domain + 8, 0, 19)
+                local name_width = utility.textlength(name_text, 2, 13).X
+                local stats_width = utility.textlength(stats_text, 2, 13).X
 
-    
-    watermark.objects.background.Size = newSize
-    watermark.objects.text2.Text = title_text
-    watermark.objects.text3.Text = domain_text
-    
+                local newSize = UDim2.new(0, name_width + stats_width + 12, 0, 19)
+                watermark.objects.background.Size = newSize
 
-    watermark.objects.text3.Position = UDim2.new(0, width_title + 5, 0, 2)
-			end
-        end
+                watermark.objects.text2.Text = name_text
+                watermark.objects.text3.Text = stats_text
+                
+                watermark.objects.text3.Position = UDim2.new(0, name_width + 3, 0, 2)
+            end
+		end
     end)
 
     watermark.setstate(false)
