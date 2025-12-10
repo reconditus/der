@@ -1,4 +1,4 @@
---// dreya
+--// niche
 
 local startUpArgs = getgenv().startUpArgs or { 'universal', 'public' }
 -- [[
@@ -6084,10 +6084,10 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 optioninstances[option].button = button
 
-                --if option == game.Players.LocalPlayer then option.Name = dreya.userinfo.username or option.Name end
+                --if option == game.Players.LocalPlayer then option.Name = niche.userinfo.username or option.Name end
 
                 local title = library:create("Text", {
-                    Text = option == game.Players.LocalPlayer and dreya.userinfo.username or #option.Name > 15 and option.Name:sub(1, 15) .. '...' or option.Name,
+                    Text = option == game.Players.LocalPlayer and niche.userinfo.username or #option.Name > 15 and option.Name:sub(1, 15) .. '...' or option.Name,
                     Font = Drawing.Fonts.Plex,
                     Size = 13,
                     Position = UDim2.new(0, 3, 0, 1),
@@ -7081,7 +7081,7 @@ function library:createwatermark()
     watermark.objects.outline1 = library:outline(watermark.objects.background, Color3.fromRGB(44, 44, 44), 10, true)
     watermark.objects.outline2 = library:outline(watermark.objects.outline1, Color3.fromRGB(0, 0, 0), 10, true)
 
-    watermark.objects.text2 = library:create("Text", { Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Accent", Size = 13, Text = 'dreya', Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 3, 0, 2), ZIndex = 11 })
+    watermark.objects.text2 = library:create("Text", { Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Accent", Size = 13, Text = 'niche', Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 3, 0, 2), ZIndex = 11 })
     watermark.objects.text3 = library:create("Text", { Text = watermark.title, Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, utility.textlength(watermark.objects.text2.Text, 2, 13).X + 5, 0, 2), ZIndex = 11 })
 
     watermark.objects.line1 = library:create("Square", { Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(0, 20, 0, 1), Position = UDim2.new(0, 0, 1, -1), Thickness = 1, Filled = true, ZIndex = 11 })
@@ -7109,7 +7109,7 @@ function library:createwatermark()
             watermark_init = tick()
             if watermark.objects.background.Visible then
                 local title = string.lower(utility.findtriggers(watermark.title))
-                local newSize = UDim2.new(0, utility.textlength(title, 2, 13).X + utility.textlength('dreya', 2, 13).X + 10, 0, 19)
+                local newSize = UDim2.new(0, utility.textlength(title, 2, 13).X + utility.textlength('niche', 2, 13).X + 10, 0, 19)
 
                 watermark.objects.background.Size = newSize
                 watermark.objects.text2.Text = watermark.title
