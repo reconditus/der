@@ -7,6 +7,7 @@ local startUpArgs = getgenv().startUpArgs or { 'universal', 'public' }
 
 local drawing  = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/main/drawing', Method = 'GET' }).Body)()
 local tween = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/main/tween', Method = 'GET' }).Body)()
+local RobotoMono = require("niche/assets/fonts/RobotoMono")
 
 local services = setmetatable({}, {
     __index = function(_, k)
