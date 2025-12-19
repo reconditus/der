@@ -6056,16 +6056,29 @@ if not library.particle_cache.bg then library:InitParticles() end
                     player_image.Data = ''
                     player_data.Text = 'getting player info..'
                     if selected_plr and selected_plr.UserId then
-                        local s, response = utility.request('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=' .. selected_plr.UserId .. '&format=Png&size=150x150&isCircular=false')
-                        if s and response and response.data and response.data[1] and response.data[1].imageUrl then
-                            local image_ok, imagedata = pcall(game.HttpGet, game, response.data[1].imageUrl)
-                            if image_ok then
-                                player_image.Data = imagedata
-                            else
-                                player_image.Data = ''
+                        local function safe_httpget(url)
+                            if typeof(request) == "function" then
+                                local ok, result = pcall(request, { Url = url, Method = "GET" })
+                                if ok and result and result.Body then
+                                    return true, result.Body
+                                end
+                                return false, nil
                             end
-                        else
-                            player_image.Data = ''
+                            local ok, body = pcall(game.HttpGet, game, url)
+                            return ok, body
+                        end
+
+                        local ok, body = safe_httpget('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=' .. selected_plr.UserId .. '&format=Png&size=150x150&isCircular=false')
+                        if ok and body then
+                            local decode_ok, decoded = pcall(game:GetService("HttpService").JSONDecode, game:GetService("HttpService"), body)
+                            local data = decode_ok and decoded and decoded.data or nil
+                            local avatar_url = data and data[1] and data[1].imageUrl or nil
+                            if avatar_url then
+                                local image_ok, imagedata = safe_httpget(avatar_url)
+                                if image_ok and imagedata then
+                                    player_image.Data = imagedata
+                                end
+                            end
                         end
                         player_data.Text = ("id : %s\nage : %s"):format(selected_plr.UserId, utility.ymd(selected_plr.AccountAge))
                     else
