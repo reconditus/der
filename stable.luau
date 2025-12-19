@@ -2889,7 +2889,7 @@ if not library.particle_cache.bg then library:InitParticles() end
     --
     local window_accent = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-15,0,2), Position = UDim2.new(0,7,0,21), Thickness = 1, Filled = true, ZIndex = 11});
     library:outline(window_accent , Color3.new(0,0,0), 11);
-    -- gradient removed for consistent accent bar
+    library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = window_accent, Size = UDim2.new(1,0,1,0), ZIndex = 11});
     --
     local window_holder = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1,-15,1,-90), Position = UDim2.new(0,7,0,82), Thickness = 1, Filled = true, ZIndex = 12}) do
         local outline = library:outline(window_holder, Color3.fromRGB(48, 48, 60), 12);
@@ -2917,6 +2917,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         table.insert(self.pages_buttons, button_holder);
         local button_inline = library:create("Square", {Parent = button_holder, Visible = true, Transparency = 1, Thickness = 1, Filled = true, ZIndex = 13, Theme = "Toggle Background", Size = UDim2.new(1,-2,1,-2),Position = UDim2.new(0,1,0,1)});
         local button_inline_gradient = library:create("Square", {Parent = button_inline, Visible = true, Transparency = 1, Thickness = 1, Filled = true, ZIndex = 13, Theme = "Toggle Background Highlight", Size = UDim2.new(1,-2,1,-2),Position = UDim2.new(0,1,0,1)});
+        library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = button_inline_gradient, Size = UDim2.new(1,0,1,0), ZIndex = 13});
         --
         local button_title = library:create("Text", {Text = name, Parent = button_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,9), ZIndex = 13});
         table.insert(self.pages_titles, button_title);
@@ -6054,21 +6055,24 @@ if not library.particle_cache.bg then library:InitParticles() end
                 if selected_plr ~= last_plr then
                     player_image.Data = ''
                     player_data.Text = 'getting player info..'
-                    --
-                    local ok, response = pcall(game.HttpGet, game, string.format("https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=%d&size=150x150&format=Png&isCircular=false", selected_plr.UserId))
-                    if ok then
-                        local decode_ok, decoded = pcall(game:GetService("HttpService").JSONDecode, game:GetService("HttpService"), response)
-                        local data = decode_ok and decoded and decoded.data or nil
-                        local avatar_url = data and data[1] and data[1].imageUrl or nil
-                        if avatar_url then
-                            local image_ok, imagedata = pcall(game.HttpGet, game, avatar_url)
-                            if image_ok then
-                                player_image.Data = imagedata
+                    if selected_plr and selected_plr.UserId then
+                        local ok, response = pcall(game.HttpGet, game, string.format("https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=%d&size=150x150&format=Png&isCircular=false", selected_plr.UserId))
+                        if ok then
+                            local decode_ok, decoded = pcall(game:GetService("HttpService").JSONDecode, game:GetService("HttpService"), response)
+                            local data = decode_ok and decoded and decoded.data or nil
+                            local avatar_url = data and data[1] and data[1].imageUrl or nil
+                            if avatar_url then
+                                local image_ok, imagedata = pcall(game.HttpGet, game, avatar_url)
+                                if image_ok then
+                                    player_image.Data = imagedata
+                                end
                             end
                         end
+                        player_data.Text = ("id : %s\nage : %s"):format(selected_plr.UserId, utility.ymd(selected_plr.AccountAge))
+                    else
+                        player_data.Text = "unable to load player"
                     end
                     last_plr = selected_plr;
-                    player_data.Text = ("id : %s\nage : %s"):format(selected_plr.UserId, utility.ymd(selected_plr.AccountAge))
                 end;
             end)
         end
