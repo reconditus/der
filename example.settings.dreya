@@ -188,11 +188,9 @@ local window = library:new({ name = 'Niche', sub = `.{startUpArgs[1]}`, size = V
             options:slider({ name = 'refresh rate', flag = 'watermark refresh rate', min = 10, max = 1000, suffix = 'ms', float = 1, default = 250, callback = function(v)
                 watermark.refreshrate = v
             end})
-            watermark.createtransparencyslider(options, {
-                name = 'watermark transparency',
-                flag = 'watermark transparency',
-                default = 0
-            })
+            options:slider({ name = 'watermark transparency', flag = 'watermark transparency', min = 0, max = 1, float = 0.01, default = 0, callback = function(v)
+                watermark.objects.background.Transparency = v
+            end})
         end
         local options = options_tab:section({ name = 'options', side = 'right', size = '275' }) do
             options:divider({ name = 'menu options' }) do

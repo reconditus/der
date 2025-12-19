@@ -7077,7 +7077,6 @@ function library:createwatermark()
     local watermark_init = tick()
 
     watermark.objects.background = library:create('Square', { Size = UDim2.new(0, utility.textlength(watermark.title, 2, 13).X + 5, 0, 19), Position = UDim2.new(0, 18, 0, 75), Color = Color3.fromRGB(13, 13, 13), ZIndex = 1, Thickness = 1, Filled = true }, true)
-    watermark.background_transparency = watermark.objects.background.Transparency or 0
 
     watermark.objects.outline1 = library:outline(watermark.objects.background, Color3.fromRGB(44, 44, 44), 10, true)
     watermark.objects.outline2 = library:outline(watermark.objects.outline1, Color3.fromRGB(0, 0, 0), 10, true)
@@ -7104,28 +7103,6 @@ function library:createwatermark()
     end
     function watermark.setdomain(string)
         watermark.domain = string
-    end
-    function watermark.setbackgroundtransparency(value)
-        local transparency = math.clamp(tonumber(value) or 0, 0, 1)
-        watermark.background_transparency = transparency
-        watermark.objects.background.Transparency = transparency
-    end
-    function watermark.createtransparencyslider(section, cfg)
-        cfg = cfg or {}
-        local flag = cfg.flag or "watermark background transparency"
-        local slider = section:slider({
-            name = cfg.name or "watermark transparency",
-            flag = flag,
-            min = 0,
-            max = 1,
-            float = cfg.float or 0.01,
-            default = cfg.default or watermark.background_transparency or 0,
-            callback = function(value)
-                watermark.setbackgroundtransparency(value)
-            end
-        })
-
-        return slider
     end
     game:GetService("RunService").Heartbeat:Connect(function()
         if (tick() - watermark_init) * 1000 > watermark.tickrate then
