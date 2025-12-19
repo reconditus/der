@@ -2889,7 +2889,7 @@ if not library.particle_cache.bg then library:InitParticles() end
     --
     local window_accent = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-15,0,2), Position = UDim2.new(0,7,0,21), Thickness = 1, Filled = true, ZIndex = 11});
     library:outline(window_accent , Color3.new(0,0,0), 11);
-    library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = window_accent, Size = UDim2.new(1,0,1,0), ZIndex = 11});
+    -- gradient removed for consistent accent bar
     --
     local window_holder = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1,-15,1,-90), Position = UDim2.new(0,7,0,82), Thickness = 1, Filled = true, ZIndex = 12}) do
         local outline = library:outline(window_holder, Color3.fromRGB(48, 48, 60), 12);
@@ -5910,7 +5910,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
         utility.dragify(list_holder, 'player list')
 
-        local list_title = library:create("Text", {Text = "players", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 14, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
+        local list_title = library:create("Text", {Text = "players", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
         local assent = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-30,0,2), Position = UDim2.new(0,16,0,25), Thickness = 1, Filled = true, ZIndex = 14});
 
         --
@@ -6055,23 +6055,15 @@ if not library.particle_cache.bg then library:InitParticles() end
                 if selected_plr ~= last_plr then
                     player_image.Data = ''
                     player_data.Text = 'getting player info..'
-                    if selected_plr and selected_plr.UserId then
-                        local s, response = utility.request('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=' .. selected_plr.UserId .. '&format=Png&size=150x150&isCircular=false')
-                        if s and response and response.data and response.data[1] and response.data[1].imageUrl then
-                            local image_ok, imagedata = pcall(game.HttpGet, game, response.data[1].imageUrl)
-                            if image_ok then
-                                player_image.Data = imagedata
-                            else
-                                player_image.Data = ''
-                            end
-                        else
-                            player_image.Data = ''
-                        end
-                        player_data.Text = ("id : %s\nage : %s"):format(selected_plr.UserId, utility.ymd(selected_plr.AccountAge))
-                    else
-                        player_data.Text = "unable to load player"
-                    end
+                    --
+                    local response = game:HttpGet(string.format("https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=%d&size=150x150&format=Png&isCircular=false", selected_plr.UserId))
+                    local data = game:GetService("HttpService"):JSONDecode(response).data
+                    local avatar_url = data[1].imageUrl
+                    --
+                    local imagedata = game:HttpGet(avatar_url)
+                    player_image.Data = imagedata
                     last_plr = selected_plr;
+                    player_data.Text = ("id : %s\nage : %s"):format(selected_plr.UserId, utility.ymd(selected_plr.AccountAge))
                 end;
             end)
         end
@@ -6275,7 +6267,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         utility.dragify(list_holder, 'server list')
 
         --
-        local list_title = library:create("Text", {Text = "servers", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 14, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
+        local list_title = library:create("Text", {Text = "servers", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
         local assent = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-30,0,2), Position = UDim2.new(0,16,0,25), Thickness = 1, Filled = true, ZIndex = 14});
         --
         local list_inline = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0, 340, 0, (max * 20)), Position = UDim2.new(0, 20, 0, 45), Thickness = 1, Filled = true, ZIndex = 14}) do
