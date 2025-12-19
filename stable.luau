@@ -7079,10 +7079,10 @@ function library:createwatermark()
     local watermark = { domain = '.pub', title = 'niche', objects = {}, tickrate = 25 }
     local watermark_init = tick()
 
-    watermark.objects.background = library:create('Square', { Size = UDim2.new(0, utility.textlength(watermark.title, 2, 13).X + 5, 0, 19), Position = UDim2.new(0, 18, 0, 75), Theme = "Watermark Background", ZIndex = 1, Thickness = 1, Filled = true }, true)
+    watermark.objects.background = library:create('Square', { Size = UDim2.new(0, utility.textlength(watermark.title, 2, 13).X + 5, 0, 19), Position = UDim2.new(0, 18, 0, 75), Theme = "Watermark Background", ZIndex = 1, Thickness = 1, Filled = true })
 
-    watermark.objects.outline1 = library:outline(watermark.objects.background, "Watermark Outline", 10, true)
-    watermark.objects.outline2 = library:outline(watermark.objects.outline1, "Watermark Outline Inner", 10, true)
+    watermark.objects.outline1 = library:outline(watermark.objects.background, "Watermark Outline", 10)
+    watermark.objects.outline2 = library:outline(watermark.objects.outline1, "Watermark Outline Inner", 10)
 
     watermark.objects.text2 = library:create("Text", { Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Accent", Size = 13, Text = 'dreya', Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 3, 0, 2), ZIndex = 11 })
     watermark.objects.text3 = library:create("Text", { Text = watermark.title, Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, utility.textlength(watermark.objects.text2.Text, 2, 13).X + 5, 0, 2), ZIndex = 11 })
