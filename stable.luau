@@ -2915,8 +2915,8 @@ if not library.particle_cache.bg then library:InitParticles() end
         local button_holder = library:create("Square", {Parent = window_page_holder_inline, Visible = true, Transparency = 1, Thickness = 1, Filled = true, ZIndex = 13});
         --library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = button_holder, Size = UDim2.new(1,0,1,0), ZIndex = 13});
         table.insert(self.pages_buttons, button_holder);
-        local button_inline = library:create("Square", {Parent = button_holder, Visible = true, Transparency = 1, Thickness = 1, Filled = true, ZIndex = 13, Color = Color3.fromRGB(41,41,41), Size = UDim2.new(1,-2,1,-2),Position = UDim2.new(0,1,0,1)});
-        local button_inline_gradient = library:create("Square", {Parent = button_inline, Visible = true, Transparency = 1, Thickness = 1, Filled = true, ZIndex = 13, Color = Color3.fromRGB(41,41,41), Size = UDim2.new(1,-2,1,-2),Position = UDim2.new(0,1,0,1)});
+        local button_inline = library:create("Square", {Parent = button_holder, Visible = true, Transparency = 1, Thickness = 1, Filled = true, ZIndex = 13, Theme = "Toggle Background", Size = UDim2.new(1,-2,1,-2),Position = UDim2.new(0,1,0,1)});
+        local button_inline_gradient = library:create("Square", {Parent = button_inline, Visible = true, Transparency = 1, Thickness = 1, Filled = true, ZIndex = 13, Theme = "Toggle Background Highlight", Size = UDim2.new(1,-2,1,-2),Position = UDim2.new(0,1,0,1)});
         library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = button_inline_gradient, Size = UDim2.new(1,0,1,0), ZIndex = 13});
         --
         local button_title = library:create("Text", {Text = name, Parent = button_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,9), ZIndex = 13});
