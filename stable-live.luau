@@ -621,7 +621,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
 
     local value = library:create("Text", {
         Text = "",
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0, 2, 0, 0),
         Theme = "Text",
@@ -630,7 +630,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
         Parent = dropdown
     })
 
-    local icon = library:create("Text", {Text = "-", Transparency = 1, Visible = true, Parent = dropdown, Theme = "Text", ZIndex = 16, Position = UDim2.new(1, -13, 0, 0), RobotoMono, Size = 13, Outline = true});
+    local icon = library:create("Text", {Text = "-", Transparency = 1, Visible = true, Parent = dropdown, Theme = "Text", ZIndex = 16, Position = UDim2.new(1, -13, 0, 0), Font = 2, Size = 13, Outline = true});
 
     local contentframe = library:create("Square", {
         Filled = true,
@@ -717,7 +717,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
 
             local title = library:create("Text", {
                 Text = string.lower(option),
-                Font = Drawing.Fonts.Monospace,
+                Font = Drawing.Fonts.Plex,
                 Size = 13,
                 Position = UDim2.new(0, 2, 0, 1),
                 Theme = "Text",
@@ -886,7 +886,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
                     for _, opt in next, chosen do
                         table.insert(textchosen, opt)
 
-                        if utility.textlength(table.concat(textchosen, ", ") .. ", ...", RobotoMono, 13).X > (dropdown.AbsoluteSize.X - 6) then
+                        if utility.textlength(table.concat(textchosen, ", ") .. ", ...", Drawing.Fonts.Plex, 13).X > (dropdown.AbsoluteSize.X - 6) then
                             cutobject = true
                             table.remove(textchosen, #textchosen)
                         end
@@ -987,7 +987,7 @@ function library.createlist(holder, content, flag, callback, default, max, scrol
 
             local title = library:create("Text", {
                 Text = string.lower(option),
-                Font = Drawing.Fonts.Monospace,
+                Font = Drawing.Fonts.Plex,
                 Size = 13,
                 Position = UDim2.new(0, 2, 0, 1),
                 Theme = "Text",
@@ -1151,7 +1151,7 @@ function library.createlist(holder, content, flag, callback, default, max, scrol
                     for _, opt in next, chosen do
                         table.insert(textchosen, opt)
 
-                        if utility.textlength(table.concat(textchosen, ", ") .. ", ...", RobotoMono, 13).X > (list.AbsoluteSize.X - 6) then
+                        if utility.textlength(table.concat(textchosen, ", ") .. ", ...", Drawing.Fonts.Plex, 13).X > (list.AbsoluteSize.X - 6) then
                             cutobject = true
                             table.remove(textchosen, #textchosen)
                         end
@@ -1192,12 +1192,12 @@ function library.createslider(cfg)
     library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = slider_frame, Size = UDim2.new(1,0,1,0), ZIndex = 31});
     --
     if name then
-        local slider_title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0,20,0,-2), ZIndex = 30});
+        local slider_title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,20,0,-2), ZIndex = 30});
     end
     --
     local slider_fill = library:create("Square", {Parent = slider_frame, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,0,1,0), Thickness = 1, Filled = true, ZIndex = 30, Position = UDim2.new(0,0,0,0)});
     --
-    local slider_value = library:create("Text", {Text = text, Parent = slider_fill, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(1,0,0.5,-2), ZIndex = 31});
+    local slider_value = library:create("Text", {Text = text, Parent = slider_fill, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(1,0,0.5,-2), ZIndex = 31});
     --
     local slider_drag = library:create("Square", {Parent = slider_frame, Visible = true, Transparency = 0, Size = UDim2.new(1,0,1,0), Thickness = 1, Filled = true, ZIndex = 30, Position = UDim2.new(0,0,0,0)});
     -- functions
@@ -1299,7 +1299,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
 
     local value = library:create("Text", {
         Text = "",
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0, 2, 0, 0),
         Theme = "Text",
@@ -1308,7 +1308,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
         Parent = dropdown
     })
 
-    local icon = library:create("Text", {Text = "-", Transparency = 1, Visible = true, Parent = dropdown, Theme = "Text", ZIndex = 16, Position = UDim2.new(1, -13, 0, 0), RobotoMono, Size = 13, Outline = true});
+    local icon = library:create("Text", {Text = "-", Transparency = 1, Visible = true, Parent = dropdown, Theme = "Text", ZIndex = 16, Position = UDim2.new(1, -13, 0, 0), Font = 2, Size = 13, Outline = true});
 
     local contentframe = library:create("Square", {
         Filled = true,
@@ -1367,7 +1367,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
                     for _, opt in next, chosen do
                         table.insert(textchosen, opt)
 
-                        if utility.textlength(table.concat(textchosen, ", ") .. ", ...", RobotoMono, 13).X > (dropdown.AbsoluteSize.X - 18) then
+                        if utility.textlength(table.concat(textchosen, ", ") .. ", ...", Drawing.Fonts.Plex, 13).X > (dropdown.AbsoluteSize.X - 18) then
                             cutobject = true
                             table.remove(textchosen, #textchosen)
                         end
@@ -1394,7 +1394,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
                     for _, opt in next, chosen do
                         table.insert(textchosen, opt)
 
-                        if utility.textlength(table.concat(textchosen, ", ") .. ", ...", RobotoMono, 13).X > (dropdown.AbsoluteSize.X - 18) then
+                        if utility.textlength(table.concat(textchosen, ", ") .. ", ...", Drawing.Fonts.Plex, 13).X > (dropdown.AbsoluteSize.X - 18) then
                             cutobject = true
                             table.remove(textchosen, #textchosen)
                         end
@@ -1431,7 +1431,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
 
             local title = library:create("Text", {
                 Text = string.lower(option),
-                Font = Drawing.Fonts.Monospace,
+                Font = Drawing.Fonts.Plex,
                 Size = 13,
                 Position = UDim2.new(0, 2, 0, 1),
                 Theme = "Text",
@@ -1529,7 +1529,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
             for _, opt in next, chosen do
                 table.insert(textchosen, opt)
 
-                if utility.textlength(table.concat(textchosen, ", ") .. ", ...", RobotoMono, 13).X > (dropdown.AbsoluteSize.X - 6) then
+                if utility.textlength(table.concat(textchosen, ", ") .. ", ...", Drawing.Fonts.Plex, 13).X > (dropdown.AbsoluteSize.X - 6) then
                     cutobject = true
                     table.remove(textchosen, #textchosen)
                 end
@@ -1613,7 +1613,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
                     for _, opt in next, chosen do
                         table.insert(textchosen, opt)
 
-                        if utility.textlength(table.concat(textchosen, ", ") .. ", ...", RobotoMono, 13).X > (dropdown.AbsoluteSize.X - 6) then
+                        if utility.textlength(table.concat(textchosen, ", ") .. ", ...", Drawing.Fonts.Plex, 13).X > (dropdown.AbsoluteSize.X - 6) then
                             cutobject = true
                             table.remove(textchosen, #textchosen)
                         end
@@ -1770,7 +1770,7 @@ function library.object_colorpicker_inner(default, defaultalpha, parent, count, 
 
     local text = library:create("Text", {
         Text = string.format("%s, %s, %s", math.floor(default.R * 255), math.floor(default.G * 255), math.floor(default.B * 255)),
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0.5, 0, 0, 0),
         Center = true,
@@ -1989,7 +1989,7 @@ function library.createpicker(cfg)
 
     local title = library:create("Text", {
         Text = name,
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0,20,0,-2),
         Theme = "Text",
@@ -2170,7 +2170,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
 
     local text = library:create("Text", {
         Text = string.format("%s, %s, %s", math.floor(default.R * 255), math.floor(default.G * 255), math.floor(default.B * 255)),
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0.5, 0, 0, 0),
         Center = true,
@@ -2185,7 +2185,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
     color_outline.Visible = false
     local color_text = library:create("Text", {
         Text = "color",
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0.5, 0, 0, 0),
         Center = true,
@@ -2199,7 +2199,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
     local animation_outline = library:outline(animation_button, Color3.new(0,0,0), 20);
     local animation_text = library:create("Text", {
         Text = "animation",
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0.5, 0, 0, 0),
         Center = true,
@@ -2211,7 +2211,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
 
     local animation_rainbow = library:create("Text", {
         Text = "rainbow",
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0.5, -utility.textlength("rainbow", 2, 13).X - 17, 0.5, -60),
         Center = true,
@@ -2222,7 +2222,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
     })
     library:create("Text", {
         Text = "/",
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0.5, -25, 0.5, -60),
         Center = true,
@@ -2233,7 +2233,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
     })
     local animation_lerp = library:create("Text", {
         Text = "lerp",
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0.5, utility.textlength("lerp", 2, 13).X - 42, 0.5, -62),
         Center = false,
@@ -2244,7 +2244,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
     })
     library:create("Text", {
         Text = "/",
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0.5, 28, 0.5, -60),
         Center = true,
@@ -2255,7 +2255,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
     })
     local animation_fade = library:create("Text", {
         Text = "fade",
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0.5, utility.textlength("fade", 2, 13).X + 17, 0.5, -62),
         Center = false,
@@ -2266,7 +2266,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
     })
     local animation_disabled = library:create("Text", {
         Text = "disabled",
-        Font = Drawing.Fonts.Monospace,
+        Font = Drawing.Fonts.Plex,
         Size = 13,
         Position = UDim2.new(0.5, 0, 0.5, -80),
         Center = true,
@@ -2901,8 +2901,8 @@ if not library.particle_cache.bg then library:InitParticles() end
     --
     local window_page_holder_inline = library:create("Square", {Parent = window_page_holder, Visible = true, Transparency = 0, Size = UDim2.new(1,-7,1,-4), Position = UDim2.new(0,3,0,2), Thickness = 1, Filled = true, ZIndex = 12})
     --
-    local window_title = library:create("Text", {Text = name_white, Parent = window_outline, Visible = true, Transparency = 1, Theme = "Accent", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0,10,0,7), ZIndex = 13});
-    local window_title_accent = library:create("Text", {Text = name_color, Parent = window_outline, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0,utility.textlength(name_white, 2, 13).X + 10,0,7), ZIndex = 13});
+    local window_title = library:create("Text", {Text = name_white, Parent = window_outline, Visible = true, Transparency = 1, Theme = "Accent", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,10,0,7), ZIndex = 13});
+    local window_title_accent = library:create("Text", {Text = name_color, Parent = window_outline, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,utility.textlength(name_white, 2, 13).X + 10,0,7), ZIndex = 13});
     --
     utility.dragify(window_outline, 'window');
     -- // Pages
@@ -2919,7 +2919,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         local button_inline_gradient = library:create("Square", {Parent = button_inline, Visible = true, Transparency = 1, Thickness = 1, Filled = true, ZIndex = 13, Theme = "Toggle Background Highlight", Size = UDim2.new(1,-2,1,-2),Position = UDim2.new(0,1,0,1)});
         library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = button_inline_gradient, Size = UDim2.new(1,0,1,0), ZIndex = 13});
         --
-        local button_title = library:create("Text", {Text = name, Parent = button_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0.5,0,0,9), ZIndex = 13});
+        local button_title = library:create("Text", {Text = name, Parent = button_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,9), ZIndex = 13});
         table.insert(self.pages_titles, button_title);
         --
         local page_holder = library:create("Square", {Parent = window_holder, Visible = false, Transparency = 0, Size = UDim2.new(1,-40,1,-40), Position = UDim2.new(0,20,0,20), Thickness = 1, Filled = false, ZIndex = 13}); do
@@ -2974,8 +2974,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                 library:outline(outline, Color3.fromRGB(0,0,0), 14);
             end;
             --
-            local section_title_cover = library:create("Square", {Parent = section_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,utility.textlength(name, RobotoMono, 13).X + 2,0,4), Position = UDim2.new(0,10,0,-1), Thickness = 1, Filled = true, ZIndex = 14})
-            local section_title = library:create("Text", {Text = name, Parent = section_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0,11,0,-8), ZIndex = 14});
+            local section_title_cover = library:create("Square", {Parent = section_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,utility.textlength(name, Drawing.Fonts.Plex, 13).X + 2,0,4), Position = UDim2.new(0,10,0,-1), Thickness = 1, Filled = true, ZIndex = 14})
+            local section_title = library:create("Text", {Text = name, Parent = section_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,11,0,-8), ZIndex = 14});
             --
             local section_content = library:create("Square", {Transparency = 0,Size = UDim2.new(1, -32, 1, -10),Position = UDim2.new(0, 16, 0, 15),Parent = section_holder,ZIndex = 14});
             section_content:AddListLayout(9)
@@ -3000,7 +3000,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 end;
                 local gradient = library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = toggle_frame, Size = UDim2.new(1,0,1,0), ZIndex = 14});
 
-                local toggle_title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Theme = risky and "Risky Text" or "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0,20,0,-5), ZIndex = 14});
+                local toggle_title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Theme = risky and "Risky Text" or "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,20,0,-5), ZIndex = 14});
 
                 -- functions
                 local function setstate()
@@ -3077,7 +3077,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local keyholder = library:create("Square", {Size = UDim2.new(0,40,1,0), Position = UDim2.new(1,-60,0,0), Transparency = 0, ZIndex = 15, Parent = holder, Thickness = 1, Filled = false})
 
                     local keytext = library:create("Text", {
-                        Font = Drawing.Fonts.Monospace,
+                        Font = Drawing.Fonts.Plex,
                         Size = 13,
                         Theme = "Un-Selected_Text",
                         Position = UDim2.new(1,-40,0,-5),
@@ -3245,7 +3245,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 if name == '' then
                     offset = 12
                 end
-                local title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0,19,0,-3), ZIndex = 14});
+                local title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,19,0,-3), ZIndex = 14});
                 local div = library:create("Square", { Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = UDim2.new(1, (- utility.textlength(name, 2, 13).X) - 45 + offset, 0, 1), Position = UDim2.new(0, 28 + utility.textlength(name, 2, 13).X - offset, 0, 5), Thickness = 1, Filled = true, ZIndex = 14 })
                 --
                 if size == "auto" then
@@ -3286,7 +3286,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 local holder = library:create("Square", {Parent = side, Visible = true, Transparency = 0, Size = name and UDim2.new(1,0,0,22) or UDim2.new(1,0,0,12), Thickness = 1, Filled = true, ZIndex = 14});
 
                 if name then
-                    local slider_title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0,20,0,-2), ZIndex = 14})
+                    local slider_title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,20,0,-2), ZIndex = 14})
                 end
                 local slider_frame = library:create("Square", {Parent = holder, Visible = true, Transparency = 1, Theme = "Toggle Background", Size = UDim2.new(1,-50,0,6), Thickness = 1, Filled = true, ZIndex = 14, Position = name and UDim2.new(0,23,0,14) or UDim2.new(0,23,0,3)});
                 local outline = library:outline(slider_frame, Color3.fromRGB(0,0,0), 14);
@@ -3294,7 +3294,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 if not range then
                     local slider_fill = library:create("Square", {Parent = slider_frame, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,0,1,0), Thickness = 1, Filled = true, ZIndex = 14, Position = UDim2.new(0,0,0,0)});
-                    local slider_value = library:create("Text", {Text = text, Parent = slider_fill, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(1,0,0.5,-2), ZIndex = 15});
+                    local slider_value = library:create("Text", {Text = text, Parent = slider_fill, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(1,0,0.5,-2), ZIndex = 15});
 
                     local function set(value)
                         value = math.clamp(utility.round(value, float), min, max)
@@ -3347,8 +3347,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local min_handle = library:create("Square", {Parent = slider_frame, Visible = true, Transparency = 0, Size = UDim2.new(0,12,0,12), Filled = true, ZIndex = 14, Position = UDim2.new(0,-6,0,0)})
                     local max_handle = library:create("Square", {Parent = slider_frame, Visible = true, Transparency = 0, Size = UDim2.new(0,12,0,12), Filled = true, ZIndex = 14, Position = UDim2.new(1,-6,0,0)})
 
-                    local min_value_text = library:create("Text", {Text = tostring(range[1]) .. suffix, Parent = min_handle, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0.5, 0, 0.5, 0), ZIndex = 15});
-                    local max_value_text = library:create("Text", {Text = tostring(range[2]) .. suffix, Parent = max_handle, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0.5, 0, 0.5, 0), ZIndex = 15});
+                    local min_value_text = library:create("Text", {Text = tostring(range[1]) .. suffix, Parent = min_handle, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5, 0, 0.5, 0), ZIndex = 15});
+                    local max_value_text = library:create("Text", {Text = tostring(range[2]) .. suffix, Parent = max_handle, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5, 0, 0.5, 0), ZIndex = 15});
 
                     local function set(values)
                         local minValue = values[1] or range[1]
@@ -3437,7 +3437,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 end
 
                 if allow then
-                    local slider_question = library:create("Text", {Text = "?", Parent = holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(1,-36,0,-2), ZIndex = 14});
+                    local slider_question = library:create("Text", {Text = "?", Parent = holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(1,-36,0,-2), ZIndex = 14});
                     local question_button = library:create("Square", {
                         Filled = true,
                         Thickness = 0,
@@ -3503,7 +3503,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                     local isfading = false;
 
-                    local fadetext = library:create("Text", {Text = "fading", Parent = slider_button, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0.5, 0, 0, 1), ZIndex = 29});
+                    local fadetext = library:create("Text", {Text = "fading", Parent = slider_button, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5, 0, 0, 1), ZIndex = 29});
 
                     local outline3 = library:outline(slider_window, Color3.fromRGB(48, 48, 60))
                     library:outline(outline3, Color3.fromRGB(0,0,0))
@@ -3582,7 +3582,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 --
                 local title = library:create("Text", {
                     Text = name,
-                    Font = Drawing.Fonts.Monospace,
+                    Font = Drawing.Fonts.Plex,
                     Size = 13,
                     Position = UDim2.new(0.5, 0, 0.5, -15),
                     Color = Color3.fromRGB(105, 105, 115),
@@ -3637,7 +3637,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 if name then
                     local title = library:create("Text", {
                         Text = name,
-                        Font = Drawing.Fonts.Monospace,
+                        Font = Drawing.Fonts.Plex,
                         Size = 13,
                         Position = UDim2.new(0, 20, 0, -2),
                         Theme = "Text",
@@ -3696,7 +3696,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 if name then
                     local title = library:create("Text", {
                         Text = name,
-                        Font = Drawing.Fonts.Monospace,
+                        Font = Drawing.Fonts.Plex,
                         Size = 13,
                         Position = UDim2.new(0, 20, 0, -2),
                         Theme = "Text",
@@ -3755,7 +3755,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 if name then
                     local title = library:create("Text", {
                         Text = name,
-                        Font = Drawing.Fonts.Monospace,
+                        Font = Drawing.Fonts.Plex,
                         Size = 13,
                         Position = UDim2.new(0, 20, 0, -2),
                         Theme = "Text",
@@ -3801,7 +3801,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 local outline1 = library:outline(ButtonFrame, Color3.fromRGB(48, 48, 60), 14);
                 library:outline(outline1, Color3.new(0,0,0), 14);
 
-                local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+                local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
                 -- Connections
                 local clicked, counting = false, false
@@ -3869,7 +3869,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local outline1 = library:outline(ButtonFrame_2, Color3.fromRGB(48, 48, 60), 14);
                     library:outline(outline1, Color3.new(0,0,0), 14);
 
-                    local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame_2, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+                    local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame_2, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
                     -- Connections
                     local clicked, counting = false, false
@@ -3939,7 +3939,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 local title = library:create("Text", {
                     Text = name,
-                    Font = Drawing.Fonts.Monospace,
+                    Font = Drawing.Fonts.Plex,
                     Size = 13,
                     Position = UDim2.new(0,20,0,-5),
                     Theme = "Text",
@@ -3995,7 +3995,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 --
                 local title = library:create("Text", {
                     Text = name,
-                    Font = Drawing.Fonts.Monospace,
+                    Font = Drawing.Fonts.Plex,
                     Size = 13,
                     Position = UDim2.new(0,20,0,-5),
                     Theme = "Text",
@@ -4007,7 +4007,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 local keybindname = key_name or "";
 
                 local keytext = library:create("Text", {
-                    Font = Drawing.Fonts.Monospace,
+                    Font = Drawing.Fonts.Plex,
                     Size = 13,
                     Theme = "Un-Selected_Text",
                     Position = UDim2.new(1,-40,0,-5),
@@ -4178,8 +4178,8 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 local outline = library:outline(textbox, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
 
-                local text = library:create("Text", {Text = default, Transparency = 1, Visible = true, Parent = textbox, Theme = "Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
-                local placeholder = library:create("Text", {Text = placeholder, Transparency = 1, Visible = true, Parent = textbox, Theme = "Un-Selected_Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+                local text = library:create("Text", {Text = default, Transparency = 1, Visible = true, Parent = textbox, Theme = "Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
+                local placeholder = library:create("Text", {Text = placeholder, Transparency = 1, Visible = true, Parent = textbox, Theme = "Un-Selected_Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
                 -- functions
                 library.object_textbox(textbox, text,  function(str)
@@ -4243,11 +4243,11 @@ if not library.particle_cache.bg then library:InitParticles() end
                 local esp_health_bar_outline = library:create("Square", {Visible = false, Parent = preview_frame; Size = UDim2.new(0, 3, 0, 240), Position = UDim2.new(0, 6, 0, 20), Color = Color3.fromRGB(0, 0, 0), Thickness = 1, Filled = true, ZIndex = 16});
                 local esp_health_bar_outline_2 = library:outline(esp_health_bar_outline, Color3.new(0,0,0), 16)
                 local esp_health_bar = library:create("Square", {Parent = esp_health_bar_outline; Size = UDim2.new(1,0,1,0), Color = Color3.fromRGB(0, 255, 42), Thickness = 1, Filled = true, ZIndex = 16, Position = UDim2.new(0,0,1,0)});
-                local esp_health_text = library:create("Text", {Text = tostring("<- "..healthamount), Parent = esp_health_bar, Visible = true, Transparency = 1, Color = maincolor, Size = 13, Center = false, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(1,0,0,0), ZIndex = 16});
+                local esp_health_text = library:create("Text", {Text = tostring("<- "..healthamount), Parent = esp_health_bar, Visible = true, Transparency = 1, Color = maincolor, Size = 13, Center = false, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(1,0,0,0), ZIndex = 16});
 
-                local esp_name = library:create("Text", {Text = "player", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, 110, 0, 3), ZIndex = 16});
-                local esp_distance = library:create("Text", {Text = "0 meters", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, 110, 0, 260), ZIndex = 16});
-                local esp_weapon = library:create("Text", {Text = "weapon", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, 110, 0, 270), ZIndex = 16});
+                local esp_name = library:create("Text", {Text = "player", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110, 0, 3), ZIndex = 16});
+                local esp_distance = library:create("Text", {Text = "0 meters", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110, 0, 260), ZIndex = 16});
+                local esp_weapon = library:create("Text", {Text = "weapon", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110, 0, 270), ZIndex = 16});
                 --
                 function esp_preview:set_health(amount)
                     local value = amount/100
@@ -4340,7 +4340,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 --
                 local player_image = library:create("Image", { Size = UDim2.new(1, 0, 1, 0), Visible = true; ZIndex = 18, Parent = list_icon, Data = image; })
                 --
-                player_data = library:create("Text", {Text = info, Parent = holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, 100, 0, 30), ZIndex = 14});
+                player_data = library:create("Text", {Text = info, Parent = holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 100, 0, 30), ZIndex = 14});
 
                 function infographic:update(txt)
                     info = txt
@@ -4377,7 +4377,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 library:outline(outline, Color3.fromRGB(0,0,0), 14);
             end;
             --
-            local section_title = library:create("Text", {Text = name, Parent = section_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0,11,0,-8), ZIndex = 14});
+            local section_title = library:create("Text", {Text = name, Parent = section_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,11,0,-8), ZIndex = 14});
             --
             local sections_holder = library:create("Square", {Parent = section_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1,-20,0,24), Position = UDim2.new(0,10,0,10), Thickness = 1, Filled = true, ZIndex = 14}) do
                 local outline = library:outline(sections_holder, Color3.fromRGB(32,32,32), 14);
@@ -4411,7 +4411,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     table.insert(self.lines, button_accent);
                 end;
                 --
-                local button_title = library:create("Text", {Text = name, Parent = button_holder, Visible = true, Transparency = 1, Theme = "Un-Selected_Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0.5,0,0,2), ZIndex = 15});
+                local button_title = library:create("Text", {Text = name, Parent = button_holder, Visible = true, Transparency = 1, Theme = "Un-Selected_Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,2), ZIndex = 15});
                 table.insert(self.titles, button_title);
                 --
                 local section_content = library:create("Square", {Visible = false, Transparency = 0,Size = override and UDim2.new(0.5, -32, 1, -45) or UDim2.new(1, -32, 1, -45),Position = UDim2.new(0, 16, 0, 45),Parent = section_holder,ZIndex = 14});
@@ -4536,7 +4536,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     end;
                     local gradient = library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = toggle_frame, Size = UDim2.new(1,0,1,0), ZIndex = 14});
                     --
-                    local toggle_title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Theme = risky and "Risky Text" or "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0,20,0,-5), ZIndex = 14});
+                    local toggle_title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Theme = risky and "Risky Text" or "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,20,0,-5), ZIndex = 14});
                     -- functions
                     local function setstate()
                         toggled = not toggled
@@ -4621,7 +4621,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         local keyholder = library:create("Square", {Size = UDim2.new(0,40,1,0), Position = UDim2.new(1,-60,0,0), Transparency = 0, ZIndex = 15, Parent = holder, Thickness = 1, Filled = false})
 
                         local keytext = library:create("Text", {
-                            Font = Drawing.Fonts.Monospace,
+                            Font = Drawing.Fonts.Plex,
                             Size = 13,
                             Theme = "Un-Selected_Text",
                             Position = UDim2.new(1,-40,0,-5),
@@ -4786,7 +4786,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local holder = library:create("Square", {Parent = side, Visible = true, Transparency = 0, Size = UDim2.new(1,0,0,8), Thickness = 1, Filled = false, ZIndex = 14})
                     --
                     --local div = library:create("Square", { Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = UDim2.new(0, 6, 0, 1), Position = UDim2.new(0, 0, 0, 3), Thickness = 1, Filled = true, ZIndex = 14 })
-                    local title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0,19,0,-3), ZIndex = 14});
+                    local title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,19,0,-3), ZIndex = 14});
                     local div = library:create("Square", { Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = UDim2.new(1, (- utility.textlength(name, 2, 13).X) - 45, 0, 1), Position = UDim2.new(0, 30 + utility.textlength(name, 2, 13).X, 0, 5), Thickness = 1, Filled = true, ZIndex = 14 })
                     --
                     if size == "auto" then
@@ -4827,7 +4827,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local holder = library:create("Square", {Parent = side, Visible = true, Transparency = 0, Size = name and UDim2.new(1,0,0,22) or UDim2.new(1,0,0,12), Thickness = 1, Filled = true, ZIndex = 14});
 
                     if name then
-                        local slider_title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0,20,0,-2), ZIndex = 14})
+                        local slider_title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,20,0,-2), ZIndex = 14})
                     end
                     local slider_frame = library:create("Square", {Parent = holder, Visible = true, Transparency = 1, Theme = "Toggle Background", Size = UDim2.new(1,-50,0,6), Thickness = 1, Filled = true, ZIndex = 14, Position = name and UDim2.new(0,23,0,14) or UDim2.new(0,23,0,3)});
                     local outline = library:outline(slider_frame, Color3.fromRGB(0,0,0), 14);
@@ -4835,7 +4835,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                     if not range then
                         local slider_fill = library:create("Square", {Parent = slider_frame, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,0,1,0), Thickness = 1, Filled = true, ZIndex = 14, Position = UDim2.new(0,0,0,0)});
-                        local slider_value = library:create("Text", {Text = text, Parent = slider_fill, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(1,0,0.5,-2), ZIndex = 15});
+                        local slider_value = library:create("Text", {Text = text, Parent = slider_fill, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(1,0,0.5,-2), ZIndex = 15});
 
                         local function set(value)
                             value = math.clamp(utility.round(value, float), min, max)
@@ -4888,8 +4888,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                         local min_handle = library:create("Square", {Parent = slider_frame, Visible = true, Transparency = 0, Size = UDim2.new(0,12,0,12), Filled = true, ZIndex = 14, Position = UDim2.new(0,-6,0,0)})
                         local max_handle = library:create("Square", {Parent = slider_frame, Visible = true, Transparency = 0, Size = UDim2.new(0,12,0,12), Filled = true, ZIndex = 14, Position = UDim2.new(1,-6,0,0)})
 
-                        local min_value_text = library:create("Text", {Text = tostring(range[1]) .. suffix, Parent = min_handle, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0.5, 0, 0.5, 0), ZIndex = 15});
-                        local max_value_text = library:create("Text", {Text = tostring(range[2]) .. suffix, Parent = max_handle, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0.5, 0, 0.5, 0), ZIndex = 15});
+                        local min_value_text = library:create("Text", {Text = tostring(range[1]) .. suffix, Parent = min_handle, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5, 0, 0.5, 0), ZIndex = 15});
+                        local max_value_text = library:create("Text", {Text = tostring(range[2]) .. suffix, Parent = max_handle, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5, 0, 0.5, 0), ZIndex = 15});
 
                         local function set(values)
                             local minValue = values[1] or range[1]
@@ -4978,7 +4978,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     end
 
                     if allow then
-                        local slider_question = library:create("Text", {Text = "?", Parent = holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(1,-36,0,-2), ZIndex = 14});
+                        local slider_question = library:create("Text", {Text = "?", Parent = holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(1,-36,0,-2), ZIndex = 14});
                         local question_button = library:create("Square", {
                             Filled = true,
                             Thickness = 0,
@@ -5043,7 +5043,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                         local isfading = false;
 
-                        local fadetext = library:create("Text", {Text = "fading", Parent = slider_button, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0.5, 0, 0, 1), ZIndex = 29});
+                        local fadetext = library:create("Text", {Text = "fading", Parent = slider_button, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5, 0, 0, 1), ZIndex = 29});
 
                         local outline3 = library:outline(slider_window, Color3.fromRGB(48, 48, 60))
                         library:outline(outline3, Color3.fromRGB(0,0,0))
@@ -5123,7 +5123,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     --
                     local title = library:create("Text", {
                         Text = name,
-                        Font = Drawing.Fonts.Monospace,
+                        Font = Drawing.Fonts.Plex,
                         Size = 13,
                         Position = UDim2.new(0.5, 0, 0.5, -15),
                         Color = Color3.fromRGB(105, 105, 115),
@@ -5179,7 +5179,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     if name then
                         local title = library:create("Text", {
                             Text = name,
-                            Font = Drawing.Fonts.Monospace,
+                            Font = Drawing.Fonts.Plex,
                             Size = 13,
                             Position = UDim2.new(0, 20, 0, -2),
                             Theme = "Text",
@@ -5240,7 +5240,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     if name then
                         local title = library:create("Text", {
                             Text = name,
-                            Font = Drawing.Fonts.Monospace,
+                            Font = Drawing.Fonts.Plex,
                             Size = 13,
                             Position = UDim2.new(0, 20, 0, -2),
                             Theme = "Text",
@@ -5301,7 +5301,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     if name then
                         local title = library:create("Text", {
                             Text = name,
-                            Font = Drawing.Fonts.Monospace,
+                            Font = Drawing.Fonts.Plex,
                             Size = 13,
                             Position = UDim2.new(0, 20, 0, -2),
                             Theme = "Text",
@@ -5347,7 +5347,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local outline1 = library:outline(ButtonFrame, Color3.fromRGB(48, 48, 60), 14);
                     library:outline(outline1, Color3.new(0,0,0), 14);
 
-                    local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+                    local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
                     -- Connections
                     local clicked, counting = false, false
@@ -5415,7 +5415,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         local outline1 = library:outline(ButtonFrame_2, Color3.fromRGB(48, 48, 60), 14);
                         library:outline(outline1, Color3.new(0,0,0), 14);
 
-                        local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame_2, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+                        local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame_2, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
                         -- Connections
                         local clicked, counting = false, false
@@ -5489,7 +5489,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                     local title = library:create("Text", {
                         Text = name,
-                        Font = Drawing.Fonts.Monospace,
+                        Font = Drawing.Fonts.Plex,
                         Size = 13,
                         Position = UDim2.new(0,20,0,-5),
                         Theme = "Text",
@@ -5546,7 +5546,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     --
                     local title = library:create("Text", {
                         Text = name,
-                        Font = Drawing.Fonts.Monospace,
+                        Font = Drawing.Fonts.Plex,
                         Size = 13,
                         Position = UDim2.new(0,20,0,-5),
                         Theme = "Text",
@@ -5558,7 +5558,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local keybindname = key_name or "";
 
                     local keytext = library:create("Text", {
-                        Font = Drawing.Fonts.Monospace,
+                        Font = Drawing.Fonts.Plex,
                         Size = 13,
                         Theme = "Un-Selected_Text",
                         Position = UDim2.new(1,-40,0,-5),
@@ -5734,8 +5734,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local outline1 = library:outline(textbox, Color3.fromRGB(48, 48, 60), 14);
                     library:outline(outline1, Color3.new(0,0,0), 14);
 
-                    local text = library:create("Text", {Text = default, Transparency = 1, Visible = true, Parent = textbox, Theme = "Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
-                    local placeholder = library:create("Text", {Text = placeholder, Transparency = 1, Visible = true, Parent = textbox, Theme = "Un-Selected_Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+                    local text = library:create("Text", {Text = default, Transparency = 1, Visible = true, Parent = textbox, Theme = "Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
+                    local placeholder = library:create("Text", {Text = placeholder, Transparency = 1, Visible = true, Parent = textbox, Theme = "Un-Selected_Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
                     -- functions
                     library.object_textbox(textbox, text,  function(str)
@@ -5801,11 +5801,11 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local esp_health_bar_outline = library:create("Square", {Visible = false, Parent = preview_frame; Size = UDim2.new(0, 3, 0, 240), Position = UDim2.new(0, 6, 0, 20), Color = Color3.fromRGB(0, 0, 0), Thickness = 1, Filled = true, ZIndex = 16});
                     local esp_health_bar_outline_2 = library:outline(esp_health_bar_outline, Color3.new(0,0,0), 16)
                     local esp_health_bar = library:create("Square", {Parent = esp_health_bar_outline; Size = UDim2.new(1,0,1,0), Color = Color3.fromRGB(0, 255, 42), Thickness = 1, Filled = true, ZIndex = 16, Position = UDim2.new(0,0,1,0)});
-                    local esp_health_text = library:create("Text", {Text = tostring("<- "..healthamount), Parent = esp_health_bar, Visible = true, Transparency = 1, Color = maincolor, Size = 13, Center = false, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(1,0,0,0), ZIndex = 16});
+                    local esp_health_text = library:create("Text", {Text = tostring("<- "..healthamount), Parent = esp_health_bar, Visible = true, Transparency = 1, Color = maincolor, Size = 13, Center = false, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(1,0,0,0), ZIndex = 16});
 
-                    local esp_name = library:create("Text", {Text = "player", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, 110, 0, 3), ZIndex = 16});
-                    local esp_distance = library:create("Text", {Text = "0 meters", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, 110, 0, 260), ZIndex = 16});
-                    local esp_weapon = library:create("Text", {Text = "weapon", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, 110, 0, 270), ZIndex = 16});
+                    local esp_name = library:create("Text", {Text = "player", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110, 0, 3), ZIndex = 16});
+                    local esp_distance = library:create("Text", {Text = "0 meters", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110, 0, 260), ZIndex = 16});
+                    local esp_weapon = library:create("Text", {Text = "weapon", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110, 0, 270), ZIndex = 16});
                     --
                     function esp_preview:set_health(amount)
                         local value = amount/100
@@ -5910,7 +5910,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
         utility.dragify(list_holder, 'player list')
 
-        local list_title = library:create("Text", {Text = "players", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, RobotoMono, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
+        local list_title = library:create("Text", {Text = "players", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = 2, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
         local assent = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-30,0,2), Position = UDim2.new(0,16,0,25), Thickness = 1, Filled = true, ZIndex = 14});
 
         --
@@ -5924,7 +5924,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             library:outline(outline, Color3.fromRGB(0,0,0), 14);
         end;
         --
-        local player_data = library:create("Text", {Text = "...", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0,390,0,120), ZIndex = 14});
+        local player_data = library:create("Text", {Text = "...", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,390,0,120), ZIndex = 14});
         --
         local player_image = library:create("Image", {
             Size = UDim2.new(1, 0, 1, 0),
@@ -5963,7 +5963,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         local outline1 = library:outline(PriorityFrame, Color3.fromRGB(48, 48, 60), 14);
         library:outline(outline1, Color3.new(0,0,0), 14);
 
-        local icon = library:create("Text", {Text = "priority", Transparency = 1, Visible = true, Parent = PriorityFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+        local icon = library:create("Text", {Text = "priority", Transparency = 1, Visible = true, Parent = PriorityFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
         local FriendFrame = library:create("Square", {
             Filled = true,
@@ -5987,7 +5987,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         local outline2 = library:outline(FriendFrame, Color3.fromRGB(48, 48, 60), 14);
         library:outline(outline2, Color3.new(0,0,0), 14);
 
-        local friendicon = library:create("Text", {Text = "friendly", Transparency = 1, Visible = true, Parent = FriendFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+        local friendicon = library:create("Text", {Text = "friendly", Transparency = 1, Visible = true, Parent = FriendFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
         list_content:AddListLayout(3)
         --// Scroll
@@ -6088,7 +6088,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 local title = library:create("Text", {
                     Text = option == game.Players.LocalPlayer and dreya.userinfo.username or #option.Name > 15 and option.Name:sub(1, 15) .. '...' or option.Name,
-                    Font = Drawing.Fonts.Monospace,
+                    Font = Drawing.Fonts.Plex,
                     Size = 13,
                     Position = UDim2.new(0, 3, 0, 1),
                     Theme = "Text",
@@ -6099,7 +6099,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 local status = library:create("Text", {
                     Text = option == game.Players.LocalPlayer and "local" or "none",
-                    Font = Drawing.Fonts.Monospace,
+                    Font = Drawing.Fonts.Plex,
                     Size = 13,
                     Position = UDim2.new(1/2, 6, 0, 1),
                     Color = option == game.Players.LocalPlayer and Color3.fromHex('#404040') or Color3.fromRGB(175,175,175),
@@ -6267,7 +6267,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         utility.dragify(list_holder, 'server list')
 
         --
-        local list_title = library:create("Text", {Text = "servers", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, RobotoMono, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
+        local list_title = library:create("Text", {Text = "servers", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = 2, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
         local assent = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-30,0,2), Position = UDim2.new(0,16,0,25), Thickness = 1, Filled = true, ZIndex = 14});
         --
         local list_inline = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0, 340, 0, (max * 20)), Position = UDim2.new(0, 20, 0, 45), Thickness = 1, Filled = true, ZIndex = 14}) do
@@ -6294,7 +6294,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             local clicked_join, counting_join = false, false
 
             local outline = library:outline(connect_frame, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
-            local text = library:create("Text", {Text = "connect", Transparency = 1, Visible = true, Parent = connect_frame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+            local text = library:create("Text", {Text = "connect", Transparency = 1, Visible = true, Parent = connect_frame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
             connect_frame.MouseEnter:Connect(function() connect_frame.Color = Color3.fromRGB(34, 34, 42) end)
             connect_frame.MouseLeave:Connect(function() connect_frame.Color = Color3.fromRGB(24, 24, 30) end)
@@ -6334,7 +6334,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             local sortAscending, sortField = false, 'players'
 
             local outline = library:outline(sort_frame, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
-            sort_text = library:create("Text", {Text = "players ascending", Transparency = 0.6, Visible = true, Parent = sort_frame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+            sort_text = library:create("Text", {Text = "players ascending", Transparency = 0.6, Visible = true, Parent = sort_frame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
             sort_frame.MouseEnter:Connect(function() sort_frame.Color = Color3.fromRGB(34, 34, 42) end)
             sort_frame.MouseLeave:Connect(function() sort_frame.Color = Color3.fromRGB(24, 24, 30) end)
@@ -6374,7 +6374,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
         local refresh_frame = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Transparency = 0.2, Size = UDim2.new(0,60,0,17), Position = UDim2.new(0, 85, 0, 250), ZIndex = 14, Parent = list_holder }) do
             local outline = library:outline(refresh_frame, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
-            library:create("Text", {Text = "refresh", Transparency = 1, Visible = true, Parent = refresh_frame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+            library:create("Text", {Text = "refresh", Transparency = 1, Visible = true, Parent = refresh_frame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
             refresh_frame.MouseLeave:Connect(function() refresh_frame.Color = Color3.fromRGB(24, 24, 30) end)
             refresh_frame.MouseEnter:Connect(function() refresh_frame.Color = Color3.fromRGB(34, 34, 42) end)
@@ -6392,8 +6392,8 @@ if not library.particle_cache.bg then library:InitParticles() end
 
             local outline = library:outline(textbox, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
 
-            local text = library:create("Text", {Text = '', Transparency = 1, Visible = true, Parent = textbox, Theme = "Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
-            local placeholder = library:create("Text", {Text = 'username or id', Transparency = 1, Visible = true, Parent = textbox, Theme = "Un-Selected_Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+            local text = library:create("Text", {Text = '', Transparency = 1, Visible = true, Parent = textbox, Theme = "Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
+            local placeholder = library:create("Text", {Text = 'username or id', Transparency = 1, Visible = true, Parent = textbox, Theme = "Un-Selected_Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
             library.object_textbox(textbox, text,  function(str)
                 if str == "" then
@@ -6430,7 +6430,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         local button3 = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Transparency = 0.2, Size = UDim2.new(0,90,0,17), Position = UDim2.new(0, 386, 0, 172), ZIndex = 14, Parent = list_holder }) do
             local threads, searching = 30, false
             local outline = library:outline(button3, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
-            local text = library:create("Text", {Text = "scan", Transparency = 1, Visible = true, Parent = button3, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+            local text = library:create("Text", {Text = "scan", Transparency = 1, Visible = true, Parent = button3, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
             button3.MouseLeave:Connect(function() button3.Color = Color3.fromRGB(24, 24, 30) end)
             button3.MouseEnter:Connect(function() button3.Color = Color3.fromRGB(34, 34, 42) end)
@@ -6541,11 +6541,11 @@ if not library.particle_cache.bg then library:InitParticles() end
             end)
         end
 
-        local currentserv_text = library:create("Text", {Text = "current server", Transparency = 0.6, Visible = true, Parent = list_holder, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0, 432, 0, 230), RobotoMono, Size = 13, Outline = true});
+        local currentserv_text = library:create("Text", {Text = "current server", Transparency = 0.6, Visible = true, Parent = list_holder, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0, 432, 0, 230), Font = 2, Size = 13, Outline = true});
 
         local button1 = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,40,0,17), Position = UDim2.new(0, 386, 0, 250), ZIndex = 14, Parent = list_holder }) do
             local outline = library:outline(button1, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
-            local text = library:create("Text", {Text = "rejoin", Transparency = 1, Visible = true, Parent = button1, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+            local text = library:create("Text", {Text = "rejoin", Transparency = 1, Visible = true, Parent = button1, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
             button1.MouseLeave:Connect(function() button1.Color = Color3.fromRGB(24, 24, 30) end)
             button1.MouseEnter:Connect(function() button1.Color = Color3.fromRGB(34, 34, 42) end)
@@ -6582,7 +6582,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
         local button2 = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,40,0,17), Position = UDim2.new(0, 436, 0, 250), ZIndex = 14, Parent = list_holder }) do
             local outline = library:outline(button2, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
-            library:create("Text", {Text = "copy", Transparency = 1, Visible = true, Parent = button2, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), RobotoMono, Size = 13, Outline = true});
+            library:create("Text", {Text = "copy", Transparency = 1, Visible = true, Parent = button2, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
             button2.MouseLeave:Connect(function() button2.Color = Color3.fromRGB(24, 24, 30) end)
             button2.MouseEnter:Connect(function() button2.Color = Color3.fromRGB(34, 34, 42) end)
@@ -6680,7 +6680,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 local id = library:create("Text", {
                     Text = option.id and string.sub(option.id, 0, 8) .. '...' or 'nil',
-                    Font = Drawing.Fonts.Monospace,
+                    Font = Drawing.Fonts.Plex,
                     Size = 13,
                     Position = UDim2.new(0, 3, 0, 1),
                     Theme = "Text",
@@ -6691,7 +6691,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 local ping = library:create("Text", {
                     Text = option.ping and tostring(option.ping .. ' ms') or "0 ms",
-                    Font = Drawing.Fonts.Monospace,
+                    Font = Drawing.Fonts.Plex,
                     Size = 13,
                     Position = UDim2.new(1/3, 6, 0, 1),
                     Color = isbuyer and library.theme['Accent'] or Color3.fromRGB(175,175,175),
@@ -6702,7 +6702,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 local players = library:create("Text", {
                     Text = option.playing and option.maxPlayers and tostring(option.playing .. '/'.. option.maxPlayers) or "0/0",
-                    Font = Drawing.Fonts.Monospace,
+                    Font = Drawing.Fonts.Plex,
                     Size = 13,
                     Position = UDim2.new(2/3, 6, 0, 1),
                     Color = Color3.fromRGB(175,175,175),
@@ -6834,7 +6834,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             Size = 13, 
             Center = true, 
             Outline = true, 
-            RobotoMono, 
+            Font = 2, 
             Position = UDim2.new(0.5,0,0,5), 
             ZIndex = 14
         })
@@ -6886,13 +6886,13 @@ if not library.particle_cache.bg then library:InitParticles() end
         
         local esp_health_bar = library:create("Square", {Parent = esp_health_bar_outline, Size = UDim2.new(1,0,1,0), Color = Color3.fromRGB(0, 255, 42), Thickness = 1, Filled = true, ZIndex = 16, Position = UDim2.new(0,0,1,0)})
         
-        local esp_health_text = library:create("Text", {Text = tostring("<- "..healthamount), Parent = esp_health_bar, Visible = true, Transparency = 1, Color = maincolor, Size = 13, Center = false, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(1,0,0,0), ZIndex = 16})
+        local esp_health_text = library:create("Text", {Text = tostring("<- "..healthamount), Parent = esp_health_bar, Visible = true, Transparency = 1, Color = maincolor, Size = 13, Center = false, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(1,0,0,0), ZIndex = 16})
         
-        local esp_name = library:create("Text", {Text = "player", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, 110 + x_offset, 0, 3 + y_offset), ZIndex = 16})
+        local esp_name = library:create("Text", {Text = "player", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110 + x_offset, 0, 3 + y_offset), ZIndex = 16})
         
-        local esp_distance = library:create("Text", {Text = "0 meters", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, 110 + x_offset, 0, 260 + y_offset), ZIndex = 16})
+        local esp_distance = library:create("Text", {Text = "0 meters", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110 + x_offset, 0, 260 + y_offset), ZIndex = 16})
         
-        local esp_weapon = library:create("Text", {Text = "weapon", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, 110 + x_offset, 0, 270 + y_offset), ZIndex = 16})
+        local esp_weapon = library:create("Text", {Text = "weapon", Parent = preview_frame, Visible = false, Transparency = 1, Color = Color3.fromRGB(255, 255, 255), Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 110 + x_offset, 0, 270 + y_offset), ZIndex = 16})
 
         -- 5. Helper Functions
         function preview_obj:set_health(amount)
@@ -7027,8 +7027,8 @@ function library:notify(info)
     --
     local line1 = library:create("Square", {Parent = background, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(0,20,0,1), Position = UDim2.new(0,0,1,-1), Thickness = 1, Filled = true, ZIndex = 11});
     --
-    local text = library:create("Text", { Parent = background, Visible = true, Transparency = 1, Theme = "Accent", Size = 13, Text = name, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, 3,0,2), ZIndex = 11})
-    local notiftext = library:create("Text", { Text = title, Parent = background, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, utility.textlength(text.Text, 2, 13).X + 5,0,2), ZIndex = 11})
+    local text = library:create("Text", { Parent = background, Visible = true, Transparency = 1, Theme = "Accent", Size = 13, Text = name, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 3,0,2), ZIndex = 11})
+    local notiftext = library:create("Text", { Text = title, Parent = background, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, utility.textlength(text.Text, 2, 13).X + 5,0,2), ZIndex = 11})
     --
     function ntif.remove()
         local goaway = tween.new(ntif.instances[2], TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0,-500,0,0)}):Play()
@@ -7081,8 +7081,8 @@ function library:createwatermark()
     watermark.objects.outline1 = library:outline(watermark.objects.background, Color3.fromRGB(44, 44, 44), 10, true)
     watermark.objects.outline2 = library:outline(watermark.objects.outline1, Color3.fromRGB(0, 0, 0), 10, true)
 
-    watermark.objects.text2 = library:create("Text", { Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Accent", Size = 13, Text = 'dreya', Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, 3, 0, 2), ZIndex = 11 })
-    watermark.objects.text3 = library:create("Text", { Text = watermark.title, Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Monospace, Position = UDim2.new(0, utility.textlength(watermark.objects.text2.Text, 2, 13).X + 5, 0, 2), ZIndex = 11 })
+    watermark.objects.text2 = library:create("Text", { Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Accent", Size = 13, Text = 'dreya', Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 3, 0, 2), ZIndex = 11 })
+    watermark.objects.text3 = library:create("Text", { Text = watermark.title, Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, utility.textlength(watermark.objects.text2.Text, 2, 13).X + 5, 0, 2), ZIndex = 11 })
 
     watermark.objects.line1 = library:create("Square", { Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(0, 20, 0, 1), Position = UDim2.new(0, 0, 1, -1), Thickness = 1, Filled = true, ZIndex = 11 })
 
