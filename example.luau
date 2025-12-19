@@ -10,7 +10,7 @@ startUpArgs = { 'blank', 'private' }; do
     end
 end
 
-local library = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/codex/list-elements-and-features-of-stable.luau/stable.luau', Method = 'GET' }).Body)()
+local library = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/main/stable.lua', Method = 'GET' }).Body)()
 
 local folders = {
     main = 'niche',
