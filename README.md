@@ -1,1 +1,0 @@
-bandz is gay
