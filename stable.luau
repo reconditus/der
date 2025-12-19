@@ -6055,15 +6055,23 @@ if not library.particle_cache.bg then library:InitParticles() end
                 if selected_plr ~= last_plr then
                     player_image.Data = ''
                     player_data.Text = 'getting player info..'
-                    --
-                    local response = game:HttpGet(string.format("https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=%d&size=150x150&format=Png&isCircular=false", selected_plr.UserId))
-                    local data = game:GetService("HttpService"):JSONDecode(response).data
-                    local avatar_url = data[1].imageUrl
-                    --
-                    local imagedata = game:HttpGet(avatar_url)
-                    player_image.Data = imagedata
+                    if selected_plr and selected_plr.UserId then
+                        local s, response = utility.request('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=' .. selected_plr.UserId .. '&format=Png&size=150x150&isCircular=false')
+                        if s and response and response.data and response.data[1] and response.data[1].imageUrl then
+                            local image_ok, imagedata = pcall(game.HttpGet, game, response.data[1].imageUrl)
+                            if image_ok then
+                                player_image.Data = imagedata
+                            else
+                                player_image.Data = ''
+                            end
+                        else
+                            player_image.Data = ''
+                        end
+                        player_data.Text = ("id : %s\nage : %s"):format(selected_plr.UserId, utility.ymd(selected_plr.AccountAge))
+                    else
+                        player_data.Text = "unable to load player"
+                    end
                     last_plr = selected_plr;
-                    player_data.Text = ("id : %s\nage : %s"):format(selected_plr.UserId, utility.ymd(selected_plr.AccountAge))
                 end;
             end)
         end
