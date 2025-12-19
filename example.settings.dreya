@@ -195,28 +195,6 @@ local window = library:new({ name = 'Niche', sub = `.{startUpArgs[1]}`, size = V
             end})
         end
         local options = options_tab:section({ name = 'options', side = 'right', size = '275' }) do
-            local menu_colors = {
-                background = Color3.fromRGB(13, 13, 13),
-                control = Color3.fromRGB(25, 25, 25),
-                outline = Color3.fromRGB(44, 44, 44),
-                inner = Color3.fromRGB(0, 0, 0)
-            }
-
-            local function update_menu_colors(kind, new_color)
-                local previous = menu_colors[kind]
-                if not previous then
-                    return
-                end
-
-                for _, obj in ipairs(library.drawings) do
-                    if obj and obj.Color == previous then
-                        obj.Color = new_color
-                    end
-                end
-
-                menu_colors[kind] = new_color
-            end
-
             options:divider({ name = 'menu options' }) do
                 options:keybind({ name = 'menu', flag = 'menu toggle', default = Enum.KeyCode.End, mode = 'Toggle', callback = function() library:set_open(not library.open) end})
                 options:keybind({ name = 'player list', flag = 'player list toggle', default = Enum.KeyCode.End, mode = 'Toggle', callback = function(state) playerlist:setopen(not playerlist.open) end})
@@ -225,25 +203,6 @@ local window = library:new({ name = 'Niche', sub = `.{startUpArgs[1]}`, size = V
             end
             options:divider({ name = 'personalization' }) do
                 options:colorpicker({ name = 'accent', flag = 'menu accent', default = Color3.fromRGB(117, 163, 125), callback = function(s) library:change_theme_color('Accent', s) end})
-                options:colorpicker({ name = 'menu background', flag = 'menu background color', default = Color3.fromRGB(13, 13, 13), callback = function(s)
-                    library:change_theme_color('Window Background', s)
-                    library:change_theme_color('Window Holder', s)
-                    library:change_theme_color('Control Background', s)
-                    library:change_theme_color('Watermark Background', s)
-                    update_menu_colors("background", s)
-                    update_menu_colors("control", s)
-                end})
-                options:colorpicker({ name = 'menu outline (grey)', flag = 'menu outline grey', default = Color3.fromRGB(44, 44, 44), callback = function(s)
-                    library:change_theme_color('Window Outline', s)
-                    library:change_theme_color('Control Outline', s)
-                    library:change_theme_color('Watermark Outline', s)
-                    update_menu_colors("outline", s)
-                end})
-                options:colorpicker({ name = 'menu outline (black)', flag = 'menu outline black', default = Color3.fromRGB(0, 0, 0), callback = function(s)
-                    library:change_theme_color('Window Outline Inner', s)
-                    library:change_theme_color('Watermark Outline Inner', s)
-                    update_menu_colors("inner", s)
-                end})
             end
         end
     end
