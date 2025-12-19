@@ -264,13 +264,13 @@ end;
 -- // Library
 local themes = { -- ignore
     ["Default"] = {
-        ["Accent"] = Color3.fromRGB(117, 163, 125);
-        ["Un-Selected"] = Color3.fromRGB(55,55,55);
-        ["Un-Selected_Text"] = Color3.fromRGB(118,118,118);
-        ["Text"] = Color3.fromRGB(175,175,175);
-        ["Risky Text"] = Color3.fromRGB(227, 206, 20);
-        ["Toggle Background"] = Color3.fromRGB(77, 77, 77);
-        ["Toggle Background Highlight"] = Color3.fromRGB(88,88,88);
+        ["Accent"] = Color3.fromRGB(255, 59, 141);
+        ["Un-Selected"] = Color3.fromRGB(24, 24, 30);
+        ["Un-Selected_Text"] = Color3.fromRGB(105, 105, 115);
+        ["Text"] = Color3.fromRGB(215, 215, 225);
+        ["Risky Text"] = Color3.fromRGB(255, 92, 92);
+        ["Toggle Background"] = Color3.fromRGB(34, 34, 42);
+        ["Toggle Background Highlight"] = Color3.fromRGB(48, 48, 60);
     };
 }
 local themeobjects = {};
@@ -601,7 +601,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
         Filled = true,
         Visible = true,
         Thickness = 0,
-        Color = Color3.fromRGB(25,25,25),
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(1, -50, 0, 15),
         Position = UDim2.new(0, 23, 1, -17),
         ZIndex = 16,
@@ -609,14 +609,14 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
     })
 
     holder.MouseEnter:Connect(function()
-        dropdown.Color = Color3.fromRGB(27,27,27)
+        dropdown.Color = Color3.fromRGB(34, 34, 42)
     end)
 
     holder.MouseLeave:Connect(function()
-        dropdown.Color = Color3.fromRGB(25,25,25)
+        dropdown.Color = Color3.fromRGB(24, 24, 30)
     end)
 
-    local outline1 = library:outline(dropdown, Color3.fromRGB(44,44,44), 14);
+    local outline1 = library:outline(dropdown, Color3.fromRGB(48, 48, 60), 14);
     library:outline(outline1, Color3.new(0,0,0), 14);
 
     local value = library:create("Text", {
@@ -636,7 +636,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
         Filled = true,
         Visible = false,
         Thickness = 0,
-        Color = Color3.fromRGB(25,25,25),
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(1,0,0,0),
         Position = UDim2.new(0, 0, 1, 6),
         ZIndex = 18,
@@ -645,7 +645,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
 
     table.insert(drops, contentframe)
 
-    local outline2 = library:outline(contentframe, Color3.fromRGB(44,44,44), 17);
+    local outline2 = library:outline(contentframe, Color3.fromRGB(48, 48, 60), 17);
     library:outline(outline2, Color3.new(0,0,0), 17);
 
     local contentholder = library:create("Square", {
@@ -911,7 +911,7 @@ function library.createlist(holder, content, flag, callback, default, max, scrol
         Filled = true,
         Visible = true,
         Thickness = 0,
-        Color = Color3.fromRGB(25,25,25),
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(1, -50, 0, 15),
         Position = UDim2.new(0, 23, 0, 0),
         ZIndex = 16,
@@ -923,14 +923,14 @@ function library.createlist(holder, content, flag, callback, default, max, scrol
         Filled = true,
         Visible = true,
         Thickness = 0,
-        Color = Color3.fromRGB(25,25,25),
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(1,0,0,0),
         Position = UDim2.new(0, 0, 0, 0),
         ZIndex = 18,
         Parent = list
     })
 
-    local outline2 = library:outline(contentframe, Color3.fromRGB(44,44,44), 17);
+    local outline2 = library:outline(contentframe, Color3.fromRGB(48, 48, 60), 17);
     library:outline(outline2, Color3.new(0,0,0), 17);
 
     local contentholder = library:create("Square", {
@@ -1279,7 +1279,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
         Filled = true,
         Visible = true,
         Thickness = 0,
-        Color = Color3.fromRGB(25,25,25),
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(1, -50, 0, 15),
         Position = UDim2.new(0, 23, 1, -17),
         ZIndex = 16,
@@ -1287,14 +1287,14 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
     })
 
     holder.MouseEnter:Connect(function()
-        dropdown.Color = Color3.fromRGB(27,27,27)
+        dropdown.Color = Color3.fromRGB(34, 34, 42)
     end)
 
     holder.MouseLeave:Connect(function()
-        dropdown.Color = Color3.fromRGB(25,25,25)
+        dropdown.Color = Color3.fromRGB(24, 24, 30)
     end)
 
-    local outline1 = library:outline(dropdown, Color3.fromRGB(44,44,44), 14);
+    local outline1 = library:outline(dropdown, Color3.fromRGB(48, 48, 60), 14);
     library:outline(outline1, Color3.new(0,0,0), 14);
 
     local value = library:create("Text", {
@@ -1314,7 +1314,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
         Filled = true,
         Visible = false,
         Thickness = 0,
-        Color = Color3.fromRGB(25,25,25),
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(1,0,0,0),
         Position = UDim2.new(0, 0, 1, 6),
         ZIndex = 18,
@@ -1323,7 +1323,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
 
     table.insert(drops, contentframe)
 
-    local outline2 = library:outline(contentframe, Color3.fromRGB(44,44,44), 17);
+    local outline2 = library:outline(contentframe, Color3.fromRGB(48, 48, 60), 17);
     library:outline(outline2, Color3.new(0,0,0), 17);
 
     local contentholder = library:create("Square", {
@@ -1651,7 +1651,7 @@ function library.object_colorpicker_inner(default, defaultalpha, parent, count, 
         Filled = true,
         Thickness = 0,
         Parent = icon,
-        Color = Color3.fromRGB(13,13,13),
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(0, 206, 0, 180),
         Visible = false,
         Position = UDim2.new(1, -185 + (count * 20) + (count * 6), 1, 6),
@@ -1660,7 +1660,7 @@ function library.object_colorpicker_inner(default, defaultalpha, parent, count, 
 
     table.insert(innerpickers, window)
 
-    local outline1 = library:outline(window, Color3.fromRGB(50,50,50), 33)
+    local outline1 = library:outline(window, Color3.fromRGB(48, 48, 60), 33)
     library:outline(outline1, Color3.fromRGB(0,0,0), 33)
 
     local saturation = library:create("Square", {
@@ -1758,14 +1758,14 @@ function library.object_colorpicker_inner(default, defaultalpha, parent, count, 
         Filled = true,
         Transparency = 1,
         Thickness = 1,
-        Color = Color3.fromRGB(13,13,13),
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(1, -12, 0, 14),
         Position = UDim2.new(0, 6, 0, 160),
         ZIndex = 35,
         Parent = window
     })
 
-    local outline2 = library:outline(rgbinput, Color3.fromRGB(50,50,50))
+    local outline2 = library:outline(rgbinput, Color3.fromRGB(48, 48, 60))
     library:outline(outline2, Color3.fromRGB(0,0,0))
 
     local text = library:create("Text", {
@@ -2028,7 +2028,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
         Filled = true,
         Thickness = 0,
         Parent = icon,
-        Color = Color3.fromRGB(13,13,13),
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(0, 206, 0, 200),
         Visible = false,
         Position = UDim2.new(1, -185 + (count * 20) + (count * 6), 1, 6),
@@ -2040,7 +2040,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
         Thickness = 0,
         Transparency = 0,
         Parent = window,
-        Color = Color3.fromRGB(13,13,13),
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(1,0,1,0),
         Visible = true,
         ZIndex = 20
@@ -2051,7 +2051,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
         Thickness = 0,
         Transparency = 0,
         Parent = window,
-        Color = Color3.fromRGB(13,13,13),
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(1,0,1,0),
         Visible = false,
         ZIndex = 20
@@ -2059,7 +2059,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
 
     table.insert(pickers, window)
 
-    local outline1 = library:outline(window, Color3.fromRGB(50,50,50), 21)
+    local outline1 = library:outline(window, Color3.fromRGB(48, 48, 60), 21)
     library:outline(outline1, Color3.fromRGB(0,0,0), 21)
 
     local saturation = library:create("Square", {
@@ -2158,14 +2158,14 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
         Filled = true,
         Transparency = 1,
         Thickness = 1,
-        Color = Color3.fromRGB(13,13,13),
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(1, -12, 0, 14),
         Position = UDim2.new(0, 6, 0, 180),
         ZIndex = 24,
         Parent = colorpage
     })
 
-    local outline2 = library:outline(rgbinput, Color3.fromRGB(50,50,50))
+    local outline2 = library:outline(rgbinput, Color3.fromRGB(48, 48, 60))
     library:outline(outline2, Color3.fromRGB(0,0,0))
 
     local text = library:create("Text", {
@@ -2180,7 +2180,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
         Parent = rgbinput
     })
 
-    local color_button = library:create("Square", {Parent = window, Size = UDim2.new(0.5,-1,0,14), Color = Color3.fromRGB(13,13,13), Thickness = 1, Filled = true, ZIndex = 21});
+    local color_button = library:create("Square", {Parent = window, Size = UDim2.new(0.5,-1,0,14), Color = Color3.fromRGB(24, 24, 30), Thickness = 1, Filled = true, ZIndex = 21});
     local color_outline = library:outline(color_button, Color3.new(0,0,0), 20);
     color_outline.Visible = false
     local color_text = library:create("Text", {
@@ -2195,7 +2195,7 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
         Parent = color_button
     })
 
-    local animation_button = library:create("Square", {Parent = window, Size = UDim2.new(0.5,-1,0,14), Position = UDim2.new(0.5,1,0,0), Color = Color3.fromRGB(19,19,19), Thickness = 1, Filled = true, ZIndex = 21});
+    local animation_button = library:create("Square", {Parent = window, Size = UDim2.new(0.5,-1,0,14), Position = UDim2.new(0.5,1,0,0), Color = Color3.fromRGB(24, 24, 30), Thickness = 1, Filled = true, ZIndex = 21});
     local animation_outline = library:outline(animation_button, Color3.new(0,0,0), 20);
     local animation_text = library:create("Text", {
         Text = "animation",
@@ -2554,21 +2554,21 @@ function library.object_colorpicker(default, defaultalpha, parent, count, flag, 
 
     color_button.MouseButton1Click:Connect(function()
         colorpage.Visible = true
-        color_button.Color = Color3.fromRGB(13,13,13)
+        color_button.Color = Color3.fromRGB(24, 24, 30)
         color_outline.Visible = false
         --
         animationpage.Visible = false
-        animation_button.Color = Color3.fromRGB(19,19,19)
+        animation_button.Color = Color3.fromRGB(24, 24, 30)
         animation_outline.Visible = true
     end)
 
     animation_button.MouseButton1Click:Connect(function()
         colorpage.Visible = false
-        color_button.Color = Color3.fromRGB(19,19,19)
+        color_button.Color = Color3.fromRGB(24, 24, 30)
         color_outline.Visible = true
         --
         animationpage.Visible = true
-        animation_button.Color = Color3.fromRGB(13,13,13)
+        animation_button.Color = Color3.fromRGB(24, 24, 30)
         animation_outline.Visible = false
     end)
 
@@ -2879,7 +2879,7 @@ if not library.particle_cache.bg then library:InitParticles() end
     local size = cfg.size or cfg.Size or Vector2.new(600, 650);
     -- // Drawings
     local window_outline = library:create("Square", {Visible = false, Transparency = 1, Color = Color3.fromRGB(12,12,12), Size = UDim2.new(0,size.X,0,size.Y), Position = UDim2.new(0, 204, 0, 268), Thickness = 1, Filled = true, ZIndex = 10}) do
-        local outline = library:outline(window_outline, Color3.fromRGB(50,50,50), 10);
+        local outline = library:outline(window_outline, Color3.fromRGB(48, 48, 60), 10);
         library:outline(outline, Color3.new(0,0,0), 10);
     end;
     --
@@ -2891,13 +2891,13 @@ if not library.particle_cache.bg then library:InitParticles() end
     library:outline(window_accent , Color3.new(0,0,0), 11);
     library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = window_accent, Size = UDim2.new(1,0,1,0), ZIndex = 11});
     --
-    local window_holder = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(1,-15,1,-90), Position = UDim2.new(0,7,0,82), Thickness = 1, Filled = true, ZIndex = 12}) do
-        local outline = library:outline(window_holder, Color3.fromRGB(50,50,50), 12);
+    local window_holder = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1,-15,1,-90), Position = UDim2.new(0,7,0,82), Thickness = 1, Filled = true, ZIndex = 12}) do
+        local outline = library:outline(window_holder, Color3.fromRGB(48, 48, 60), 12);
         library:outline(outline, Color3.fromRGB(0,0,0), 12);
     end;
     --
     --
-    local window_page_holder = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 0, Color = Color3.fromRGB(50,50,50), Size = UDim2.new(1,-6,0,35), Position = UDim2.new(0,3,0,34), Thickness = 1, Filled = true, ZIndex = 12})
+    local window_page_holder = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 0, Color = Color3.fromRGB(48, 48, 60), Size = UDim2.new(1,-6,0,35), Position = UDim2.new(0,3,0,34), Thickness = 1, Filled = true, ZIndex = 12})
     --
     local window_page_holder_inline = library:create("Square", {Parent = window_page_holder, Visible = true, Transparency = 0, Size = UDim2.new(1,-7,1,-4), Position = UDim2.new(0,3,0,2), Thickness = 1, Filled = true, ZIndex = 12})
     --
@@ -2969,12 +2969,12 @@ if not library.particle_cache.bg then library:InitParticles() end
             local side = cfg.side == "left" and left or cfg.Side == "Left" and left or cfg.side == "right" and right or cfg.Side == "Right" and right or left;
             local size = cfg.size or cfg.Size or 200;
             -- // Drawings
-            local section_holder = library:create("Square", {Parent = side, Visible = true, Transparency = 1, Color = Color3.fromRGB(19,19,19), Size = size ~= 'auto' and UDim2.new(1,0,0,size) or UDim2.new(1,0,0,28), Position = UDim2.new(0,0,0,0), Thickness = 1, Filled = true, ZIndex = 14}) do
+            local section_holder = library:create("Square", {Parent = side, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = size ~= 'auto' and UDim2.new(1,0,0,size) or UDim2.new(1,0,0,28), Position = UDim2.new(0,0,0,0), Thickness = 1, Filled = true, ZIndex = 14}) do
                 local outline = library:outline(section_holder, Color3.fromRGB(37,37,37), 14);
                 library:outline(outline, Color3.fromRGB(0,0,0), 14);
             end;
             --
-            local section_title_cover = library:create("Square", {Parent = section_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(19,19,19), Size = UDim2.new(0,utility.textlength(name, Drawing.Fonts.Plex, 13).X + 2,0,4), Position = UDim2.new(0,10,0,-1), Thickness = 1, Filled = true, ZIndex = 14})
+            local section_title_cover = library:create("Square", {Parent = section_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,utility.textlength(name, Drawing.Fonts.Plex, 13).X + 2,0,4), Position = UDim2.new(0,10,0,-1), Thickness = 1, Filled = true, ZIndex = 14})
             local section_title = library:create("Text", {Text = name, Parent = section_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,11,0,-8), ZIndex = 14});
             --
             local section_content = library:create("Square", {Transparency = 0,Size = UDim2.new(1, -32, 1, -10),Position = UDim2.new(0, 16, 0, 15),Parent = section_holder,ZIndex = 14});
@@ -3240,13 +3240,13 @@ if not library.particle_cache.bg then library:InitParticles() end
                 --
                 local holder = library:create("Square", {Parent = section_content, Visible = true, Transparency = 0, Size = UDim2.new(1,0,0,8), Thickness = 1, Filled = false, ZIndex = 14})
                 --
-                --local div = library:create("Square", { Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(100, 100, 100), Size = UDim2.new(0, 6, 0, 1), Position = UDim2.new(0, 0, 0, 3), Thickness = 1, Filled = true, ZIndex = 14 })
+                --local div = library:create("Square", { Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = UDim2.new(0, 6, 0, 1), Position = UDim2.new(0, 0, 0, 3), Thickness = 1, Filled = true, ZIndex = 14 })
                 local offset = 0
                 if name == '' then
                     offset = 12
                 end
-                local title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(100, 100, 100), Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,19,0,-3), ZIndex = 14});
-                local div = library:create("Square", { Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(100, 100, 100), Size = UDim2.new(1, (- utility.textlength(name, 2, 13).X) - 45 + offset, 0, 1), Position = UDim2.new(0, 28 + utility.textlength(name, 2, 13).X - offset, 0, 5), Thickness = 1, Filled = true, ZIndex = 14 })
+                local title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,19,0,-3), ZIndex = 14});
+                local div = library:create("Square", { Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = UDim2.new(1, (- utility.textlength(name, 2, 13).X) - 45 + offset, 0, 1), Position = UDim2.new(0, 28 + utility.textlength(name, 2, 13).X - offset, 0, 5), Thickness = 1, Filled = true, ZIndex = 14 })
                 --
                 if size == "auto" then
                     section_holder.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 5);
@@ -3442,7 +3442,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         Filled = true,
                         Thickness = 0,
                         Parent = holder,
-                        Color = Color3.fromRGB(13,13,13),
+                        Color = Color3.fromRGB(24, 24, 30),
                         Size = UDim2.new(0,slider_question.TextBounds.X,0,slider_question.TextBounds.Y),
                         Position = UDim2.new(1,-36,0,-2),
                         Visible = true,
@@ -3454,7 +3454,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         Filled = true,
                         Thickness = 0,
                         Parent = slider_drag,
-                        Color = Color3.fromRGB(13,13,13),
+                        Color = Color3.fromRGB(24, 24, 30),
                         Size = UDim2.new(0, 205, 0, 107),
                         Visible = false,
                         Position = UDim2.new(1, -185, 1, 6),
@@ -3462,7 +3462,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     })
                     table.insert(fadethings, slider_window)
 
-                    local outline3 = library:outline(slider_window, Color3.fromRGB(44,44,44))
+                    local outline3 = library:outline(slider_window, Color3.fromRGB(48, 48, 60))
                     library:outline(outline3, Color3.fromRGB(0,0,0))
 
                     local windowback = library:create("Square", {
@@ -3494,7 +3494,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         Filled = true,
                         Thickness = 0,
                         Parent = slider_window,
-                        Color = Color3.fromRGB(13,13,13),
+                        Color = Color3.fromRGB(24, 24, 30),
                         Size = UDim2.new(1,0,0,17),
                         Position = UDim2.new(0,0,0,10),
                         Visible = true,
@@ -3505,7 +3505,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                     local fadetext = library:create("Text", {Text = "fading", Parent = slider_button, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5, 0, 0, 1), ZIndex = 29});
 
-                    local outline3 = library:outline(slider_window, Color3.fromRGB(44,44,44))
+                    local outline3 = library:outline(slider_window, Color3.fromRGB(48, 48, 60))
                     library:outline(outline3, Color3.fromRGB(0,0,0))
 
                     local startslide = library.createslider({parent = window_page, name = "start", flag = library.flags[flag .. "_FADING_START"], min = fade_min, max = fade_max, default = 0, callback = function(state) library.flags[flag .. "_FADING_START"] = state end})
@@ -3585,7 +3585,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     Font = Drawing.Fonts.Plex,
                     Size = 13,
                     Position = UDim2.new(0.5, 0, 0.5, -15),
-                    Color = Color3.fromRGB(100, 100, 100),
+                    Color = Color3.fromRGB(105, 105, 115),
                     ZIndex = 14,
                     Center = true,
                     Outline = false,
@@ -3783,7 +3783,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     Filled = true,
                     Visible = true,
                     Thickness = 0,
-                    Color = Color3.fromRGB(25,25,25),
+                    Color = Color3.fromRGB(24, 24, 30),
                     Size = UDim2.new(1, -50, 0, 17),
                     Position = UDim2.new(0, 23, 1, -22),
                     ZIndex = 14,
@@ -3791,14 +3791,14 @@ if not library.particle_cache.bg then library:InitParticles() end
                 })
 
                 holder.MouseEnter:Connect(function()
-                    ButtonFrame.Color = Color3.fromRGB(27,27,27)
+                    ButtonFrame.Color = Color3.fromRGB(34, 34, 42)
                 end)
 
                 holder.MouseLeave:Connect(function()
-                    ButtonFrame.Color = Color3.fromRGB(25,25,25)
+                    ButtonFrame.Color = Color3.fromRGB(24, 24, 30)
                 end)
 
-                local outline1 = library:outline(ButtonFrame, Color3.fromRGB(44,44,44), 14);
+                local outline1 = library:outline(ButtonFrame, Color3.fromRGB(48, 48, 60), 14);
                 library:outline(outline1, Color3.new(0,0,0), 14);
 
                 local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
@@ -3851,7 +3851,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         Filled = true,
                         Visible = true,
                         Thickness = 0,
-                        Color = Color3.fromRGB(25,25,25),
+                        Color = Color3.fromRGB(24, 24, 30),
                         Size = UDim2.new(1/2, -40, 0, 17),
                         Position = UDim2.new(0.5, 13, 1, -22),
                         ZIndex = 14,
@@ -3859,14 +3859,14 @@ if not library.particle_cache.bg then library:InitParticles() end
                     })
 
                     holder.MouseEnter:Connect(function()
-                        ButtonFrame_2.Color = Color3.fromRGB(27,27,27)
+                        ButtonFrame_2.Color = Color3.fromRGB(34, 34, 42)
                     end)
 
                     holder.MouseLeave:Connect(function()
-                        ButtonFrame_2.Color = Color3.fromRGB(25,25,25)
+                        ButtonFrame_2.Color = Color3.fromRGB(24, 24, 30)
                     end)
 
-                    local outline1 = library:outline(ButtonFrame_2, Color3.fromRGB(44,44,44), 14);
+                    local outline1 = library:outline(ButtonFrame_2, Color3.fromRGB(48, 48, 60), 14);
                     library:outline(outline1, Color3.new(0,0,0), 14);
 
                     local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame_2, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
@@ -4171,12 +4171,12 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 -- Main
                 local holder = library:create("Square", {Transparency = 0, ZIndex = 14, Size = UDim2.new(1, 0, 0, 22),Parent = section_content, Thickness = 1});
-                local textbox = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(19,19,19), Size = UDim2.new(1, -50, 0, 15), Position = UDim2.new(0, 23, 1, -17), ZIndex = 14, Parent = holder })
+                local textbox = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1, -50, 0, 15), Position = UDim2.new(0, 23, 1, -17), ZIndex = 14, Parent = holder })
 
                 holder.MouseEnter:Connect(function() textbox.Color = Color3.fromRGB(22,22,22) end)
-                holder.MouseLeave:Connect(function() textbox.Color = Color3.fromRGB(19,19,19) end)
+                holder.MouseLeave:Connect(function() textbox.Color = Color3.fromRGB(24, 24, 30) end)
 
-                local outline = library:outline(textbox, Color3.fromRGB(44,44,44), 14); library:outline(outline, Color3.new(0,0,0), 14);
+                local outline = library:outline(textbox, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
 
                 local text = library:create("Text", {Text = default, Transparency = 1, Visible = true, Parent = textbox, Theme = "Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
                 local placeholder = library:create("Text", {Text = placeholder, Transparency = 1, Visible = true, Parent = textbox, Theme = "Un-Selected_Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
@@ -4223,7 +4223,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 -- // Drawings
                 local holder = library:create("Square", {Parent = section_content, Visible = true, Transparency = 0, Size = UDim2.new(1,0,0,285), Thickness = 1, Filled = false, ZIndex = 14});
                 --
-                local preview_frame = library:create("Square", {Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(1,0,1,0), Thickness = 1, Filled = true, ZIndex = 15}) do
+                local preview_frame = library:create("Square", {Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1,0,1,0), Thickness = 1, Filled = true, ZIndex = 15}) do
                     local outline = library:outline(preview_frame, Color3.fromRGB(37,37,37), 14);
                     library:outline(outline, Color3.fromRGB(0,0,0), 14);
                 end;
@@ -4333,7 +4333,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 local image = cfg.image or defaultpfp
 
                 holder = library:create("Square", {Parent = section_content, Visible = true, Transparency = 0, Size = UDim2.new(1,0,0,100), Thickness = 1, Filled = false, ZIndex = 14});
-                list_icon = library:create("Square", {Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(0,60,0,60), Position = UDim2.new(0, 30, 0, 15), Thickness = 1, Filled = true, ZIndex = 14}) do
+                list_icon = library:create("Square", {Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,60,0,60), Position = UDim2.new(0, 30, 0, 15), Thickness = 1, Filled = true, ZIndex = 14}) do
                     local outline = library:outline(list_icon, Color3.fromRGB(37,37,37), 14);
                     library:outline(outline, Color3.fromRGB(0,0,0), 14);
                 end;
@@ -4372,14 +4372,14 @@ if not library.particle_cache.bg then library:InitParticles() end
             local offset = cfg.offset or 0
             local size = cfg.size or cfg.Size or 200;
             -- // Drawings
-            local section_holder = library:create("Square", {Parent = override and page_holder or side, Visible = true, Transparency = 1, Color = Color3.fromRGB(19,19,19), Size = size ~= "auto" and UDim2.new(1,0,0,size) or UDim2.new(1,0,0,28), Position = override and UDim2.new(0,0,0,offset) or UDim2.new(0,0,0,0), Thickness = 1, Filled = true, ZIndex = 14}) do
+            local section_holder = library:create("Square", {Parent = override and page_holder or side, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = size ~= "auto" and UDim2.new(1,0,0,size) or UDim2.new(1,0,0,28), Position = override and UDim2.new(0,0,0,offset) or UDim2.new(0,0,0,0), Thickness = 1, Filled = true, ZIndex = 14}) do
                 local outline = library:outline(section_holder, Color3.fromRGB(37,37,37), 14);
                 library:outline(outline, Color3.fromRGB(0,0,0), 14);
             end;
             --
             local section_title = library:create("Text", {Text = name, Parent = section_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,11,0,-8), ZIndex = 14});
             --
-            local sections_holder = library:create("Square", {Parent = section_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(1,-20,0,24), Position = UDim2.new(0,10,0,10), Thickness = 1, Filled = true, ZIndex = 14}) do
+            local sections_holder = library:create("Square", {Parent = section_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1,-20,0,24), Position = UDim2.new(0,10,0,10), Thickness = 1, Filled = true, ZIndex = 14}) do
                 local outline = library:outline(sections_holder, Color3.fromRGB(32,32,32), 14);
                 library:outline(outline, Color3.fromRGB(0,0,0), 14);
             end;
@@ -4475,7 +4475,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     function section:preview1(cfg)
                         local preview = {}
                         local side = cfg.side == 'left' and section_content or cfg.side == 'right' and section_content1 or section_content
-                        local preview_frame = library:create("Square", {Parent = side, Visible = true, Transparency = 0, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(1, 0, 0, 220), Position = UDim2.new(0,0,0,0),Thickness = 1, Filled = true, ZIndex = 15}) do
+                        local preview_frame = library:create("Square", {Parent = side, Visible = true, Transparency = 0, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1, 0, 0, 220), Position = UDim2.new(0,0,0,0),Thickness = 1, Filled = true, ZIndex = 15}) do
                             local accent = library:create("Square", {Parent = preview_frame, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(0,140,0,2), Position = UDim2.new(0.5,-70,1,-6), Thickness = 1, Filled = true, ZIndex = 15});
                             library:outline(accent, Color3.new(0,0,0), 14);
                             local gradient = library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = accent, Size = UDim2.new(1,0,1,0), ZIndex = 15});
@@ -4785,9 +4785,9 @@ if not library.particle_cache.bg then library:InitParticles() end
                     --
                     local holder = library:create("Square", {Parent = side, Visible = true, Transparency = 0, Size = UDim2.new(1,0,0,8), Thickness = 1, Filled = false, ZIndex = 14})
                     --
-                    --local div = library:create("Square", { Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(100, 100, 100), Size = UDim2.new(0, 6, 0, 1), Position = UDim2.new(0, 0, 0, 3), Thickness = 1, Filled = true, ZIndex = 14 })
-                    local title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(100, 100, 100), Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,19,0,-3), ZIndex = 14});
-                    local div = library:create("Square", { Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(100, 100, 100), Size = UDim2.new(1, (- utility.textlength(name, 2, 13).X) - 45, 0, 1), Position = UDim2.new(0, 30 + utility.textlength(name, 2, 13).X, 0, 5), Thickness = 1, Filled = true, ZIndex = 14 })
+                    --local div = library:create("Square", { Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = UDim2.new(0, 6, 0, 1), Position = UDim2.new(0, 0, 0, 3), Thickness = 1, Filled = true, ZIndex = 14 })
+                    local title = library:create("Text", {Text = name, Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,19,0,-3), ZIndex = 14});
+                    local div = library:create("Square", { Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(105, 105, 115), Size = UDim2.new(1, (- utility.textlength(name, 2, 13).X) - 45, 0, 1), Position = UDim2.new(0, 30 + utility.textlength(name, 2, 13).X, 0, 5), Thickness = 1, Filled = true, ZIndex = 14 })
                     --
                     if size == "auto" then
                         section_holder.Size = UDim2.new(1,0,0,section_content.AbsoluteContentSize + 5);
@@ -4983,7 +4983,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                             Filled = true,
                             Thickness = 0,
                             Parent = holder,
-                            Color = Color3.fromRGB(13,13,13),
+                            Color = Color3.fromRGB(24, 24, 30),
                             Size = UDim2.new(0,slider_question.TextBounds.X,0,slider_question.TextBounds.Y),
                             Position = UDim2.new(1,-36,0,-2),
                             Visible = true,
@@ -4995,7 +4995,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                             Filled = true,
                             Thickness = 0,
                             Parent = slider_drag,
-                            Color = Color3.fromRGB(13,13,13),
+                            Color = Color3.fromRGB(24, 24, 30),
                             Size = UDim2.new(0, 205, 0, 107),
                             Visible = false,
                             Position = UDim2.new(1, -185, 1, 6),
@@ -5003,7 +5003,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         })
                         table.insert(fadethings, slider_window)
 
-                        local outline3 = library:outline(slider_window, Color3.fromRGB(44,44,44))
+                        local outline3 = library:outline(slider_window, Color3.fromRGB(48, 48, 60))
                         library:outline(outline3, Color3.fromRGB(0,0,0))
 
                         local windowback = library:create("Square", {
@@ -5034,7 +5034,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                             Filled = true,
                             Thickness = 0,
                             Parent = slider_window,
-                            Color = Color3.fromRGB(13,13,13),
+                            Color = Color3.fromRGB(24, 24, 30),
                             Size = UDim2.new(1,0,0,17),
                             Position = UDim2.new(0,0,0,10),
                             Visible = true,
@@ -5045,7 +5045,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                         local fadetext = library:create("Text", {Text = "fading", Parent = slider_button, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5, 0, 0, 1), ZIndex = 29});
 
-                        local outline3 = library:outline(slider_window, Color3.fromRGB(44,44,44))
+                        local outline3 = library:outline(slider_window, Color3.fromRGB(48, 48, 60))
                         library:outline(outline3, Color3.fromRGB(0,0,0))
 
                         local startslide = library.createslider({parent = window_page, name = "start", flag = library.flags[flag .. "_FADING_START"], min = fade_min, max = fade_max, default = 0, callback = function(state) library.flags[flag .. "_FADING_START"] = state end})
@@ -5126,7 +5126,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         Font = Drawing.Fonts.Plex,
                         Size = 13,
                         Position = UDim2.new(0.5, 0, 0.5, -15),
-                        Color = Color3.fromRGB(100, 100, 100),
+                        Color = Color3.fromRGB(105, 105, 115),
                         ZIndex = 14,
                         Center = true,
                         Outline = false,
@@ -5329,7 +5329,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         Filled = true,
                         Visible = true,
                         Thickness = 0,
-                        Color = Color3.fromRGB(25,25,25),
+                        Color = Color3.fromRGB(24, 24, 30),
                         Size = UDim2.new(1, -50, 0, 17),
                         Position = UDim2.new(0, 23, 1, -22),
                         ZIndex = 14,
@@ -5337,14 +5337,14 @@ if not library.particle_cache.bg then library:InitParticles() end
                     })
 
                     holder.MouseEnter:Connect(function()
-                        ButtonFrame.Color = Color3.fromRGB(27,27,27)
+                        ButtonFrame.Color = Color3.fromRGB(34, 34, 42)
                     end)
 
                     holder.MouseLeave:Connect(function()
-                        ButtonFrame.Color = Color3.fromRGB(25,25,25)
+                        ButtonFrame.Color = Color3.fromRGB(24, 24, 30)
                     end)
 
-                    local outline1 = library:outline(ButtonFrame, Color3.fromRGB(44,44,44), 14);
+                    local outline1 = library:outline(ButtonFrame, Color3.fromRGB(48, 48, 60), 14);
                     library:outline(outline1, Color3.new(0,0,0), 14);
 
                     local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
@@ -5397,7 +5397,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                             Filled = true,
                             Visible = true,
                             Thickness = 0,
-                            Color = Color3.fromRGB(25,25,25),
+                            Color = Color3.fromRGB(24, 24, 30),
                             Size = UDim2.new(1/2, -40, 0, 17),
                             Position = UDim2.new(0.5, 13, 1, -22),
                             ZIndex = 14,
@@ -5405,14 +5405,14 @@ if not library.particle_cache.bg then library:InitParticles() end
                         })
 
                         holder.MouseEnter:Connect(function()
-                            ButtonFrame_2.Color = Color3.fromRGB(27,27,27)
+                            ButtonFrame_2.Color = Color3.fromRGB(34, 34, 42)
                         end)
 
                         holder.MouseLeave:Connect(function()
-                            ButtonFrame_2.Color = Color3.fromRGB(25,25,25)
+                            ButtonFrame_2.Color = Color3.fromRGB(24, 24, 30)
                         end)
 
-                        local outline1 = library:outline(ButtonFrame_2, Color3.fromRGB(44,44,44), 14);
+                        local outline1 = library:outline(ButtonFrame_2, Color3.fromRGB(48, 48, 60), 14);
                         library:outline(outline1, Color3.new(0,0,0), 14);
 
                         local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame_2, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
@@ -5726,12 +5726,12 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                     -- Main
                     local holder = library:create("Square", {Transparency = 0, ZIndex = 14, Size = UDim2.new(1, 0, 0, 22),Parent = side, Thickness = 1});
-                    local textbox = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(19,19,19), Size = UDim2.new(1, -50, 0, 15), Position = UDim2.new(0, 23, 1, -17), ZIndex = 14, Parent = holder })
+                    local textbox = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1, -50, 0, 15), Position = UDim2.new(0, 23, 1, -17), ZIndex = 14, Parent = holder })
 
                     holder.MouseEnter:Connect(function() textbox.Color = Color3.fromRGB(22,22,22) end)
-                    holder.MouseLeave:Connect(function() textbox.Color = Color3.fromRGB(19,19,19) end)
+                    holder.MouseLeave:Connect(function() textbox.Color = Color3.fromRGB(24, 24, 30) end)
 
-                    local outline1 = library:outline(textbox, Color3.fromRGB(44,44,44), 14);
+                    local outline1 = library:outline(textbox, Color3.fromRGB(48, 48, 60), 14);
                     library:outline(outline1, Color3.new(0,0,0), 14);
 
                     local text = library:create("Text", {Text = default, Transparency = 1, Visible = true, Parent = textbox, Theme = "Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
@@ -5781,7 +5781,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     -- // Drawings
                     local holder = library:create("Square", {Parent = side, Visible = true, Transparency = 0, Size = UDim2.new(1,0,0,285), Thickness = 1, Filled = false, ZIndex = 14});
                     --
-                    local preview_frame = library:create("Square", {Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(1,0,1,0), Thickness = 1, Filled = true, ZIndex = 15}) do
+                    local preview_frame = library:create("Square", {Parent = holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1,0,1,0), Thickness = 1, Filled = true, ZIndex = 15}) do
                         local outline = library:outline(preview_frame, Color3.fromRGB(37,37,37), 14);
                         library:outline(outline, Color3.fromRGB(0,0,0), 14);
                     end;
@@ -5903,7 +5903,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         local flag = cfg.flag or cfg.Flag or utility.nextflag();
         local players = game:GetService("Players");
         -- // Drawings
-        local list_holder = library:create("Square", { Visible = false, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(0,500,0,265), Position = UDim2.new(0, 860, 0, 268), Thickness = 1, Filled = true, ZIndex = 14}) do
+        local list_holder = library:create("Square", { Visible = false, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,500,0,265), Position = UDim2.new(0, 860, 0, 268), Thickness = 1, Filled = true, ZIndex = 14}) do
             local outline = library:outline(list_holder, Color3.fromRGB(37,37,37), 14);
             library:outline(outline, Color3.fromRGB(0,0,0), 14);
         end;
@@ -5914,12 +5914,12 @@ if not library.particle_cache.bg then library:InitParticles() end
         local assent = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-30,0,2), Position = UDim2.new(0,16,0,25), Thickness = 1, Filled = true, ZIndex = 14});
 
         --
-        local list_inline = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(0, 340, 0, (max * 20)), Position = UDim2.new(0, 20, 0, 45), Thickness = 1, Filled = true, ZIndex = 14}) do
+        local list_inline = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0, 340, 0, (max * 20)), Position = UDim2.new(0, 20, 0, 45), Thickness = 1, Filled = true, ZIndex = 14}) do
             local outline = library:outline(list_inline, Color3.fromRGB(37,37,37), 14);
             library:outline(outline, Color3.fromRGB(0,0,0), 14);
         end;
         --
-        local list_icon = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(0,60,0,60), Position = UDim2.new(0,400,0,50), Thickness = 1, Filled = true, ZIndex = 14}) do
+        local list_icon = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,60,0,60), Position = UDim2.new(0,400,0,50), Thickness = 1, Filled = true, ZIndex = 14}) do
             local outline = library:outline(list_icon, Color3.fromRGB(37,37,37), 14);
             library:outline(outline, Color3.fromRGB(0,0,0), 14);
         end;
@@ -5945,7 +5945,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             Filled = true,
             Visible = true,
             Thickness = 0,
-            Color = Color3.fromRGB(25,25,25),
+            Color = Color3.fromRGB(24, 24, 30),
             Size = UDim2.new(0,100,0,17),
             Position = UDim2.new(0,381,0,210),
             ZIndex = 14,
@@ -5953,14 +5953,14 @@ if not library.particle_cache.bg then library:InitParticles() end
         })
 
         PriorityFrame.MouseEnter:Connect(function()
-            PriorityFrame.Color = Color3.fromRGB(27,27,27)
+            PriorityFrame.Color = Color3.fromRGB(34, 34, 42)
         end)
 
         PriorityFrame.MouseLeave:Connect(function()
-            PriorityFrame.Color = Color3.fromRGB(25,25,25)
+            PriorityFrame.Color = Color3.fromRGB(24, 24, 30)
         end)
 
-        local outline1 = library:outline(PriorityFrame, Color3.fromRGB(44,44,44), 14);
+        local outline1 = library:outline(PriorityFrame, Color3.fromRGB(48, 48, 60), 14);
         library:outline(outline1, Color3.new(0,0,0), 14);
 
         local icon = library:create("Text", {Text = "priority", Transparency = 1, Visible = true, Parent = PriorityFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
@@ -5969,7 +5969,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             Filled = true,
             Visible = true,
             Thickness = 0,
-            Color = Color3.fromRGB(25,25,25),
+            Color = Color3.fromRGB(24, 24, 30),
             Size = UDim2.new(0,100,0,17),
             Position = UDim2.new(0,381,0,180),
             ZIndex = 14,
@@ -5977,14 +5977,14 @@ if not library.particle_cache.bg then library:InitParticles() end
         })
 
         FriendFrame.MouseEnter:Connect(function()
-            FriendFrame.Color = Color3.fromRGB(27,27,27)
+            FriendFrame.Color = Color3.fromRGB(34, 34, 42)
         end)
 
         FriendFrame.MouseLeave:Connect(function()
-            FriendFrame.Color = Color3.fromRGB(25,25,25)
+            FriendFrame.Color = Color3.fromRGB(24, 24, 30)
         end)
 
-        local outline2 = library:outline(FriendFrame, Color3.fromRGB(44,44,44), 14);
+        local outline2 = library:outline(FriendFrame, Color3.fromRGB(48, 48, 60), 14);
         library:outline(outline2, Color3.new(0,0,0), 14);
 
         local friendicon = library:create("Text", {Text = "friendly", Transparency = 1, Visible = true, Parent = FriendFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
@@ -6259,7 +6259,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         local servers = game:GetService('HttpService'):JSONDecode(request({Url = ('https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100'):format(game.PlaceId), Method = 'GET'}).Body).data
 
         -- // Drawings
-        local list_holder = library:create("Square", {Visible = false, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(0,500,0,285), Position = UDim2.new(0, 860, 0, 539), Thickness = 1, Filled = true, ZIndex = 14}) do
+        local list_holder = library:create("Square", {Visible = false, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,500,0,285), Position = UDim2.new(0, 860, 0, 539), Thickness = 1, Filled = true, ZIndex = 14}) do
             local outline = library:outline(list_holder, Color3.fromRGB(37,37,37), 14);
             library:outline(outline, Color3.fromRGB(0,0,0), 14);
         end;
@@ -6270,13 +6270,13 @@ if not library.particle_cache.bg then library:InitParticles() end
         local list_title = library:create("Text", {Text = "servers", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 14, Center = true, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
         local assent = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-30,0,2), Position = UDim2.new(0,16,0,25), Thickness = 1, Filled = true, ZIndex = 14});
         --
-        local list_inline = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(0, 340, 0, (max * 20)), Position = UDim2.new(0, 20, 0, 45), Thickness = 1, Filled = true, ZIndex = 14}) do
+        local list_inline = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0, 340, 0, (max * 20)), Position = UDim2.new(0, 20, 0, 45), Thickness = 1, Filled = true, ZIndex = 14}) do
             local outline = library:outline(list_inline, Color3.fromRGB(37,37,37), 14);
             library:outline(outline, Color3.fromRGB(0,0,0), 14);
         end;
         local list_content = library:create("Square", { Transparency = 0, Size = UDim2.new(1, -4, 1, -4), Position = UDim2.new(0, 2, 0, 3), Parent = list_inline })
         --
-        local list_icon = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(0,60,0,60), Position = UDim2.new(0, 400, 0, 55), Thickness = 1, Filled = true, ZIndex = 14}) do
+        local list_icon = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,60,0,60), Position = UDim2.new(0, 400, 0, 55), Thickness = 1, Filled = true, ZIndex = 14}) do
             local outline = library:outline(list_icon, Color3.fromRGB(37,37,37), 14);
             library:outline(outline, Color3.fromRGB(0,0,0), 14);
         end;
@@ -6290,14 +6290,14 @@ if not library.particle_cache.bg then library:InitParticles() end
         })
         --
         --
-        local connect_frame = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(25,25,25), Transparency = 0.2, Size = UDim2.new(0,60,0,17), Position = UDim2.new(0, 20, 0, 250), ZIndex = 14, Parent = list_holder }) do
+        local connect_frame = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Transparency = 0.2, Size = UDim2.new(0,60,0,17), Position = UDim2.new(0, 20, 0, 250), ZIndex = 14, Parent = list_holder }) do
             local clicked_join, counting_join = false, false
 
-            local outline = library:outline(connect_frame, Color3.fromRGB(44,44,44), 14); library:outline(outline, Color3.new(0,0,0), 14);
+            local outline = library:outline(connect_frame, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
             local text = library:create("Text", {Text = "connect", Transparency = 1, Visible = true, Parent = connect_frame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
-            connect_frame.MouseEnter:Connect(function() connect_frame.Color = Color3.fromRGB(27,27,27) end)
-            connect_frame.MouseLeave:Connect(function() connect_frame.Color = Color3.fromRGB(25,25,25) end)
+            connect_frame.MouseEnter:Connect(function() connect_frame.Color = Color3.fromRGB(34, 34, 42) end)
+            connect_frame.MouseLeave:Connect(function() connect_frame.Color = Color3.fromRGB(24, 24, 30) end)
             connect_frame.MouseButton1Click:Connect(function()
                 task.spawn(function()
                     if clicked_join then
@@ -6330,14 +6330,14 @@ if not library.particle_cache.bg then library:InitParticles() end
 
         local sort_text
 
-        local sort_frame = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(25,25,25), Transparency = 0.2, Size = UDim2.new(0,120,0,17), Position = UDim2.new(0, 240, 0, 250), ZIndex = 14, Parent = list_holder }) do
+        local sort_frame = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Transparency = 0.2, Size = UDim2.new(0,120,0,17), Position = UDim2.new(0, 240, 0, 250), ZIndex = 14, Parent = list_holder }) do
             local sortAscending, sortField = false, 'players'
 
-            local outline = library:outline(sort_frame, Color3.fromRGB(44,44,44), 14); library:outline(outline, Color3.new(0,0,0), 14);
+            local outline = library:outline(sort_frame, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
             sort_text = library:create("Text", {Text = "players ascending", Transparency = 0.6, Visible = true, Parent = sort_frame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
-            sort_frame.MouseEnter:Connect(function() sort_frame.Color = Color3.fromRGB(27,27,27) end)
-            sort_frame.MouseLeave:Connect(function() sort_frame.Color = Color3.fromRGB(25,25,25) end)
+            sort_frame.MouseEnter:Connect(function() sort_frame.Color = Color3.fromRGB(34, 34, 42) end)
+            sort_frame.MouseLeave:Connect(function() sort_frame.Color = Color3.fromRGB(24, 24, 30) end)
             sort_frame.MouseButton1Click:Connect(function()
                 local compare
                 if sortField == "ping" then
@@ -6372,12 +6372,12 @@ if not library.particle_cache.bg then library:InitParticles() end
             end)
         end
 
-        local refresh_frame = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(25,25,25), Transparency = 0.2, Size = UDim2.new(0,60,0,17), Position = UDim2.new(0, 85, 0, 250), ZIndex = 14, Parent = list_holder }) do
-            local outline = library:outline(refresh_frame, Color3.fromRGB(44,44,44), 14); library:outline(outline, Color3.new(0,0,0), 14);
+        local refresh_frame = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Transparency = 0.2, Size = UDim2.new(0,60,0,17), Position = UDim2.new(0, 85, 0, 250), ZIndex = 14, Parent = list_holder }) do
+            local outline = library:outline(refresh_frame, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
             library:create("Text", {Text = "refresh", Transparency = 1, Visible = true, Parent = refresh_frame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
-            refresh_frame.MouseLeave:Connect(function() refresh_frame.Color = Color3.fromRGB(25,25,25) end)
-            refresh_frame.MouseEnter:Connect(function() refresh_frame.Color = Color3.fromRGB(27,27,27) end)
+            refresh_frame.MouseLeave:Connect(function() refresh_frame.Color = Color3.fromRGB(24, 24, 30) end)
+            refresh_frame.MouseEnter:Connect(function() refresh_frame.Color = Color3.fromRGB(34, 34, 42) end)
             refresh_frame.MouseButton1Click:Connect(function()
                 serverlist:refresh(game:GetService('HttpService'):JSONDecode(game:HttpGet(('https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100'):format(game.PlaceId))).data, false)
                 sort_text.Text = 'players ascending'
@@ -6385,12 +6385,12 @@ if not library.particle_cache.bg then library:InitParticles() end
         end
 
         local textbox_frame = library:create("Square", { ZIndex = 14, Transparency = 0.2, Size = UDim2.new(0,90,0,17),Parent = list_holder, Thickness = 1, Position = UDim2.new(0, 386, 0, 150)}) do
-            local textbox = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(19,19,19), Size = UDim2.new(1, 0, 1, 0), ZIndex = 14, Parent = textbox_frame })
+            local textbox = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1, 0, 1, 0), ZIndex = 14, Parent = textbox_frame })
 
             textbox_frame.MouseEnter:Connect(function() textbox.Color = Color3.fromRGB(22,22,22) end)
-            textbox_frame.MouseLeave:Connect(function() textbox.Color = Color3.fromRGB(19,19,19) end)
+            textbox_frame.MouseLeave:Connect(function() textbox.Color = Color3.fromRGB(24, 24, 30) end)
 
-            local outline = library:outline(textbox, Color3.fromRGB(44,44,44), 14); library:outline(outline, Color3.new(0,0,0), 14);
+            local outline = library:outline(textbox, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
 
             local text = library:create("Text", {Text = '', Transparency = 1, Visible = true, Parent = textbox, Theme = "Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
             local placeholder = library:create("Text", {Text = 'username or id', Transparency = 1, Visible = true, Parent = textbox, Theme = "Un-Selected_Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
@@ -6427,13 +6427,13 @@ if not library.particle_cache.bg then library:InitParticles() end
 
             set('')
         end
-        local button3 = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(25,25,25), Transparency = 0.2, Size = UDim2.new(0,90,0,17), Position = UDim2.new(0, 386, 0, 172), ZIndex = 14, Parent = list_holder }) do
+        local button3 = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Transparency = 0.2, Size = UDim2.new(0,90,0,17), Position = UDim2.new(0, 386, 0, 172), ZIndex = 14, Parent = list_holder }) do
             local threads, searching = 30, false
-            local outline = library:outline(button3, Color3.fromRGB(44,44,44), 14); library:outline(outline, Color3.new(0,0,0), 14);
+            local outline = library:outline(button3, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
             local text = library:create("Text", {Text = "scan", Transparency = 1, Visible = true, Parent = button3, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
-            button3.MouseLeave:Connect(function() button3.Color = Color3.fromRGB(25,25,25) end)
-            button3.MouseEnter:Connect(function() button3.Color = Color3.fromRGB(27,27,27) end)
+            button3.MouseLeave:Connect(function() button3.Color = Color3.fromRGB(24, 24, 30) end)
+            button3.MouseEnter:Connect(function() button3.Color = Color3.fromRGB(34, 34, 42) end)
             button3.MouseButton1Click:Connect(function()
                 task.spawn(function()
                     if clicked_join then
@@ -6543,12 +6543,12 @@ if not library.particle_cache.bg then library:InitParticles() end
 
         local currentserv_text = library:create("Text", {Text = "current server", Transparency = 0.6, Visible = true, Parent = list_holder, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0, 432, 0, 230), Font = 2, Size = 13, Outline = true});
 
-        local button1 = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(25,25,25), Size = UDim2.new(0,40,0,17), Position = UDim2.new(0, 386, 0, 250), ZIndex = 14, Parent = list_holder }) do
-            local outline = library:outline(button1, Color3.fromRGB(44,44,44), 14); library:outline(outline, Color3.new(0,0,0), 14);
+        local button1 = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,40,0,17), Position = UDim2.new(0, 386, 0, 250), ZIndex = 14, Parent = list_holder }) do
+            local outline = library:outline(button1, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
             local text = library:create("Text", {Text = "rejoin", Transparency = 1, Visible = true, Parent = button1, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
-            button1.MouseLeave:Connect(function() button1.Color = Color3.fromRGB(25,25,25) end)
-            button1.MouseEnter:Connect(function() button1.Color = Color3.fromRGB(27,27,27) end)
+            button1.MouseLeave:Connect(function() button1.Color = Color3.fromRGB(24, 24, 30) end)
+            button1.MouseEnter:Connect(function() button1.Color = Color3.fromRGB(34, 34, 42) end)
             button1.MouseButton1Click:Connect(function()
                 task.spawn(function()
                     if clicked_join then
@@ -6580,12 +6580,12 @@ if not library.particle_cache.bg then library:InitParticles() end
             end)
         end
 
-        local button2 = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(25,25,25), Size = UDim2.new(0,40,0,17), Position = UDim2.new(0, 436, 0, 250), ZIndex = 14, Parent = list_holder }) do
-            local outline = library:outline(button2, Color3.fromRGB(44,44,44), 14); library:outline(outline, Color3.new(0,0,0), 14);
+        local button2 = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,40,0,17), Position = UDim2.new(0, 436, 0, 250), ZIndex = 14, Parent = list_holder }) do
+            local outline = library:outline(button2, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
             library:create("Text", {Text = "copy", Transparency = 1, Visible = true, Parent = button2, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
-            button2.MouseLeave:Connect(function() button2.Color = Color3.fromRGB(25,25,25) end)
-            button2.MouseEnter:Connect(function() button2.Color = Color3.fromRGB(27,27,27) end)
+            button2.MouseLeave:Connect(function() button2.Color = Color3.fromRGB(24, 24, 30) end)
+            button2.MouseEnter:Connect(function() button2.Color = Color3.fromRGB(34, 34, 42) end)
             button2.MouseButton1Click:Connect(function()
                 setclipboard('Roblox.GameLauncher.joinGameInstance('..game.PlaceId..',\''..game.JobId..'\')')
                 library:notify({ text = ('copied game invite to your clipboard'):format(string.sub(game.JobId, 0, 8)), time = 7 })
@@ -6810,7 +6810,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         local preview_holder = library:create("Square", {
             Visible = false, 
             Transparency = 1, 
-            Color = Color3.fromRGB(13,13,13), 
+            Color = Color3.fromRGB(24, 24, 30), 
             Size = UDim2.new(0, 250, 0, 360), 
             Position = default_pos, 
             Thickness = 1, 
@@ -6856,7 +6856,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             Parent = preview_holder, 
             Visible = true, 
             Transparency = 1, 
-            Color = Color3.fromRGB(13,13,13), 
+            Color = Color3.fromRGB(24, 24, 30), 
             Size = UDim2.new(1,0,1,-30), 
             Position = UDim2.new(0, 0, 0, 30), 
             Thickness = 0, 
@@ -7016,13 +7016,13 @@ function library:notify(info)
         Size = UDim2.new(0, utility.textlength(title, 2, 13).X + utility.textlength(name, 2, 13).X + 10, 0, 19);
         Position = UDim2.new(0, -500, 0, 0);
         Parent = holder;
-        Color = Color3.fromRGB(13,13,13);
+        Color = Color3.fromRGB(24, 24, 30);
         ZIndex = z;
         Thickness = 1;
         Filled = true;
     }, true)
     --
-    local outline1 = library:outline(background, Color3.fromRGB(44,44,44), z, true);
+    local outline1 = library:outline(background, Color3.fromRGB(48, 48, 60), z, true);
     local outline2 = library:outline(outline1, Color3.fromRGB(0,0,0), z, true);
     --
     local line1 = library:create("Square", {Parent = background, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(0,20,0,1), Position = UDim2.new(0,0,1,-1), Thickness = 1, Filled = true, ZIndex = 11});
