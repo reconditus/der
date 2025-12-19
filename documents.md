@@ -1,6 +1,6 @@
 # stable.luau UI Library Guide
 
-This guide describes how to build UI with `stable.luau`, including windows, pages,
+this guide describes how to build UI with `dreya`, including windows, pages,
 sections, and the available elements. All examples assume you have already loaded
 and executed `stable.luau` to get the `library` table.
 
@@ -22,7 +22,7 @@ Most elements accept `callback = function(value) ... end`. The callback fires wh
 that element changes.
 
 ### Theme
-You can adjust theme colors with:
+you can adjust theme colors with:
 
 ```lua
 library:change_theme_color("Accent", Color3.fromRGB(255, 100, 100))
