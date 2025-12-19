@@ -6056,7 +6056,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                     player_image.Data = ''
                     player_data.Text = 'getting player info..'
                     if selected_plr and selected_plr.UserId then
-                        player_data.Text = ("id : %s\nage : %s"):format(selected_plr.UserId, utility.ymd(selected_plr.AccountAge))
+                        local ok, ymd = pcall(utility.ymd, selected_plr.AccountAge)
+                        player_data.Text = ok and ("id : %s\nage : %s"):format(selected_plr.UserId, ymd) or ("id : %s\nage : ?"):format(selected_plr.UserId)
                     else
                         player_data.Text = "unable to load player"
                     end
