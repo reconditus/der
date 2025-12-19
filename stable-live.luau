@@ -1,4 +1,4 @@
---// dreya
+--// niche
 
 local startUpArgs = getgenv().startUpArgs or { 'universal', 'public' }
 -- [[
@@ -6999,7 +6999,7 @@ end;
 --
 function library:notify(info)
     local ntif = {instances = {},create_tick = tick()};
-    local name = info.title or info.Title or 'I dont like BBC.. Im too fragile'
+    local name = info.title or info.Title or 'niche'
     local title = info.text or info.Text or "something happened.";
     local time = info.time or info.Time or 5;
     local z = 10;
@@ -7079,7 +7079,7 @@ function library:createwatermark()
     watermark.objects.outline1 = library:outline(watermark.objects.background, Color3.fromRGB(44, 44, 44), 10, true)
     watermark.objects.outline2 = library:outline(watermark.objects.outline1, Color3.fromRGB(0, 0, 0), 10, true)
 
-    watermark.objects.text2 = library:create("Text", { Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Accent", Size = 13, Text = 'dreya', Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 3, 0, 2), ZIndex = 11 })
+    watermark.objects.text2 = library:create("Text", { Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Accent", Size = 13, Text = 'niche', Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, 3, 0, 2), ZIndex = 11 })
     watermark.objects.text3 = library:create("Text", { Text = watermark.title, Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0, utility.textlength(watermark.objects.text2.Text, 2, 13).X + 5, 0, 2), ZIndex = 11 })
 
     watermark.objects.line1 = library:create("Square", { Parent = watermark.objects.background, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(0, 20, 0, 1), Position = UDim2.new(0, 0, 1, -1), Thickness = 1, Filled = true, ZIndex = 11 })
