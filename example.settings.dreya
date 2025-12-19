@@ -93,7 +93,7 @@ local init = tick()
 local window = library:new({ name = 'Niche', sub = `.{startUpArgs[1]}`, size = Vector2.new(650, 700)}) do
     --# windows
     local watermark = library:createwatermark()
-    watermark.setdomain("dreya.pub")
+    watermark.setdomain("niche.pub")
 
     local serverlist = window:server_list({ flag = 'selected server' })
     local playerlist = window:player_list({ flag = 'selected player' })
@@ -190,6 +190,8 @@ local window = library:new({ name = 'Niche', sub = `.{startUpArgs[1]}`, size = V
             end})
             options:slider({ name = 'watermark transparency', flag = 'watermark transparency', min = 0, max = 1, float = 0.01, default = 0, callback = function(v)
                 watermark.objects.background.Transparency = v
+                watermark.objects.outline1.Transparency = v
+                watermark.objects.outline2.Transparency = v
             end})
         end
         local options = options_tab:section({ name = 'options', side = 'right', size = '275' }) do
