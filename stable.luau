@@ -2917,7 +2917,6 @@ if not library.particle_cache.bg then library:InitParticles() end
         table.insert(self.pages_buttons, button_holder);
         local button_inline = library:create("Square", {Parent = button_holder, Visible = true, Transparency = 1, Thickness = 1, Filled = true, ZIndex = 13, Theme = "Toggle Background", Size = UDim2.new(1,-2,1,-2),Position = UDim2.new(0,1,0,1)});
         local button_inline_gradient = library:create("Square", {Parent = button_inline, Visible = true, Transparency = 1, Thickness = 1, Filled = true, ZIndex = 13, Theme = "Toggle Background Highlight", Size = UDim2.new(1,-2,1,-2),Position = UDim2.new(0,1,0,1)});
-        library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = button_inline_gradient, Size = UDim2.new(1,0,1,0), ZIndex = 13});
         --
         local button_title = library:create("Text", {Text = name, Parent = button_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,9), ZIndex = 13});
         table.insert(self.pages_titles, button_title);
@@ -5910,7 +5909,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
         utility.dragify(list_holder, 'player list')
 
-        local list_title = library:create("Text", {Text = "players", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
+        local list_title = library:create("Text", {Text = "players", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.UI, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
         local assent = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-30,0,2), Position = UDim2.new(0,16,0,25), Thickness = 1, Filled = true, ZIndex = 14});
 
         --
@@ -5924,7 +5923,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             library:outline(outline, Color3.fromRGB(0,0,0), 14);
         end;
         --
-        local player_data = library:create("Text", {Text = "...", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.Plex, Position = UDim2.new(0,390,0,120), ZIndex = 14});
+        local player_data = library:create("Text", {Text = "...", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = false, Outline = false, Font = Drawing.Fonts.UI, Position = UDim2.new(0,390,0,120), ZIndex = 14});
         --
         local player_image = library:create("Image", {
             Size = UDim2.new(1, 0, 1, 0),
@@ -6056,12 +6055,18 @@ if not library.particle_cache.bg then library:InitParticles() end
                     player_image.Data = ''
                     player_data.Text = 'getting player info..'
                     --
-                    local response = game:HttpGet(string.format("https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=%d&size=150x150&format=Png&isCircular=false", selected_plr.UserId))
-                    local data = game:GetService("HttpService"):JSONDecode(response).data
-                    local avatar_url = data[1].imageUrl
-                    --
-                    local imagedata = game:HttpGet(avatar_url)
-                    player_image.Data = imagedata
+                    local ok, response = pcall(game.HttpGet, game, string.format("https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=%d&size=150x150&format=Png&isCircular=false", selected_plr.UserId))
+                    if ok then
+                        local decode_ok, decoded = pcall(game:GetService("HttpService").JSONDecode, game:GetService("HttpService"), response)
+                        local data = decode_ok and decoded and decoded.data or nil
+                        local avatar_url = data and data[1] and data[1].imageUrl or nil
+                        if avatar_url then
+                            local image_ok, imagedata = pcall(game.HttpGet, game, avatar_url)
+                            if image_ok then
+                                player_image.Data = imagedata
+                            end
+                        end
+                    end
                     last_plr = selected_plr;
                     player_data.Text = ("id : %s\nage : %s"):format(selected_plr.UserId, utility.ymd(selected_plr.AccountAge))
                 end;
@@ -6267,7 +6272,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         utility.dragify(list_holder, 'server list')
 
         --
-        local list_title = library:create("Text", {Text = "servers", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
+        local list_title = library:create("Text", {Text = "servers", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.UI, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
         local assent = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-30,0,2), Position = UDim2.new(0,16,0,25), Thickness = 1, Filled = true, ZIndex = 14});
         --
         local list_inline = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0, 340, 0, (max * 20)), Position = UDim2.new(0, 20, 0, 45), Thickness = 1, Filled = true, ZIndex = 14}) do
@@ -6834,7 +6839,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             Size = 13, 
             Center = true, 
             Outline = true, 
-            Font = Drawing.Fonts.Plex, 
+            Font = Drawing.Fonts.UI, 
             Position = UDim2.new(0.5,0,0,5), 
             ZIndex = 14
         })
