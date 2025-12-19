@@ -271,6 +271,12 @@ local themes = { -- ignore
         ["Risky Text"] = Color3.fromRGB(227, 206, 20);
         ["Toggle Background"] = Color3.fromRGB(77, 77, 77);
         ["Toggle Background Highlight"] = Color3.fromRGB(88,88,88);
+        ["Window Background"] = Color3.fromRGB(12,12,12);
+        ["Window Holder"] = Color3.fromRGB(13,13,13);
+        ["Window Outline"] = Color3.fromRGB(50,50,50);
+        ["Window Outline Inner"] = Color3.fromRGB(0,0,0);
+        ["Control Background"] = Color3.fromRGB(25,25,25);
+        ["Control Outline"] = Color3.fromRGB(44,44,44);
         ["Watermark Background"] = Color3.fromRGB(13, 13, 13);
         ["Watermark Outline"] = Color3.fromRGB(44, 44, 44);
         ["Watermark Outline Inner"] = Color3.fromRGB(0, 0, 0);
@@ -604,7 +610,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
         Filled = true,
         Visible = true,
         Thickness = 0,
-        Color = Color3.fromRGB(25,25,25),
+        Theme = "Control Background",
         Size = UDim2.new(1, -50, 0, 15),
         Position = UDim2.new(0, 23, 1, -17),
         ZIndex = 16,
@@ -619,7 +625,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
         dropdown.Color = Color3.fromRGB(25,25,25)
     end)
 
-    local outline1 = library:outline(dropdown, Color3.fromRGB(44,44,44), 14);
+    local outline1 = library:outline(dropdown, "Control Outline", 14);
     library:outline(outline1, Color3.new(0,0,0), 14);
 
     local value = library:create("Text", {
@@ -639,7 +645,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
         Filled = true,
         Visible = false,
         Thickness = 0,
-        Color = Color3.fromRGB(25,25,25),
+        Theme = "Control Background",
         Size = UDim2.new(1,0,0,0),
         Position = UDim2.new(0, 0, 1, 6),
         ZIndex = 18,
@@ -648,7 +654,7 @@ function library.createdropdown(holder, content, flag, callback, default, max, s
 
     table.insert(drops, contentframe)
 
-    local outline2 = library:outline(contentframe, Color3.fromRGB(44,44,44), 17);
+    local outline2 = library:outline(contentframe, "Control Outline", 17);
     library:outline(outline2, Color3.new(0,0,0), 17);
 
     local contentholder = library:create("Square", {
@@ -914,7 +920,7 @@ function library.createlist(holder, content, flag, callback, default, max, scrol
         Filled = true,
         Visible = true,
         Thickness = 0,
-        Color = Color3.fromRGB(25,25,25),
+        Theme = "Control Background",
         Size = UDim2.new(1, -50, 0, 15),
         Position = UDim2.new(0, 23, 0, 0),
         ZIndex = 16,
@@ -926,14 +932,14 @@ function library.createlist(holder, content, flag, callback, default, max, scrol
         Filled = true,
         Visible = true,
         Thickness = 0,
-        Color = Color3.fromRGB(25,25,25),
+        Theme = "Control Background",
         Size = UDim2.new(1,0,0,0),
         Position = UDim2.new(0, 0, 0, 0),
         ZIndex = 18,
         Parent = list
     })
 
-    local outline2 = library:outline(contentframe, Color3.fromRGB(44,44,44), 17);
+    local outline2 = library:outline(contentframe, "Control Outline", 17);
     library:outline(outline2, Color3.new(0,0,0), 17);
 
     local contentholder = library:create("Square", {
@@ -1282,7 +1288,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
         Filled = true,
         Visible = true,
         Thickness = 0,
-        Color = Color3.fromRGB(25,25,25),
+        Theme = "Control Background",
         Size = UDim2.new(1, -50, 0, 15),
         Position = UDim2.new(0, 23, 1, -17),
         ZIndex = 16,
@@ -1297,7 +1303,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
         dropdown.Color = Color3.fromRGB(25,25,25)
     end)
 
-    local outline1 = library:outline(dropdown, Color3.fromRGB(44,44,44), 14);
+    local outline1 = library:outline(dropdown, "Control Outline", 14);
     library:outline(outline1, Color3.new(0,0,0), 14);
 
     local value = library:create("Text", {
@@ -1317,7 +1323,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
         Filled = true,
         Visible = false,
         Thickness = 0,
-        Color = Color3.fromRGB(25,25,25),
+        Theme = "Control Background",
         Size = UDim2.new(1,0,0,0),
         Position = UDim2.new(0, 0, 1, 6),
         ZIndex = 18,
@@ -1326,7 +1332,7 @@ function library.createmultibox(holder, content, flag, callback, default, max, s
 
     table.insert(drops, contentframe)
 
-    local outline2 = library:outline(contentframe, Color3.fromRGB(44,44,44), 17);
+    local outline2 = library:outline(contentframe, "Control Outline", 17);
     library:outline(outline2, Color3.new(0,0,0), 17);
 
     local contentholder = library:create("Square", {
@@ -2881,26 +2887,26 @@ if not library.particle_cache.bg then library:InitParticles() end
     local name_color = cfg.sub or cfg.Sub or "Hook";
     local size = cfg.size or cfg.Size or Vector2.new(600, 650);
     -- // Drawings
-    local window_outline = library:create("Square", {Visible = false, Transparency = 1, Color = Color3.fromRGB(12,12,12), Size = UDim2.new(0,size.X,0,size.Y), Position = UDim2.new(0, 204, 0, 268), Thickness = 1, Filled = true, ZIndex = 10}) do
-        local outline = library:outline(window_outline, Color3.fromRGB(50,50,50), 10);
-        library:outline(outline, Color3.new(0,0,0), 10);
+    local window_outline = library:create("Square", {Visible = false, Transparency = 1, Theme = "Window Background", Size = UDim2.new(0,size.X,0,size.Y), Position = UDim2.new(0, 204, 0, 268), Thickness = 1, Filled = true, ZIndex = 10}) do
+        local outline = library:outline(window_outline, "Window Outline", 10);
+        library:outline(outline, "Window Outline Inner", 10);
     end;
     --
     library.holder = window_outline;
     --
-    local window_inline = library:create("Square", {Parent = window_outline, Visible = true, Transparency = 0, Color = Color3.fromRGB(12,12,12), Size = UDim2.new(1,-10,1,-10), Position = UDim2.new(0,5,0,5), Thickness = 1, Filled = true, ZIndex = 11})
+    local window_inline = library:create("Square", {Parent = window_outline, Visible = true, Transparency = 0, Theme = "Window Background", Size = UDim2.new(1,-10,1,-10), Position = UDim2.new(0,5,0,5), Thickness = 1, Filled = true, ZIndex = 11})
     --
     local window_accent = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-15,0,2), Position = UDim2.new(0,7,0,21), Thickness = 1, Filled = true, ZIndex = 11});
     library:outline(window_accent , Color3.new(0,0,0), 11);
     library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = window_accent, Size = UDim2.new(1,0,1,0), ZIndex = 11});
     --
-    local window_holder = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 1, Color = Color3.fromRGB(13,13,13), Size = UDim2.new(1,-15,1,-90), Position = UDim2.new(0,7,0,82), Thickness = 1, Filled = true, ZIndex = 12}) do
-        local outline = library:outline(window_holder, Color3.fromRGB(50,50,50), 12);
-        library:outline(outline, Color3.fromRGB(0,0,0), 12);
+    local window_holder = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 1, Theme = "Window Holder", Size = UDim2.new(1,-15,1,-90), Position = UDim2.new(0,7,0,82), Thickness = 1, Filled = true, ZIndex = 12}) do
+        local outline = library:outline(window_holder, "Window Outline", 12);
+        library:outline(outline, "Window Outline Inner", 12);
     end;
     --
     --
-    local window_page_holder = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 0, Color = Color3.fromRGB(50,50,50), Size = UDim2.new(1,-6,0,35), Position = UDim2.new(0,3,0,34), Thickness = 1, Filled = true, ZIndex = 12})
+    local window_page_holder = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 0, Theme = "Window Outline", Size = UDim2.new(1,-6,0,35), Position = UDim2.new(0,3,0,34), Thickness = 1, Filled = true, ZIndex = 12})
     --
     local window_page_holder_inline = library:create("Square", {Parent = window_page_holder, Visible = true, Transparency = 0, Size = UDim2.new(1,-7,1,-4), Position = UDim2.new(0,3,0,2), Thickness = 1, Filled = true, ZIndex = 12})
     --
@@ -3786,7 +3792,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     Filled = true,
                     Visible = true,
                     Thickness = 0,
-                    Color = Color3.fromRGB(25,25,25),
+                    Theme = "Control Background",
                     Size = UDim2.new(1, -50, 0, 17),
                     Position = UDim2.new(0, 23, 1, -22),
                     ZIndex = 14,
@@ -3801,7 +3807,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     ButtonFrame.Color = Color3.fromRGB(25,25,25)
                 end)
 
-                local outline1 = library:outline(ButtonFrame, Color3.fromRGB(44,44,44), 14);
+                local outline1 = library:outline(ButtonFrame, "Control Outline", 14);
                 library:outline(outline1, Color3.new(0,0,0), 14);
 
                 local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
@@ -3854,7 +3860,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         Filled = true,
                         Visible = true,
                         Thickness = 0,
-                        Color = Color3.fromRGB(25,25,25),
+                        Theme = "Control Background",
                         Size = UDim2.new(1/2, -40, 0, 17),
                         Position = UDim2.new(0.5, 13, 1, -22),
                         ZIndex = 14,
@@ -3869,7 +3875,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         ButtonFrame_2.Color = Color3.fromRGB(25,25,25)
                     end)
 
-                    local outline1 = library:outline(ButtonFrame_2, Color3.fromRGB(44,44,44), 14);
+                    local outline1 = library:outline(ButtonFrame_2, "Control Outline", 14);
                     library:outline(outline1, Color3.new(0,0,0), 14);
 
                     local icon = library:create("Text", {Text = name, Transparency = 1, Visible = true, Parent = ButtonFrame_2, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
