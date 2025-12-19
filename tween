@@ -1,6 +1,6 @@
 -- custom tween
 
-local Signal = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/main/singal', Method = 'GET' }).Body)()
+local Signal = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/codex/list-elements-and-features-of-stable.luau/stable.luau', Method = 'GET' }).Body)()
 
 local render = game:GetService("RunService").RenderStepped
 local sqrt, sin, pi, halfpi, doublepi = math.sqrt, math.sin, math.pi, math.pi / 2, math.pi * 2

@@ -5,8 +5,8 @@ local startUpArgs = getgenv().startUpArgs or { 'universal', 'public' }
     --obleus remake
 --]]
 
-local drawing  = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/main/drawing', Method = 'GET' }).Body)()
-local tween = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/main/tween', Method = 'GET' }).Body)()
+local drawing  = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/codex/list-elements-and-features-of-stable.luau/stable.luau', Method = 'GET' }).Body)()
+local tween = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/codex/list-elements-and-features-of-stable.luau/stable.luau', Method = 'GET' }).Body)()
 
 local services = setmetatable({}, {
     __index = function(_, k)
