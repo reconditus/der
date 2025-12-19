@@ -203,6 +203,15 @@ local window = library:new({ name = 'Niche', sub = `.{startUpArgs[1]}`, size = V
             end
             options:divider({ name = 'personalization' }) do
                 options:colorpicker({ name = 'accent', flag = 'menu accent', default = Color3.fromRGB(117, 163, 125), callback = function(s) library:change_theme_color('Accent', s) end})
+                options:colorpicker({ name = 'watermark background', flag = 'watermark background color', default = Color3.fromRGB(13, 13, 13), callback = function(s)
+                    watermark.objects.background.Color = s
+                end})
+                options:colorpicker({ name = 'watermark outline (grey)', flag = 'watermark outline grey', default = Color3.fromRGB(44, 44, 44), callback = function(s)
+                    watermark.objects.outline1.Color = s
+                end})
+                options:colorpicker({ name = 'watermark outline (black)', flag = 'watermark outline black', default = Color3.fromRGB(0, 0, 0), callback = function(s)
+                    watermark.objects.outline2.Color = s
+                end})
             end
         end
     end
