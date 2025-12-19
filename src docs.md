@@ -1,4 +1,4 @@
-# stable.luau Elements & Editable Areas
+# dreya Elements & Editable Areas
 
 This document lists the UI elements inside `stable.luau` and highlights what you
 can safely change in the library source itself (colors, sizes, behavior hooks,
