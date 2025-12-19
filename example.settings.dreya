@@ -1,0 +1,206 @@
+-- legit - rage - esp - visuals - explotis - config
+
+dreya = {}
+startUpArgs = { 'blank', 'private' }; do
+    if LPH_OBFUSCATED then
+        startUpArgs[2] = 'production'
+    else
+        LPH_JIT_MAX = function(...) return (...) end
+        LPH_NO_VIRTUALIZE = function(...) return (...) end
+        LPH_NO_UPVALUES = function(...) return (...) end
+        LPH_CRASH = function(...) return (...) end
+    end
+end
+
+-- table
+local MATERIALS = {
+    Neon = Enum.Material.Neon, Plastic = Enum.Material.Plastic, ForceField = Enum.Material.ForceField,
+    Metal = Enum.Material.Metal, Glass = Enum.Material.Glass, Grass = Enum.Material.Grass,
+    Wood = Enum.Material.Wood, Ice = Enum.Material.Ice, Foil = Enum.Material.Foil
+}
+
+getgenv().Key = "9tGs1wUvAV1Wf3LiqzrwRq1K"
+
+-- lib
+local library = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/main/stable.lua', Method = 'GET' }).Body)()
+
+-- folders
+local folders = {
+    main = 'dreya',
+    assets = 'dreya/assets',
+    sounds = 'dreya/assets/sounds',
+    configs = ('dreya/games/%s/configs'):format(startUpArgs[1]),
+    scripts = ('dreya/games/%s/scripts'):format(startUpArgs[1])
+}
+
+for _, folder in pairs(folders) do
+    if not isfolder(folder) then
+        makefolder(folder)
+    end
+end
+
+-- idk
+if not isfile(folders['assets'] .. '/settings.lua') then
+    writefile(folders['assets'] .. '/settings.lua', [[
+local assets = {
+    tracers = { Default = '' },
+    textures = { Default = '' },
+    skyboxes = {
+        Cache = {
+            SkyboxBk = 'rbxassetid://220513302',
+            SkyboxDn = 'rbxassetid://213221473',
+            SkyboxFt = 'rbxassetid://220513328',
+            SkyboxLf = 'rbxassetid://220513318',
+            SkyboxRt = 'rbxassetid://220513279',
+            SkyboxUp = 'rbxassetid://220513345'
+        }
+    },
+}
+return assets]])
+end
+
+local assets = loadfile(folders['assets'] .. '/settings.lua')()
+
+local ContentProvider = game:GetService('ContentProvider')
+local QueueSize = ContentProvider.RequestQueueSize do
+    if QueueSize > 10 then
+        repeat task.wait() until QueueSize <= 10
+    end
+end
+
+local Players = game:GetService('Players')
+local LocalPlayer = Players.LocalPlayer
+
+local Whitelist = {
+    ["9tGs1wUvAV1Wf3LiqzrwRq1K"] = "1",
+    ["TEST_KEY_2"] = "2",
+}
+
+local user_key = getgenv().Key
+local my_uid = Whitelist[user_key]
+
+if not my_uid then
+    LocalPlayer:Kick("niggas")
+    return
+end
+
+getgenv().uid = my_uid
+
+dreya.userinfo = { id = my_uid, username = LocalPlayer.Name, displayname = LocalPlayer.DisplayName }
+
+local init = tick()
+
+local window = library:new({ name = 'Niche', sub = `.{startUpArgs[1]}`, size = Vector2.new(650, 700)}) do
+    --# windows
+    local watermark = library:createwatermark()
+    watermark.setdomain("dreya.pub")
+
+    local serverlist = window:server_list({ flag = 'selected server' })
+    local playerlist = window:player_list({ flag = 'selected player' })
+    local preview = window:esp_preview_window({
+        flag = 'esp_preview_window',
+        main_color = Color3.fromRGB(60, 255, 60),
+        empty_color = Color3.fromRGB(255, 0, 0)
+    })
+
+    -- #legit tab
+    local legit_tab = window:page({ name = 'legit' }) do
+        local LeftLegit = legit_tab:section({ name = 'left side test', side = 'left', size = 'auto' })
+        local RightLegit = legit_tab:section({ name = 'right side test', side = 'right', size = 'auto' })
+
+        LeftLegit:divider({ name = 'Legit Elements' })
+        local tog_legit_l = LeftLegit:toggle({ name = 'Toggle', flag = 'legit_left_toggle', default = false })
+        tog_legit_l:colorpicker({ flag = 'legit_left_toggle_color', default = Color3.fromRGB(0, 255, 100) })
+        tog_legit_l:keybind({ flag = 'legit_left_toggle_bind', default = Enum.KeyCode.Q, mode = 'Toggle' })
+    end
+
+    -- #settings tab
+    local options_tab = window:page({ name = 'settings', default = true  }) do
+        local main = options_tab:section({ name = 'files', size = '565' }) do
+            main:divider({ name = 'configurations' })
+            local configlist = main:dropdown({ name = 'available configs', flag = 'selected config', ignoreflag = true, options = {}, scrollable = true, scrollingmax = 4})
+            local function update_configs()
+                local tbl = {}
+                if isfolder(folders['configs']) then
+                    for i, v in next, listfiles(folders['configs']) do
+                        tbl[#tbl + 1] = v:match('.*\\(.-)%.dreya$') or v:match('.*/(.-)%.dreya$')
+                    end
+                end
+                configlist:refresh(tbl);
+                library:notify({ title = 'dreya ', text = 'all available configs have been refreshed', time = 5 })
+            end
+
+            main:button({ name = 'load', confirm = true, callback = function()
+                if library.flags['selected config'] ~= nil and isfile(folders['configs'] .. '/'..library.flags['selected config']..'.dreya') then
+                    library:load_config(folders['configs'] .. '/'..library.flags['selected config']..'.dreya');
+                    library:notify({ title = 'dreya ', text = string.format('successfully loaded \'%s\'', library.flags['selected config']), time = 7 })
+                end
+            end})
+            main:button({ name = 'save', confirm = true, callback = function()
+                local file = library.flags['selected config']
+                if file ~= nil and isfile(string.format(folders['configs'] .. '/%s.dreya', file)) then
+                    writefile(string.format(folders['configs'] .. '/%s.dreya', file), library:get_config());
+                    library:notify({ title = 'dreya ', text = string.format('successfully saved \'%s\'', file), time = 7 })
+                end
+            end}):button({ name = 'delete', confirm = true, callback = function()
+                if library.flags['selected config'] ~= nil and isfile(folders['configs'] .. '/'..library.flags['selected config']..'.dreya') then
+                    local file = library.flags['selected config']
+                    delfile(folders['configs'] .. '/'..file..'.dreya');
+                    library:notify({ title = 'dreya ', text = string.format('successfully deleted \'%s\'', file), time = 7 })
+                    update_configs();
+                end
+            end})
+            main:textbox({ placeholder = 'file name', flag = 'config name', default = '', ignoreflag = true, middle = true})
+            main:button({ name = 'create', confirm = true, callback = function()
+                local name = library.flags['config name']
+                if library.flags['config name'] == '' then
+                    return library:notify({ title = 'dreya ', text = string.format('failed (name can\'t be blank)', name), time = 7 })
+                end
+                if isfile(string.format(folders['configs'] .. '/%s.dreya', name)) then
+                    return library:notify({ title = 'dreya ', text = string.format('failed (\'%s.dreya\' already exists)', name), time = 7 })
+                end
+                writefile(string.format(folders['configs'] .. '/%s.dreya', name), library:get_config());
+                update_configs();
+                library:notify({ title = 'dreya ', text = string.format('successfully created file \'%s.dreya\'', name), time = 7 })
+            end })
+            update_configs()
+        end
+        local options = options_tab:section({ name = 'data', side = 'right', size = '275' }) do
+            if userdata then
+                local pfp = request({
+                    Url = `https://cdn.discordapp.com/avatars/{userdata.discord_info.id}/{userdata.discord_info.avatar}.png`,
+                    Method = 'GET'
+                }).Body
+
+                local infographic = options:infographic({
+                    info = string.format("uid %s (%s)\nexpires in: 9y, 9m", userdata.UID, userdata.discord_info.username),
+                    image = pfp })
+                options:toggle({ name = 'hide', flag = 'hide userinfo', callback = function(bool)
+                    infographic:hide(bool)
+                end})
+            end
+            options:toggle({ name = 'watermark', flag = 'watermark', callback = function(state)
+                watermark.setstate(state)
+            end })
+            options:multibox({ flag = 'watermark text', options = { '{fps}', '{fpsavg}', '{ping}', '{date}', '{time}', '{uid}', '{build}', '{game}', '{memory}', '{netreceived}', '{netoutgoing}' }, default = { '{build}', '{fpsavg}'}, max = 5, callback = function(tbl)
+                watermark.title = table.concat(tbl, ', ')
+            end})
+            options:slider({ name = 'refresh rate', flag = 'watermark refresh rate', min = 10, max = 1000, suffix = 'ms', float = 1, default = 250, callback = function(v)
+                watermark.refreshrate = v
+            end})
+        end
+        local options = options_tab:section({ name = 'options', side = 'right', size = '275' }) do
+            options:divider({ name = 'menu options' }) do
+                options:keybind({ name = 'menu', flag = 'menu toggle', default = Enum.KeyCode.End, mode = 'Toggle', callback = function() library:set_open(not library.open) end})
+                options:keybind({ name = 'player list', flag = 'player list toggle', default = Enum.KeyCode.End, mode = 'Toggle', callback = function(state) playerlist:setopen(not playerlist.open) end})
+                options:keybind({ name = 'server list', flag = 'server list toggle', default = Enum.KeyCode.End, mode = 'Toggle', callback = function(state) serverlist:setopen(not serverlist.open) end })
+                options:keybind({ name = 'esp preview', flag = 'esp preview toggle', default = Enum.KeyCode.End, mode = 'Toggle', callback = function(state) preview:setopen(not preview.open) end })
+            end
+            options:divider({ name = 'personalization' }) do
+                options:colorpicker({ name = 'accent', flag = 'menu accent', default = Color3.fromRGB(117, 163, 125), callback = function(s) library:change_theme_color('Accent', s) end})
+            end
+        end
+    end
+end
+
+library:notify({text = string.format('loaded, took %.2fs', tostring(math.floor(tick() - init))), time = 10})
