@@ -264,7 +264,7 @@ end;
 -- // Library
 local themes = { -- ignore
     ["Default"] = {
-        ["Accent"] = Color3.fromRGB(255, 59, 141);
+        ["Accent"] = Color3.fromRGB(255, 159, 198);
         ["Un-Selected"] = Color3.fromRGB(24, 24, 30);
         ["Un-Selected_Text"] = Color3.fromRGB(105, 105, 115);
         ["Text"] = Color3.fromRGB(215, 215, 225);
@@ -2878,14 +2878,14 @@ if not library.particle_cache.bg then library:InitParticles() end
     local name_color = cfg.sub or cfg.Sub or "Hook";
     local size = cfg.size or cfg.Size or Vector2.new(600, 650);
     -- // Drawings
-    local window_outline = library:create("Square", {Visible = false, Transparency = 1, Color = Color3.fromRGB(12,12,12), Size = UDim2.new(0,size.X,0,size.Y), Position = UDim2.new(0, 204, 0, 268), Thickness = 1, Filled = true, ZIndex = 10}) do
+    local window_outline = library:create("Square", {Visible = false, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,size.X,0,size.Y), Position = UDim2.new(0, 204, 0, 268), Thickness = 1, Filled = true, ZIndex = 10}) do
         local outline = library:outline(window_outline, Color3.fromRGB(48, 48, 60), 10);
         library:outline(outline, Color3.new(0,0,0), 10);
     end;
     --
     library.holder = window_outline;
     --
-    local window_inline = library:create("Square", {Parent = window_outline, Visible = true, Transparency = 0, Color = Color3.fromRGB(12,12,12), Size = UDim2.new(1,-10,1,-10), Position = UDim2.new(0,5,0,5), Thickness = 1, Filled = true, ZIndex = 11})
+    local window_inline = library:create("Square", {Parent = window_outline, Visible = true, Transparency = 0, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1,-10,1,-10), Position = UDim2.new(0,5,0,5), Thickness = 1, Filled = true, ZIndex = 11})
     --
     local window_accent = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-15,0,2), Position = UDim2.new(0,7,0,21), Thickness = 1, Filled = true, ZIndex = 11});
     library:outline(window_accent , Color3.new(0,0,0), 11);
