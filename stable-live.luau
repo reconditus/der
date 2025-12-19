@@ -2889,7 +2889,7 @@ if not library.particle_cache.bg then library:InitParticles() end
     --
     local window_accent = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-15,0,2), Position = UDim2.new(0,7,0,21), Thickness = 1, Filled = true, ZIndex = 11});
     library:outline(window_accent , Color3.new(0,0,0), 11);
-    library:create("Image", {Data = images.gradient, Transparency = 1, Visible = true, Parent = window_accent, Size = UDim2.new(1,0,1,0), ZIndex = 11});
+    -- gradient removed for consistent accent bar
     --
     local window_holder = library:create("Square", {Parent = window_inline, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1,-15,1,-90), Position = UDim2.new(0,7,0,82), Thickness = 1, Filled = true, ZIndex = 12}) do
         local outline = library:outline(window_holder, Color3.fromRGB(48, 48, 60), 12);
@@ -5910,7 +5910,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
         utility.dragify(list_holder, 'player list')
 
-        local list_title = library:create("Text", {Text = "players", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = 2, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
+        local list_title = library:create("Text", {Text = "players", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
         local assent = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-30,0,2), Position = UDim2.new(0,16,0,25), Thickness = 1, Filled = true, ZIndex = 14});
 
         --
@@ -5928,7 +5928,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         --
         local player_image = library:create("Image", {
             Size = UDim2.new(1, 0, 1, 0),
-            Visible = true;
+            Visible = false;
             ZIndex = 18,
             Parent = list_icon,
             Data = nil;
@@ -6040,31 +6040,34 @@ if not library.particle_cache.bg then library:InitParticles() end
         local optioninstances = {}
         local function handleoptionclick(option, button)
             button.MouseButton1Click:Connect(function()
-                chosen = option
-                library.flags[flag] = option
-                selected_plr = option
-                --
-                for i, v in next, optioninstances do
-                    if i == option then
-                        library:change_object_theme(v.text, "Accent")
-                    else
-                        library:change_object_theme(v.text, "Text")
+                local ok, err = pcall(function()
+                    chosen = option
+                    library.flags[flag] = option
+                    selected_plr = option
+                    --
+                    for i, v in next, optioninstances do
+                        if i == option then
+                            library:change_object_theme(v.text, "Accent")
+                        else
+                            library:change_object_theme(v.text, "Text")
+                        end
                     end
+                    --
+                    if selected_plr ~= last_plr then
+                        player_image.Data = ''
+                        player_data.Text = 'getting player info..'
+                        if selected_plr and selected_plr.UserId then
+                            local ok_age, ymd = pcall(utility.ymd, selected_plr.AccountAge)
+                            player_data.Text = ok_age and ("id : %s\nage : %s"):format(selected_plr.UserId, ymd) or ("id : %s\nage : ?"):format(selected_plr.UserId)
+                        else
+                            player_data.Text = "unable to load player"
+                        end
+                        last_plr = selected_plr;
+                    end;
+                end)
+                if not ok then
+                    player_data.Text = "unable to load player"
                 end
-                --
-                if selected_plr ~= last_plr then
-                    player_image.Data = ''
-                    player_data.Text = 'getting player info..'
-                    --
-                    local response = game:HttpGet(string.format("https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=%d&size=150x150&format=Png&isCircular=false", selected_plr.UserId))
-                    local data = game:GetService("HttpService"):JSONDecode(response).data
-                    local avatar_url = data[1].imageUrl
-                    --
-                    local imagedata = game:HttpGet(avatar_url)
-                    player_image.Data = imagedata
-                    last_plr = selected_plr;
-                    player_data.Text = ("id : %s\nage : %s"):format(selected_plr.UserId, utility.ymd(selected_plr.AccountAge))
-                end;
             end)
         end
         --
@@ -6267,7 +6270,7 @@ if not library.particle_cache.bg then library:InitParticles() end
         utility.dragify(list_holder, 'server list')
 
         --
-        local list_title = library:create("Text", {Text = "servers", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = 2, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
+        local list_title = library:create("Text", {Text = "servers", Parent = list_holder, Visible = true, Transparency = 1, Theme = "Text", Size = 13, Center = true, Outline = true, Font = Drawing.Fonts.Plex, Position = UDim2.new(0.5,0,0,5), ZIndex = 14});
         local assent = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Theme = "Accent", Size = UDim2.new(1,-30,0,2), Position = UDim2.new(0,16,0,25), Thickness = 1, Filled = true, ZIndex = 14});
         --
         local list_inline = library:create("Square", {Parent = list_holder, Visible = true, Transparency = 1, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0, 340, 0, (max * 20)), Position = UDim2.new(0, 20, 0, 45), Thickness = 1, Filled = true, ZIndex = 14}) do
@@ -6409,12 +6412,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     return game:GetService('Players'):GetUserIdFromNameAsync(str)
                 end)
                 if s then
-                    local s, response = utility.request('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=' .. id .. '&format=Png&size=150x150&isCircular=false')
-                    if s then
-                        player_image.Data = game:HttpGet(response.data[1].imageUrl)
-                    else
-                        player_image.Data = ''
-                    end
+                    player_image.Data = ''
                 end
             end)
 
@@ -6834,7 +6832,7 @@ if not library.particle_cache.bg then library:InitParticles() end
             Size = 13, 
             Center = true, 
             Outline = true, 
-            Font = 2, 
+            Font = Drawing.Fonts.Plex, 
             Position = UDim2.new(0.5,0,0,5), 
             ZIndex = 14
         })
