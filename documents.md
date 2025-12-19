@@ -1,4 +1,4 @@
-# stable.luau UI Library Guide
+# dreya notes
 
 this guide describes how to build UI with `dreya`, including windows, pages,
 sections, and the available elements. All examples assume you have already loaded
