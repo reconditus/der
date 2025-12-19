@@ -6040,29 +6040,34 @@ if not library.particle_cache.bg then library:InitParticles() end
         local optioninstances = {}
         local function handleoptionclick(option, button)
             button.MouseButton1Click:Connect(function()
-                chosen = option
-                library.flags[flag] = option
-                selected_plr = option
-                --
-                for i, v in next, optioninstances do
-                    if i == option then
-                        library:change_object_theme(v.text, "Accent")
-                    else
-                        library:change_object_theme(v.text, "Text")
+                local ok, err = pcall(function()
+                    chosen = option
+                    library.flags[flag] = option
+                    selected_plr = option
+                    --
+                    for i, v in next, optioninstances do
+                        if i == option then
+                            library:change_object_theme(v.text, "Accent")
+                        else
+                            library:change_object_theme(v.text, "Text")
+                        end
                     end
+                    --
+                    if selected_plr ~= last_plr then
+                        player_image.Data = ''
+                        player_data.Text = 'getting player info..'
+                        if selected_plr and selected_plr.UserId then
+                            local ok_age, ymd = pcall(utility.ymd, selected_plr.AccountAge)
+                            player_data.Text = ok_age and ("id : %s\nage : %s"):format(selected_plr.UserId, ymd) or ("id : %s\nage : ?"):format(selected_plr.UserId)
+                        else
+                            player_data.Text = "unable to load player"
+                        end
+                        last_plr = selected_plr;
+                    end;
+                end)
+                if not ok then
+                    player_data.Text = "unable to load player"
                 end
-                --
-                if selected_plr ~= last_plr then
-                    player_image.Data = ''
-                    player_data.Text = 'getting player info..'
-                    if selected_plr and selected_plr.UserId then
-                        local ok, ymd = pcall(utility.ymd, selected_plr.AccountAge)
-                        player_data.Text = ok and ("id : %s\nage : %s"):format(selected_plr.UserId, ymd) or ("id : %s\nage : ?"):format(selected_plr.UserId)
-                    else
-                        player_data.Text = "unable to load player"
-                    end
-                    last_plr = selected_plr;
-                end;
             end)
         end
         --
