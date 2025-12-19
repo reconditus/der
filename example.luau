@@ -1,205 +1,208 @@
-dreya = {}
-startUpArgs = { 'blank', 'private' }; do
-    if LPH_OBFUSCATED then
-        startUpArgs[2] = 'production'
-    else
-        LPH_JIT_MAX = function(...) return (...) end
-        LPH_NO_VIRTUALIZE = function(...) return (...) end
-        LPH_NO_UPVALUES = function(...) return (...) end
-        LPH_CRASH = function(...) return (...) end
-    end
-end
+        local refresh_frame = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Transparency = 0.2, Size = UDim2.new(0,60,0,17), Position = UDim2.new(0, 85, 0, 250), ZIndex = 14, Parent = list_holder }) do
+            local outline = library:outline(refresh_frame, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
+            library:create("Text", {Text = "refresh", Transparency = 1, Visible = true, Parent = refresh_frame, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
-local library = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/main/stable.lua', Method = 'GET' }).Body)()
+            refresh_frame.MouseLeave:Connect(function() refresh_frame.Color = Color3.fromRGB(24, 24, 30) end)
+            refresh_frame.MouseEnter:Connect(function() refresh_frame.Color = Color3.fromRGB(34, 34, 42) end)
+            refresh_frame.MouseButton1Click:Connect(function()
+                serverlist:refresh(game:GetService('HttpService'):JSONDecode(game:HttpGet(('https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100'):format(game.PlaceId))).data, false)
+                sort_text.Text = 'players ascending'
+            end)
+        end
 
-local folders = {
-    main = 'niche',
-    assets = 'niche/assets',
-    sounds = 'niche/assets/sounds',
-    configs = ('niche/games/%s/configs'):format(startUpArgs[1]),
-    scripts = ('niche/games/%s/scripts'):format(startUpArgs[1])
-}
+        local textbox_frame = library:create("Square", { ZIndex = 14, Transparency = 0.2, Size = UDim2.new(0,90,0,17),Parent = list_holder, Thickness = 1, Position = UDim2.new(0, 386, 0, 150)}) do
+            local textbox = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1, 0, 1, 0), ZIndex = 14, Parent = textbox_frame })
 
--- first-time executors duh
-for _, folder in pairs(folders) do
-    if not isfolder(folder) then
-        makefolder(folder)
-        library:notify({ title = 'dreya', text = ('\'%s\' not found, creating..'):format(folder), time = 7 })
-    end
-end
+            textbox_frame.MouseEnter:Connect(function() textbox.Color = Color3.fromRGB(22,22,22) end)
+            textbox_frame.MouseLeave:Connect(function() textbox.Color = Color3.fromRGB(24, 24, 30) end)
 
-if not isfile(folders['assets'] .. '/settings.lua') then
-    writefile(folders['assets'] .. '/settings.lua', [[
-local assets = {
-    tracers = {
-        Default = ''
-    },
-    textures = {
-        Default = '',
-    },
-    skyboxes = {
-        Cache = {
-            SkyboxBk = 'rbxassetid://220513302',
-            SkyboxDn = 'rbxassetid://213221473',
-            SkyboxFt = 'rbxassetid://220513328',
-            SkyboxLf = 'rbxassetid://220513318',
-            SkyboxRt = 'rbxassetid://220513279',
-            SkyboxUp = 'rbxassetid://220513345'
-        }
-    },
-}
-    
-return assets]])
-    library:notify({ title = 'dreya', text = ('\'%s\' not found, creating..'):format(folders['assets'] .. '/settings.lua'), time = 7 })
-end
+            local outline = library:outline(textbox, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
 
-local assets = loadfile(folders['assets'] .. '/settings.lua')()
+            local text = library:create("Text", {Text = '', Transparency = 1, Visible = true, Parent = textbox, Theme = "Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
+            local placeholder = library:create("Text", {Text = 'username or id', Transparency = 1, Visible = true, Parent = textbox, Theme = "Un-Selected_Text", ZIndex = 14, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
-local ContentProvider = game:GetService('ContentProvider')
-local QueueSize = ContentProvider.RequestQueueSize do
-    if QueueSize > 10 then
-        local init = library:notify({ text = 'waiting for the game to load (?)', time = 10 })
-        repeat task.wait()
-        until QueueSize <= 10
-    end
-end
-local Players = game:GetService('Players')
-local LocalPlayer = Players.LocalPlayer
-
-local oldName = LocalPlayer.Name
-local oldDisplayName = LocalPlayer.DisplayName
-local oldUserId = tostring(LocalPlayer.UserId)
-
-dreya.userinfo = { id = oldUserId, username = oldName, displayname = oldDisplayName }
-
-local init = tick()
-
-local window = library:new({ name = 'dreya', sub = `.{startUpArgs[1]}`, size = Vector2.new(650, 700)}) do
-
-    local watermark = library:createwatermark()
-    local serverlist = window:server_list({ flag = 'selected server' })
-    local playerlist = window:player_list({ flag = 'selected player' })
-
-    -- scripts
-    local scripts_tab = window:page({ name = 'scripts' }) do
-        dreya.tab = scripts_tab
-    end
-
-    -- options
-    local options_tab = window:page({ name = 'options', default = true  }) do
-        local main = options_tab:section({ name = 'files', size = '565' }) do
-            main:divider({ name = 'configurations' })
-            local configlist = main:dropdown({ name = 'available configs', flag = 'selected config', ignoreflag = true, options = {}, scrollable = true, scrollingmax = 4})
-            local function update_configs()
-                local tbl = {}
-                for i, v in next, listfiles(folders['configs']) do
-                    tbl[#tbl + 1] = v:match('.*\\(.-)%.dreya$')
+            library.object_textbox(textbox, text,  function(str)
+                if str == "" then
+                    placeholder.Visible = true
+                    text.Visible = false
+                else
+                    placeholder.Visible = false
+                    text.Visible = true
                 end
-                configlist:refresh(tbl);
-                library:notify({ title = 'dreya ', text = 'all available configs have been refreshed', time = 5 })
-            end
-            --
-            main:button({ name = 'load', confirm = true, callback = function()
-                if library.flags['selected config'] ~= nil and isfile(folders['configs'] .. '/'..library.flags['selected config']..'.dreya') then
-                    library:load_config(folders['configs'] .. '/'..library.flags['selected config']..'.dreya');
-                    library:notify({ title = 'dreya ', text = string.format('successfully loaded \'%s\'', library.flags['selected config']), time = 7 })
-                end
-            end})
-            main:button({ name = 'save', confirm = true, callback = function()
-                local file = library.flags['selected config']
-                if file ~= nil and isfile(string.format(folders['configs'] .. '/%s.dreya', file)) then
-                    writefile(string.format(folders['configs'] .. '/%s.dreya', file), library:get_config());
-                    library:notify({ title = 'dreya ', text = string.format('successfully saved \'%s\'', file), time = 7 })
-                end
-            end}):button({ name = 'delete', confirm = true, callback = function()
-                if library.flags['selected config'] ~= nil and isfile(folders['configs'] .. '/'..library.flags['selected config']..'.dreya') then
-                    local file = library.flags['selected config']
-                    delfile(folders['configs'] .. '/'..file..'.dreya');
-                    library:notify({ title = 'dreya ', text = string.format('successfully deleted \'%s\'', file), time = 7 })
-                    update_configs();
-                end
-            end})
-            main:textbox({ placeholder = 'file name', flag = 'config name', default = '', ignoreflag = true, middle = true})
-            main:button({ name = 'create', confirm = true, callback = function()
-                local name = library.flags['config name']
-                if library.flags['config name'] == '' then
-                    return library:notify({ title = 'dreya ', text = string.format('failed (name can\'t be blank)', name), time = 7 })
-                end
-                if isfile(string.format(folders['configs'] .. '/%s.dreya', name)) then
-                    return library:notify({ title = 'dreya ', text = string.format('failed (\'%s.dreya\' already exists)', name), time = 7 })
-                end
-                writefile(string.format(folders['configs'] .. '/%s.dreya', name), library:get_config());
-                update_configs();
-                library:notify({ title = 'dreya ', text = string.format('successfully created file \'%s.dreya\'', name), time = 7 })
-            end })
-            update_configs()
-            main:divider({ name = 'scripts' }) do
-                local scriptlist = main:dropdown({ name = 'available scripts', flag = 'selected script', options = {}, scrollable = true, scrollingmax = 6 }) do
-                    local function update_scripts()
-                        local tbl = {}
-                        for i, v in next, listfiles(folders['scripts']) do
-                            tbl[#tbl + 1] = v:match('.*\\(.-%.lua)')
-                        end
-                        scriptlist:refresh(tbl)
-                        scriptlist:set(tbl[1])
-                        library:notify({ title = 'dreya ', text = 'all available scripts have been refreshed', time = 5 })
+            end, function(str)
+                library.flags['player username'] = str
+                local s, id = pcall(function()
+                    return game:GetService('Players'):GetUserIdFromNameAsync(str)
+                end)
+                if s then
+                    local s, response = utility.request('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=' .. id .. '&format=Png&size=150x150&isCircular=false')
+                    if s then
+                        player_image.Data = game:HttpGet(response.data[1].imageUrl)
+                    else
+                        player_image.Data = ''
                     end
-                    local function load_script()
-                        local file = library.flags['selected script']
-                        if table.find(dreya.loaded_scripts, file) then
-                            return library:notify({ title = 'dreya ', text = ('failed (\'%s\' has been executed previously.)'):format(file), time = 5 })
-                        end
-
-                        library:notify({ title = 'dreya ', text = ('attempting to load script \'%s\''):format(file), time = 10 })
-                        file = '/'..library.flags['selected script']
-                        dofile(folders['scripts'] .. file)
-
-                        table.insert(dreya.loaded_scripts, library.flags['selected script'])
-                        library:notify({ title = 'dreya ', text = ('successfully loaded script \'%s\''):format(library.flags['selected script']), time = 5 })
-                    end
-                    main:button({ name = 'load', confirm = true, callback = load_script }):button({ name = 'refresh', confirm = true, callback = update_scripts })
-                    update_scripts()
                 end
+            end)
+
+            local function set(str)
+                text.Visible = str ~= ""
+                placeholder.Visible = str == "";
+                text.Text = str
+                library.flags['player username'] = str
             end
+
+            set('')
         end
-        local options = options_tab:section({ name = 'data', side = 'right', size = '275' }) do
+        local button3 = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Transparency = 0.2, Size = UDim2.new(0,90,0,17), Position = UDim2.new(0, 386, 0, 172), ZIndex = 14, Parent = list_holder }) do
+            local threads, searching = 30, false
+            local outline = library:outline(button3, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
+            local text = library:create("Text", {Text = "scan", Transparency = 1, Visible = true, Parent = button3, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
 
-            if userdata then
-                local pfp = request({
-                    Url = `https://cdn.discordapp.com/avatars/{userdata.discord_info.id}/{userdata.discord_info.avatar}.png`,
-                    Method = 'GET'
-                }).Body
+            button3.MouseLeave:Connect(function() button3.Color = Color3.fromRGB(24, 24, 30) end)
+            button3.MouseEnter:Connect(function() button3.Color = Color3.fromRGB(34, 34, 42) end)
+            button3.MouseButton1Click:Connect(function()
+                task.spawn(function()
+                    if clicked_join then
+                        clicked_join = false
+                        counting_join = false
+                        library:change_object_theme(text, "Text")
+                        text.Text = 'scan'
+                        --
+                        do
+                            if searching then
+                                library:notify({ text = 'a scan is already in progress. hold on' })
+                                return
+                            end
+                            searching = true
+                            local playerFound = false
+                            local s, user, id = pcall(function()
+                                local userId = game:GetService('Players'):GetUserIdFromNameAsync(library.flags['player username'])
+                                local username = game:GetService('Players'):GetNameFromUserIdAsync(userId)
+                                return username, userId
+                            end)
 
-                local infographic = options:infographic({
-                    info = `uid {userdata.UID} ({userdata.discord_info.username})\nexpires in: 9y, 9m`,
-                    image = pfp })
-                options:toggle({ name = 'hide', flag = 'hide userinfo', callback = function(bool)
-                    infographic:hide(bool)
-                end})
-            end
-            options:toggle({ name = 'watermark', flag = 'watermark', callback = function(state)
-                watermark.setstate(state)
-            end })
-            options:multibox({ flag = 'watermark text', options = { '{fps}', '{fpsavg}', '{ping}', '{date}', '{time}', '{uid}', '{build}', '{game}', '{memory}', '{netreceived}', '{netoutgoing}' }, default = { '{build}', '{fpsavg}'}, max = 5, callback = function(tbl)
-                watermark.title = table.concat(tbl, ', ')
-            end})
-            options:slider({ name = 'refresh rate', flag = 'watermark refresh rate', min = 10, max = 1000, suffix = 'ms', float = 1, default = 250, callback = function(v)
-                watermark.refreshrate = v
-            end})
+                            if not s then
+                                library:notify({ text = 'invalid user' })
+                                searching = false
+                                return
+                            end
+
+                            local s, response = utility.request('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=' .. id .. '&format=Png&size=150x150&isCircular=false')
+                            if not s or not response.data then
+                                library:notify({ text = 'unable to fetch player thumbnail' })
+                                searching = false
+                                return
+                            end
+
+                            local thumbnail = response.data[1].imageUrl
+                            local placeId = game.PlaceId
+                            local cursor, scanned, maxSearchs = nil, 0, 0
+
+                            library:notify({ text = 'scanning servers for user \'' .. user .. '\''})
+                            while searching do
+                                local success, result = utility.fetchservers(placeId)
+                                if not success or not result.data then
+                                    library:notify({ text = result.data })
+                                    searching = false
+                                    return
+                                end
+
+                                local servers = result.data
+                                cursor = result.nextPageCursor
+                                maxSearchs = maxSearchs + #servers
+
+                                for index, server in ipairs(servers) do
+                                    local function scan()
+                                        local s, thumbs = utility.fetchthumbs(server.playerTokens)
+                                        if s and thumbs then
+                                            for _, playerThumb in ipairs(thumbs) do
+                                                if playerThumb.imageUrl == thumbnail then
+                                                    playerFound, searching = true, false
+                                                    library:notify({ text = ('teleporting you to \'%s-XXXX...\''):format(string.sub(server.id, 0, 8)) }); task.wait(1)
+                                                    utility.tp(placeId, server.id)
+                                                    game:GetService('Players').LocalPlayer.OnTeleport:Connect(function(state)
+                                                        if state == Enum.TeleportState.Failed then
+                                                            library:notify({ text = 'teleport failed'} )
+                                                        end
+                                                    end)
+                                                    break
+                                                end
+                                            end
+                                        end
+                                    end
+                                    scanned = scanned + 1
+                                    if index % threads ~= 0 then task.spawn(scan); task.wait() else
+                                        scan()
+                                    end
+                                end
+
+                                if not cursor then
+                                    break
+                                end
+                            end
+
+                            if searching and not playerFound then task.wait(2)
+                                library:notify({ text = 'unable to find \'' .. user .. '\'' })
+                            end
+                            searching = false
+                        end
+                        --
+                    else
+                        clicked_join = true
+                        counting_join = true
+                        for i = 3,1,-1 do
+                            if not counting_join then
+                                break
+                            end
+                            text.Text = 'confirm? '..tostring(i)
+                            library:change_object_theme(text, "Accent")
+                            wait(1)
+                        end
+                        clicked_join = false
+                        counting_join = false
+                        library:change_object_theme(text, "Text")
+                        text.Text = 'scan'
+                    end
+                end);
+            end)
         end
-        local options = options_tab:section({ name = 'options', side = 'right', size = '275' }) do
-            options:divider({ name = 'menu options' }) do
-                options:keybind({ name = 'menu', flag = 'menu toggle', default = Enum.KeyCode.Minus, mode = 'Toggle', callback = function() library:set_open(not library.open) end})
-                options:keybind({ name = 'player list', flag = 'player list toggle', default = Enum.KeyCode.LeftBracket, mode = 'Toggle', callback = function(state) playerlist:setopen(not playerlist.open) end})
-                options:keybind({ name = 'server list', flag = 'server list toggle', default = Enum.KeyCode.LeftBracket, mode = 'Toggle', callback = function(state) serverlist:setopen(not serverlist.open) end })
-                options:keybind({ name = 'esp preview', flag = 'esp preview toggle', default = Enum.KeyCode.End, mode = 'Toggle', callback = function(state) preview:setopen(not preview.open) end })
-            end
-            options:divider({ name = 'personalization' }) do
-                options:colorpicker({ name = 'accent', flag = 'menu accent', default = Color3.fromRGB(117, 163, 125), callback = function(s) library:change_theme_color('Accent', s) end})
-            end
+
+        local currentserv_text = library:create("Text", {Text = "current server", Transparency = 0.6, Visible = true, Parent = list_holder, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0, 432, 0, 230), Font = 2, Size = 13, Outline = true});
+
+        local button1 = library:create("Square", { Filled = true, Visible = true, Thickness = 0, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(0,40,0,17), Position = UDim2.new(0, 386, 0, 250), ZIndex = 14, Parent = list_holder }) do
+            local outline = library:outline(button1, Color3.fromRGB(48, 48, 60), 14); library:outline(outline, Color3.new(0,0,0), 14);
+            local text = library:create("Text", {Text = "rejoin", Transparency = 1, Visible = true, Parent = button1, Theme = "Text", ZIndex = 16, Center = true, Position = UDim2.new(0.5, 0, 0, 1), Font = 2, Size = 13, Outline = true});
+
+            button1.MouseLeave:Connect(function() button1.Color = Color3.fromRGB(24, 24, 30) end)
+            button1.MouseEnter:Connect(function() button1.Color = Color3.fromRGB(34, 34, 42) end)
+            button1.MouseButton1Click:Connect(function()
+                task.spawn(function()
+                    if clicked_join then
+                        clicked_join = false
+                        counting_join = false
+                        library:change_object_theme(text, "Text")
+                        text.Text = 'rejoin'
+                        --
+                        library:notify({ text = ('rejoining \'%s-XXXX-XXXX-XXXX-XXXXXXXXXXXX\''):format(string.sub(game.JobId, 0, 8)), time = 7 })
+                        utility.tp(game.PlaceId, game.JobId);
+                        --
+                    else
+                        clicked_join = true
+                        counting_join = true
+                        for i = 3,1,-1 do
+                            if not counting_join then
+                                break
+                            end
+                            text.Text = tostring(i)
+                            library:change_object_theme(text, "Accent")
+                            wait(1)
+                        end
+                        clicked_join = false
+                        counting_join = false
+                        library:change_object_theme(text, "Text")
+                        text.Text = 'rejoin'
+                    end
+                end);
+            end)
         end
 
-    end
-end
-
-library:notify({text = string.format('loaded, took %.2fs', tostring(math.floor(tick() - init))), time = 10})
