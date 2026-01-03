@@ -3328,7 +3328,9 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                     keyholder.MouseButton2Click:Connect(function()
                         update_mode_visuals()
-                        mode_window.Position = UDim2.new(0, keyholder.AbsolutePosition.X, 0, keyholder.AbsolutePosition.Y + keyholder.AbsoluteSize.Y + 6)
+                        local holder_pos = library.holder.AbsolutePosition or Vector2.new(0, 0)
+                        local local_pos = keyholder.AbsolutePosition - holder_pos
+                        mode_window.Position = UDim2.new(0, local_pos.X, 0, local_pos.Y + keyholder.AbsoluteSize.Y + 6)
                         mode_window.Visible = not mode_window.Visible
                     end)
 
@@ -4323,7 +4325,9 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 holder.MouseButton2Click:Connect(function()
                     update_mode_visuals()
-                    mode_window.Position = UDim2.new(0, holder.AbsolutePosition.X, 0, holder.AbsolutePosition.Y + holder.AbsoluteSize.Y + 6)
+                    local holder_pos = library.holder.AbsolutePosition or Vector2.new(0, 0)
+                    local local_pos = holder.AbsolutePosition - holder_pos
+                    mode_window.Position = UDim2.new(0, local_pos.X, 0, local_pos.Y + holder.AbsoluteSize.Y + 6)
                     mode_window.Visible = not mode_window.Visible
                 end)
 
@@ -5002,7 +5006,9 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                         keyholder.MouseButton2Click:Connect(function()
                             update_mode_visuals()
-                            mode_window.Position = UDim2.new(0, keyholder.AbsolutePosition.X, 0, keyholder.AbsolutePosition.Y + keyholder.AbsoluteSize.Y + 6)
+                            local holder_pos = library.holder.AbsolutePosition or Vector2.new(0, 0)
+                            local local_pos = keyholder.AbsolutePosition - holder_pos
+                            mode_window.Position = UDim2.new(0, local_pos.X, 0, local_pos.Y + keyholder.AbsoluteSize.Y + 6)
                             mode_window.Visible = not mode_window.Visible
                         end)
 
@@ -5946,7 +5952,9 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                     holder.MouseButton2Click:Connect(function()
                         update_mode_visuals()
-                        mode_window.Position = UDim2.new(0, holder.AbsolutePosition.X, 0, holder.AbsolutePosition.Y + holder.AbsoluteSize.Y + 6)
+                        local holder_pos = library.holder.AbsolutePosition or Vector2.new(0, 0)
+                        local local_pos = holder.AbsolutePosition - holder_pos
+                        mode_window.Position = UDim2.new(0, local_pos.X, 0, local_pos.Y + holder.AbsoluteSize.Y + 6)
                         mode_window.Visible = not mode_window.Visible
                     end)
 
