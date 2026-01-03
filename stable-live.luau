@@ -274,7 +274,7 @@ local themes = { -- ignore
     };
 }
 local themeobjects = {};
-local library = {priorities = {}, friends = {}, notiflist = {ntifs = {}, interval = 12}, settings = {default_accent = Color3.fromRGB(255,255,255)}, drawings = {}, theme = table.clone(themes.Default),currentcolor = nil, flags = {}, open = false, mousestate = services.InputService.MouseIconEnabled, cursor = nil, holder = nil, open_windows = 0, connections = {}, notifications = {}, gradient = nil};
+local library = {priorities = {}, friends = {}, notiflist = {ntifs = {}, interval = 12}, settings = {default_accent = Color3.fromRGB(255,255,255)}, drawings = {}, theme = table.clone(themes.Default),currentcolor = nil, flags = {}, open = false, mousestate = services.InputService.MouseIconEnabled, cursor = nil, holder = nil, open_windows = 0, connections = {}, notifications = {}, gradient = nil, active_mode_window = nil};
 local decode = (syn and syn.crypt.base64.decode) or (crypt and crypt.base64decode) or base64_decode;
 local flags = {};
 local configignores = {};
@@ -3109,6 +3109,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         Size = UDim2.new(1, -6, 1, -6),
                         Position = UDim2.new(0, 3, 0, 3),
                         Transparency = 1,
+                        ClipsDescendants = true,
                         ZIndex = 201
                     })
                     mode_holder:AddListLayout(3)
@@ -3123,11 +3124,12 @@ if not library.particle_cache.bg then library:InitParticles() end
                     for _, mode_name in ipairs({ "Hold", "Toggle", "Always" }) do
                         local button = library:create("Square", {
                             Parent = mode_holder,
-                            Size = UDim2.new(1, 0, 0, 16),
+                            Size = UDim2.new(1, -2, 0, 16),
                             Theme = "Toggle Background",
                             Transparency = 1,
                             Thickness = 1,
                             Filled = true,
+                            Position = UDim2.new(0, 1, 0, 0),
                             ZIndex = 202
                         })
                         local text_obj = library:create("Text", {
@@ -3264,7 +3266,11 @@ if not library.particle_cache.bg then library:InitParticles() end
                         local mouse_pos = services.InputService:GetMouseLocation()
                         local local_pos = mouse_pos - holder_pos
                         mode_window.Position = UDim2.new(0, local_pos.X, 0, local_pos.Y)
+                        if library.active_mode_window and library.active_mode_window ~= mode_window then
+                            library.active_mode_window.Visible = false
+                        end
                         mode_window.Visible = not mode_window.Visible
+                        library.active_mode_window = mode_window.Visible and mode_window or nil
                     end)
 
                     library:connect(services.InputService.InputEnded, function(inp)
@@ -4107,6 +4113,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     Size = UDim2.new(1, -6, 1, -6),
                     Position = UDim2.new(0, 3, 0, 3),
                     Transparency = 1,
+                    ClipsDescendants = true,
                     ZIndex = 201
                 })
                 mode_holder:AddListLayout(3)
@@ -4121,11 +4128,12 @@ if not library.particle_cache.bg then library:InitParticles() end
                 for _, mode_name in ipairs({ "Hold", "Toggle", "Always" }) do
                     local button = library:create("Square", {
                         Parent = mode_holder,
-                        Size = UDim2.new(1, 0, 0, 16),
+                        Size = UDim2.new(1, -2, 0, 16),
                         Theme = "Toggle Background",
                         Transparency = 1,
                         Thickness = 1,
                         Filled = true,
+                        Position = UDim2.new(0, 1, 0, 0),
                         ZIndex = 202
                     })
                     local text_obj = library:create("Text", {
@@ -4262,7 +4270,11 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local mouse_pos = services.InputService:GetMouseLocation()
                     local local_pos = mouse_pos - holder_pos
                     mode_window.Position = UDim2.new(0, local_pos.X, 0, local_pos.Y)
+                    if library.active_mode_window and library.active_mode_window ~= mode_window then
+                        library.active_mode_window.Visible = false
+                    end
                     mode_window.Visible = not mode_window.Visible
+                    library.active_mode_window = mode_window.Visible and mode_window or nil
                 end)
 
                 library:connect(services.InputService.InputEnded, function(inp)
@@ -4789,6 +4801,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                             Size = UDim2.new(1, -6, 1, -6),
                             Position = UDim2.new(0, 3, 0, 3),
                             Transparency = 1,
+                            ClipsDescendants = true,
                             ZIndex = 201
                         })
                         mode_holder:AddListLayout(3)
@@ -4803,11 +4816,12 @@ if not library.particle_cache.bg then library:InitParticles() end
                         for _, mode_name in ipairs({ "Hold", "Toggle", "Always" }) do
                             local button = library:create("Square", {
                                 Parent = mode_holder,
-                                Size = UDim2.new(1, 0, 0, 16),
+                                Size = UDim2.new(1, -2, 0, 16),
                                 Theme = "Toggle Background",
                                 Transparency = 1,
                                 Thickness = 1,
                                 Filled = true,
+                                Position = UDim2.new(0, 1, 0, 0),
                                 ZIndex = 202
                             })
                             local text_obj = library:create("Text", {
@@ -4944,7 +4958,11 @@ if not library.particle_cache.bg then library:InitParticles() end
                             local mouse_pos = services.InputService:GetMouseLocation()
                             local local_pos = mouse_pos - holder_pos
                             mode_window.Position = UDim2.new(0, local_pos.X, 0, local_pos.Y)
+                            if library.active_mode_window and library.active_mode_window ~= mode_window then
+                                library.active_mode_window.Visible = false
+                            end
                             mode_window.Visible = not mode_window.Visible
+                            library.active_mode_window = mode_window.Visible and mode_window or nil
                         end)
 
                         library:connect(services.InputService.InputEnded, function(inp)
@@ -5891,7 +5909,11 @@ if not library.particle_cache.bg then library:InitParticles() end
                         local mouse_pos = services.InputService:GetMouseLocation()
                         local local_pos = mouse_pos - holder_pos
                         mode_window.Position = UDim2.new(0, local_pos.X, 0, local_pos.Y)
+                        if library.active_mode_window and library.active_mode_window ~= mode_window then
+                            library.active_mode_window.Visible = false
+                        end
                         mode_window.Visible = not mode_window.Visible
+                        library.active_mode_window = mode_window.Visible and mode_window or nil
                     end)
 
                     library:connect(services.InputService.InputEnded, function(inp)
