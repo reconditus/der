@@ -335,6 +335,7 @@ local fadethings = {}
 function utility.dragify(object, title)
     local start, objectposition, dragging, currentpos
     local size = Vector2.new(object.Size.X, object.Size.Y)
+    local drag_zindex = (object.ZIndex or 1) + 50
 
     local function set(pos)
         local a, b, c, d = pos:match("{(%d+), (%d+)}, {(%-?%d+), (%-?%d+)}")
@@ -344,8 +345,8 @@ function utility.dragify(object, title)
     flags[title .. ' position'] = set
     library.flags[title .. ' position'] = object.Position
 
-    local windowdrag = library:create("Square", { Parent = object, Visible = true, Transparency = 0, Size = UDim2.new(1, 0, 0, 20), Position = UDim2.new(0, 0, 0, 0), Thickness = 1, Filled = true, ZIndex = 50 })
-    local dragoutline = library:create("Square", { Size = object.Size, Position = utility.getcenter(size.X, size.Y), Filled = false, Thickness = 1, Theme = "Accent", ZIndex = 100, Visible = false })
+    local windowdrag = library:create("Square", { Parent = object, Visible = true, Transparency = 1, Color = Color3.new(0, 0, 0), Size = UDim2.new(1, 0, 0, 20), Position = UDim2.new(0, 0, 0, 0), Thickness = 0, Filled = true, ZIndex = drag_zindex })
+    local dragoutline = library:create("Square", { Size = object.Size, Position = utility.getcenter(size.X, size.Y), Filled = false, Thickness = 1, Theme = "Accent", ZIndex = drag_zindex + 50, Visible = false })
 
     windowdrag.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -620,12 +621,12 @@ function library:keybind_list_window(cfg)
 
     local window = library:create("Square", {
         Visible = visible,
-        Transparency = 0,
+        Transparency = 1,
         Color = Color3.fromRGB(0, 0, 0),
         Size = UDim2.new(0, size.X, 0, size.Y),
         Position = position,
         Thickness = 0,
-        Filled = true,
+        Filled = false,
         ZIndex = 120
     })
 
@@ -636,12 +637,10 @@ function library:keybind_list_window(cfg)
         Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(1, 0, 0, header_height),
         Position = UDim2.new(0, 0, 0, 0),
-        Thickness = 1,
+        Thickness = 0,
         Filled = true,
         ZIndex = 121
     })
-    local outline = library:outline(header, Color3.fromRGB(48, 48, 60), 121)
-    library:outline(outline, Color3.fromRGB(0, 0, 0), 121)
 
     local title = library:create("Text", {
         Parent = header,
@@ -661,11 +660,10 @@ function library:keybind_list_window(cfg)
         Theme = "Accent",
         Size = UDim2.new(1, -16, 0, 2),
         Position = UDim2.new(0, 8, 1, -4),
-        Thickness = 1,
+        Thickness = 0,
         Filled = true,
         ZIndex = 122
     })
-    library:outline(header_accent, Color3.fromRGB(0, 0, 0), 122)
 
     local holder = library:create("Square", {
         Parent = window,
