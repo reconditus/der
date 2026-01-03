@@ -650,12 +650,10 @@ function library:keybind_list_window(cfg)
         Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(0, size.X, 0, size.Y),
         Position = position,
-        Thickness = 1,
+        Thickness = 0,
         Filled = true,
         ZIndex = 120
     })
-    local window_outline = library:outline(window, Color3.fromRGB(48, 48, 60), 120)
-    library:outline(window_outline, Color3.fromRGB(0, 0, 0), 120)
 
     local header_height = 24
     local header = library:create("Square", {
