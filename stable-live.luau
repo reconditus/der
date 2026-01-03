@@ -532,6 +532,103 @@ function library:change_theme_color(option, color)
         end
     end
 end;
+
+function library:get_mode_picker()
+    if self.mode_picker then
+        return self.mode_picker
+    end
+
+    local mode_window = library:create("Square", {
+        Parent = library.holder,
+        Size = UDim2.new(0, 80, 0, 60),
+        Position = UDim2.new(0, 0, 0, 0),
+        Visible = false,
+        ClipsDescendants = true,
+        Color = Color3.fromRGB(24, 24, 30),
+        Thickness = 1,
+        Filled = true,
+        ZIndex = 200
+    })
+    local mode_outline = library:outline(mode_window, Color3.fromRGB(48, 48, 60), 200)
+    library:outline(mode_outline, Color3.new(0, 0, 0), 200)
+
+    local mode_holder = library:create("Square", {
+        Parent = mode_window,
+        Size = UDim2.new(1, -6, 1, -6),
+        Position = UDim2.new(0, 3, 0, 3),
+        Transparency = 1,
+        ClipsDescendants = true,
+        ZIndex = 201
+    })
+    mode_holder:AddListLayout(3)
+
+    local picker = {window = mode_window, holder = mode_holder, texts = {}, on_select = nil}
+
+    for _, mode_name in ipairs({ "Hold", "Toggle", "Always" }) do
+        local button = library:create("Square", {
+            Parent = mode_holder,
+            Size = UDim2.new(1, -2, 0, 16),
+            Theme = "Toggle Background",
+            Transparency = 1,
+            Thickness = 1,
+            Filled = true,
+            Position = UDim2.new(0, 1, 0, 0),
+            ZIndex = 202
+        })
+        local text_obj = library:create("Text", {
+            Parent = button,
+            Text = mode_name,
+            Font = Drawing.Fonts.Plex,
+            Size = 13,
+            Position = UDim2.new(0, 2, 0, 1),
+            Theme = "Text",
+            Outline = true,
+            ZIndex = 203
+        })
+        picker.texts[mode_name] = text_obj
+        button.MouseButton1Click:Connect(function()
+            if picker.on_select then
+                picker.on_select(mode_name)
+            end
+        end)
+    end
+
+    self.mode_picker = picker
+    return picker
+end
+
+function library:show_mode_picker(position, current_mode, on_select)
+    local picker = self:get_mode_picker()
+
+    if self.active_mode_window == picker.window and picker.window.Visible then
+        picker.window.Visible = false
+        self.active_mode_window = nil
+        return
+    end
+
+    for mode_name, text_obj in next, picker.texts do
+        library:change_object_theme(text_obj, mode_name == current_mode and "Accent" or "Text")
+    end
+
+    picker.on_select = function(mode_name)
+        if on_select then
+            on_select(mode_name)
+        end
+        picker.window.Visible = false
+        if self.active_mode_window == picker.window then
+            self.active_mode_window = nil
+        end
+    end
+
+    picker.window.Position = position
+
+    if self.active_mode_window and self.active_mode_window ~= picker.window then
+        self.active_mode_window.Visible = false
+    end
+
+    picker.window.Visible = true
+    self.active_mode_window = picker.window
+end
 function library:load_config(cfg_name)
     if isfile(cfg_name) then
         local file = readfile(cfg_name)
@@ -3091,66 +3188,6 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local key
                     local state = false
                     local binding
-                    local mode_window = library:create("Square", {
-                        Parent = library.holder,
-                        Size = UDim2.new(0, 80, 0, 60),
-                        Position = UDim2.new(0, 0, 0, 0),
-                        Visible = false,
-                        Color = Color3.fromRGB(24, 24, 30),
-                        Thickness = 1,
-                        Filled = true,
-                        ZIndex = 200
-                    })
-                    local mode_outline = library:outline(mode_window, Color3.fromRGB(48, 48, 60), 200)
-                    library:outline(mode_outline, Color3.new(0, 0, 0), 200)
-
-                    local mode_holder = library:create("Square", {
-                        Parent = mode_window,
-                        Size = UDim2.new(1, -6, 1, -6),
-                        Position = UDim2.new(0, 3, 0, 3),
-                        Transparency = 1,
-                        ClipsDescendants = true,
-                        ZIndex = 201
-                    })
-                    mode_holder:AddListLayout(3)
-
-                    local mode_texts = {}
-                    local function update_mode_visuals()
-                        for mode_name, text_obj in next, mode_texts do
-                            library:change_object_theme(text_obj, mode_name == key_mode and "Accent" or "Text")
-                        end
-                    end
-
-                    for _, mode_name in ipairs({ "Hold", "Toggle", "Always" }) do
-                        local button = library:create("Square", {
-                            Parent = mode_holder,
-                            Size = UDim2.new(1, -2, 0, 16),
-                            Theme = "Toggle Background",
-                            Transparency = 1,
-                            Thickness = 1,
-                            Filled = true,
-                            Position = UDim2.new(0, 1, 0, 0),
-                            ZIndex = 202
-                        })
-                        local text_obj = library:create("Text", {
-                            Parent = button,
-                            Text = mode_name,
-                            Font = Drawing.Fonts.Plex,
-                            Size = 13,
-                            Position = UDim2.new(0, 2, 0, 1),
-                            Theme = "Text",
-                            Outline = true,
-                            ZIndex = 203
-                        })
-                        mode_texts[mode_name] = text_obj
-                        button.MouseButton1Click:Connect(function()
-                            key_mode = mode_name
-                            library.flags[flag .. "_MODE"] = key_mode
-                            update_mode_visuals()
-                            mode_window.Visible = false
-                        end)
-                    end
-                    update_mode_visuals()
 
                     local function set(newkey)
                         if c then
@@ -3261,16 +3298,13 @@ if not library.particle_cache.bg then library:InitParticles() end
                     end)
 
                     keyholder.MouseButton2Click:Connect(function()
-                        update_mode_visuals()
                         local holder_pos = library.holder.AbsolutePosition or Vector2.new(0, 0)
                         local mouse_pos = services.InputService:GetMouseLocation()
                         local local_pos = mouse_pos - holder_pos
-                        mode_window.Position = UDim2.new(0, local_pos.X, 0, local_pos.Y)
-                        if library.active_mode_window and library.active_mode_window ~= mode_window then
-                            library.active_mode_window.Visible = false
-                        end
-                        mode_window.Visible = not mode_window.Visible
-                        library.active_mode_window = mode_window.Visible and mode_window or nil
+                        library:show_mode_picker(UDim2.new(0, local_pos.X, 0, local_pos.Y), key_mode, function(mode_name)
+                            key_mode = mode_name
+                            library.flags[flag .. "_MODE"] = key_mode
+                        end)
                     end)
 
                     library:connect(services.InputService.InputEnded, function(inp)
@@ -4095,66 +4129,6 @@ if not library.particle_cache.bg then library:InitParticles() end
                 local key
                 local state = false
                 local binding
-                local mode_window = library:create("Square", {
-                    Parent = library.holder,
-                    Size = UDim2.new(0, 80, 0, 60),
-                    Position = UDim2.new(0, 0, 0, 0),
-                    Visible = false,
-                    Color = Color3.fromRGB(24, 24, 30),
-                    Thickness = 1,
-                    Filled = true,
-                    ZIndex = 200
-                })
-                local mode_outline = library:outline(mode_window, Color3.fromRGB(48, 48, 60), 200)
-                library:outline(mode_outline, Color3.new(0, 0, 0), 200)
-
-                local mode_holder = library:create("Square", {
-                    Parent = mode_window,
-                    Size = UDim2.new(1, -6, 1, -6),
-                    Position = UDim2.new(0, 3, 0, 3),
-                    Transparency = 1,
-                    ClipsDescendants = true,
-                    ZIndex = 201
-                })
-                mode_holder:AddListLayout(3)
-
-                local mode_texts = {}
-                local function update_mode_visuals()
-                    for mode_name, text_obj in next, mode_texts do
-                        library:change_object_theme(text_obj, mode_name == key_mode and "Accent" or "Text")
-                    end
-                end
-
-                for _, mode_name in ipairs({ "Hold", "Toggle", "Always" }) do
-                    local button = library:create("Square", {
-                        Parent = mode_holder,
-                        Size = UDim2.new(1, -2, 0, 16),
-                        Theme = "Toggle Background",
-                        Transparency = 1,
-                        Thickness = 1,
-                        Filled = true,
-                        Position = UDim2.new(0, 1, 0, 0),
-                        ZIndex = 202
-                    })
-                    local text_obj = library:create("Text", {
-                        Parent = button,
-                        Text = mode_name,
-                        Font = Drawing.Fonts.Plex,
-                        Size = 13,
-                        Position = UDim2.new(0, 2, 0, 1),
-                        Theme = "Text",
-                        Outline = true,
-                        ZIndex = 203
-                    })
-                    mode_texts[mode_name] = text_obj
-                    button.MouseButton1Click:Connect(function()
-                        key_mode = mode_name
-                        library.flags[flag .. "_MODE"] = key_mode
-                        update_mode_visuals()
-                        mode_window.Visible = false
-                    end)
-                end
-                update_mode_visuals()
 
                 local function set(newkey)
                     if c then
@@ -4265,16 +4239,13 @@ if not library.particle_cache.bg then library:InitParticles() end
                 end)
 
                 holder.MouseButton2Click:Connect(function()
-                    update_mode_visuals()
                     local holder_pos = library.holder.AbsolutePosition or Vector2.new(0, 0)
                     local mouse_pos = services.InputService:GetMouseLocation()
                     local local_pos = mouse_pos - holder_pos
-                    mode_window.Position = UDim2.new(0, local_pos.X, 0, local_pos.Y)
-                    if library.active_mode_window and library.active_mode_window ~= mode_window then
-                        library.active_mode_window.Visible = false
-                    end
-                    mode_window.Visible = not mode_window.Visible
-                    library.active_mode_window = mode_window.Visible and mode_window or nil
+                    library:show_mode_picker(UDim2.new(0, local_pos.X, 0, local_pos.Y), key_mode, function(mode_name)
+                        key_mode = mode_name
+                        library.flags[flag .. "_MODE"] = key_mode
+                    end)
                 end)
 
                 library:connect(services.InputService.InputEnded, function(inp)
@@ -4783,66 +4754,6 @@ if not library.particle_cache.bg then library:InitParticles() end
                         local key
                         local state = false
                         local binding
-                        local mode_window = library:create("Square", {
-                            Parent = library.holder,
-                            Size = UDim2.new(0, 80, 0, 60),
-                            Position = UDim2.new(0, 0, 0, 0),
-                            Visible = false,
-                            Color = Color3.fromRGB(24, 24, 30),
-                            Thickness = 1,
-                            Filled = true,
-                            ZIndex = 200
-                        })
-                        local mode_outline = library:outline(mode_window, Color3.fromRGB(48, 48, 60), 200)
-                        library:outline(mode_outline, Color3.new(0, 0, 0), 200)
-
-                        local mode_holder = library:create("Square", {
-                            Parent = mode_window,
-                            Size = UDim2.new(1, -6, 1, -6),
-                            Position = UDim2.new(0, 3, 0, 3),
-                            Transparency = 1,
-                            ClipsDescendants = true,
-                            ZIndex = 201
-                        })
-                        mode_holder:AddListLayout(3)
-
-                        local mode_texts = {}
-                        local function update_mode_visuals()
-                            for mode_name, text_obj in next, mode_texts do
-                                library:change_object_theme(text_obj, mode_name == key_mode and "Accent" or "Text")
-                            end
-                        end
-
-                        for _, mode_name in ipairs({ "Hold", "Toggle", "Always" }) do
-                            local button = library:create("Square", {
-                                Parent = mode_holder,
-                                Size = UDim2.new(1, -2, 0, 16),
-                                Theme = "Toggle Background",
-                                Transparency = 1,
-                                Thickness = 1,
-                                Filled = true,
-                                Position = UDim2.new(0, 1, 0, 0),
-                                ZIndex = 202
-                            })
-                            local text_obj = library:create("Text", {
-                                Parent = button,
-                                Text = mode_name,
-                                Font = Drawing.Fonts.Plex,
-                                Size = 13,
-                                Position = UDim2.new(0, 2, 0, 1),
-                                Theme = "Text",
-                                Outline = true,
-                                ZIndex = 203
-                            })
-                            mode_texts[mode_name] = text_obj
-                            button.MouseButton1Click:Connect(function()
-                                key_mode = mode_name
-                                library.flags[flag .. "_MODE"] = key_mode
-                                update_mode_visuals()
-                                mode_window.Visible = false
-                            end)
-                        end
-                        update_mode_visuals()
 
                         local function set(newkey)
                             if c then
@@ -4953,16 +4864,13 @@ if not library.particle_cache.bg then library:InitParticles() end
                         end)
 
                         keyholder.MouseButton2Click:Connect(function()
-                            update_mode_visuals()
                             local holder_pos = library.holder.AbsolutePosition or Vector2.new(0, 0)
                             local mouse_pos = services.InputService:GetMouseLocation()
                             local local_pos = mouse_pos - holder_pos
-                            mode_window.Position = UDim2.new(0, local_pos.X, 0, local_pos.Y)
-                            if library.active_mode_window and library.active_mode_window ~= mode_window then
-                                library.active_mode_window.Visible = false
-                            end
-                            mode_window.Visible = not mode_window.Visible
-                            library.active_mode_window = mode_window.Visible and mode_window or nil
+                            library:show_mode_picker(UDim2.new(0, local_pos.X, 0, local_pos.Y), key_mode, function(mode_name)
+                                key_mode = mode_name
+                                library.flags[flag .. "_MODE"] = key_mode
+                            end)
                         end)
 
                         library:connect(services.InputService.InputEnded, function(inp)
@@ -5904,16 +5812,13 @@ if not library.particle_cache.bg then library:InitParticles() end
                     end)
 
                     holder.MouseButton2Click:Connect(function()
-                        update_mode_visuals()
                         local holder_pos = library.holder.AbsolutePosition or Vector2.new(0, 0)
                         local mouse_pos = services.InputService:GetMouseLocation()
                         local local_pos = mouse_pos - holder_pos
-                        mode_window.Position = UDim2.new(0, local_pos.X, 0, local_pos.Y)
-                        if library.active_mode_window and library.active_mode_window ~= mode_window then
-                            library.active_mode_window.Visible = false
-                        end
-                        mode_window.Visible = not mode_window.Visible
-                        library.active_mode_window = mode_window.Visible and mode_window or nil
+                        library:show_mode_picker(UDim2.new(0, local_pos.X, 0, local_pos.Y), key_mode, function(mode_name)
+                            key_mode = mode_name
+                            library.flags[flag .. "_MODE"] = key_mode
+                        end)
                     end)
 
                     library:connect(services.InputService.InputEnded, function(inp)
