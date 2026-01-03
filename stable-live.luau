@@ -3093,7 +3093,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local binding
                     local mode_window = library:create("Square", {
                         Parent = library.holder,
-                        Size = UDim2.new(0, 80, 0, 54),
+                        Size = UDim2.new(0, 80, 0, 60),
                         Position = UDim2.new(0, 0, 0, 0),
                         Visible = false,
                         Color = Color3.fromRGB(24, 24, 30),
@@ -4097,7 +4097,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 local binding
                 local mode_window = library:create("Square", {
                     Parent = library.holder,
-                    Size = UDim2.new(0, 80, 0, 54),
+                    Size = UDim2.new(0, 80, 0, 60),
                     Position = UDim2.new(0, 0, 0, 0),
                     Visible = false,
                     Color = Color3.fromRGB(24, 24, 30),
@@ -4785,7 +4785,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         local binding
                         local mode_window = library:create("Square", {
                             Parent = library.holder,
-                            Size = UDim2.new(0, 80, 0, 54),
+                            Size = UDim2.new(0, 80, 0, 60),
                             Position = UDim2.new(0, 0, 0, 0),
                             Visible = false,
                             Color = Color3.fromRGB(24, 24, 30),
