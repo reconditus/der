@@ -274,7 +274,7 @@ local themes = { -- ignore
     };
 }
 local themeobjects = {};
-local library = {priorities = {}, friends = {}, notiflist = {ntifs = {}, interval = 12}, settings = {default_accent = Color3.fromRGB(255,255,255)}, drawings = {}, theme = table.clone(themes.Default),currentcolor = nil, flags = {}, open = false, mousestate = services.InputService.MouseIconEnabled, cursor = nil, holder = nil, open_windows = 0, connections = {}, notifications = {}, gradient = nil, active_mode_window = nil};
+local library = {priorities = {}, friends = {}, notiflist = {ntifs = {}, interval = 12}, settings = {default_accent = Color3.fromRGB(255,255,255)}, drawings = {}, theme = table.clone(themes.Default),currentcolor = nil, flags = {}, open = false, mousestate = services.InputService.MouseIconEnabled, cursor = nil, holder = nil, open_windows = 0, connections = {}, notifications = {}, gradient = nil, active_mode_window = nil, keybinds = {}, keybind_list = nil, mode_picker = nil};
 local decode = (syn and syn.crypt.base64.decode) or (crypt and crypt.base64decode) or base64_decode;
 local flags = {};
 local configignores = {};
@@ -533,6 +533,131 @@ function library:change_theme_color(option, color)
     end
 end;
 
+function library:hide_mode_picker()
+    if self.active_mode_window then
+        self.active_mode_window.Visible = false
+        self.active_mode_window = nil
+    end
+end
+
+function library:keybind_to_text(key)
+    if key == nil then
+        return "-"
+    end
+    if typeof(key) == "EnumItem" then
+        return keys[key] or tostring(key):gsub("Enum.KeyCode.", ""):gsub("Enum.UserInputType.", "")
+    end
+    return tostring(key)
+end
+
+function library:get_keybind_display(flag, name)
+    local key = library.flags[flag .. "_KEY"]
+    local mode = library.flags[flag .. "_MODE"] or "Hold"
+    local key_text = self:keybind_to_text(key)
+    return string.format("%s [%s] (%s)", name, key_text, mode)
+end
+
+function library:register_keybind(name, flag)
+    local entry = {name = name, flag = flag, text = nil}
+    table.insert(self.keybinds, entry)
+    if self.keybind_list and self.keybind_list.holder then
+        self:add_keybind_entry(entry)
+        self:update_keybind_list()
+    end
+    return entry
+end
+
+function library:add_keybind_entry(entry)
+    if not self.keybind_list or not self.keybind_list.holder then
+        return
+    end
+    local text_obj = library:create("Text", {
+        Parent = self.keybind_list.holder,
+        Text = self:get_keybind_display(entry.flag, entry.name),
+        Font = Drawing.Fonts.Plex,
+        Size = 13,
+        Position = UDim2.new(0, 2, 0, 0),
+        Theme = "Un-Selected_Text",
+        Outline = false,
+        ZIndex = self.keybind_list.zindex + 2
+    })
+    entry.text = text_obj
+end
+
+function library:update_keybind_list()
+    if not self.keybind_list then
+        return
+    end
+    for _, entry in ipairs(self.keybinds) do
+        if entry.text then
+            entry.text.Text = self:get_keybind_display(entry.flag, entry.name)
+            local mode = library.flags[entry.flag .. "_MODE"] or "Hold"
+            local active = mode == "Always" or library.flags[entry.flag] == true
+            library:change_object_theme(entry.text, active and "Accent" or "Un-Selected_Text")
+        end
+    end
+end
+
+function library:keybind_list_window(cfg)
+    if self.keybind_list and self.keybind_list.window then
+        return self.keybind_list
+    end
+
+    cfg = cfg or {}
+    local size = cfg.size or Vector2.new(240, 200)
+    local position = cfg.position or UDim2.new(0, 30, 0, 300)
+
+    local window = library:create("Square", {
+        Visible = true,
+        Transparency = 1,
+        Color = Color3.fromRGB(24, 24, 30),
+        Size = UDim2.new(0, size.X, 0, size.Y),
+        Position = position,
+        Thickness = 1,
+        Filled = true,
+        ZIndex = 120
+    })
+    local outline = library:outline(window, Color3.fromRGB(48, 48, 60), 120)
+    library:outline(outline, Color3.fromRGB(0, 0, 0), 120)
+
+    local title = library:create("Text", {
+        Parent = window,
+        Text = cfg.title or "keybinds",
+        Font = Drawing.Fonts.Plex,
+        Size = 13,
+        Position = UDim2.new(0, 8, 0, 6),
+        Theme = "Text",
+        Outline = false,
+        ZIndex = 121
+    })
+
+    local holder = library:create("Square", {
+        Parent = window,
+        Transparency = 1,
+        Size = UDim2.new(1, -16, 1, -28),
+        Position = UDim2.new(0, 8, 0, 22),
+        ZIndex = 121
+    })
+    holder:AddListLayout(6)
+
+    utility.dragify(window, "keybind list")
+
+    self.keybind_list = {window = window, holder = holder, zindex = 120}
+
+    for _, entry in ipairs(self.keybinds) do
+        self:add_keybind_entry(entry)
+    end
+    self:update_keybind_list()
+
+    if not self.keybind_list.connection then
+        self.keybind_list.connection = library:connect(game:GetService("RunService").RenderStepped, function()
+            self:update_keybind_list()
+        end)
+    end
+
+    return self.keybind_list
+end
+
 function library:get_mode_picker()
     if self.mode_picker then
         return self.mode_picker
@@ -622,12 +747,13 @@ function library:show_mode_picker(position, current_mode, on_select)
 
     picker.window.Position = position
 
-    if self.active_mode_window and self.active_mode_window ~= picker.window then
-        self.active_mode_window.Visible = false
-    end
+        if self.active_mode_window and self.active_mode_window ~= picker.window then
+            self.active_mode_window.Visible = false
+        end
 
-    picker.window.Visible = true
-    self.active_mode_window = picker.window
+        picker.window.Visible = true
+        self.active_mode_window = picker.window
+        self:update_keybind_list()
 end
 function library:load_config(cfg_name)
     if isfile(cfg_name) then
@@ -3042,17 +3168,18 @@ if not library.particle_cache.bg then library:InitParticles() end
         end
         --
         library:connect(button_holder.MouseButton1Click, function()
+            library:hide_mode_picker()
             for _,v in next, self.pages_titles do
                 if v ~= button_tbl then
                     library:change_object_theme(v, "Text");
                 end;
             end;
             --
-            for _,v in next, self.pages do
-                if v ~= page_holder then
-                    v.Visible = false;
+                for _,v in next, self.pages do
+                    if v ~= page_holder then
+                        v.Visible = false;
+                    end;
                 end;
-            end;
             library:change_object_theme(button_title, "Accent");
             page_holder.Visible = true;
         end);
@@ -3167,6 +3294,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local callback = cfg.callback or function() end;
                     local key_mode = mode;
                     library.flags[flag .. "_MODE"] = key_mode
+                    local name = cfg.name or cfg.Name or "keybind"
+                    local entry = library:register_keybind(name, flag)
 
                     if cfg.ignoreflag then
                         table.insert(configignores, flag)
@@ -3188,6 +3317,13 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local key
                     local state = false
                     local binding
+                    local function setmode(mode_name)
+                        if mode_name == "Hold" or mode_name == "Toggle" or mode_name == "Always" then
+                            key_mode = mode_name
+                            library.flags[flag .. "_MODE"] = mode_name
+                            library:update_keybind_list()
+                        end
+                    end
 
                     local function set(newkey)
                         if c then
@@ -3226,6 +3362,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                             end
                             callback(false)
                         end
+                        library.flags[flag.."_KEY"] = key
+                        library:update_keybind_list()
                     end
 
                     local function setkey(newkey)
@@ -3252,6 +3390,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                             keytext.Text = "["..text.."]"
                             library:change_object_theme(keytext, "Un-Selected_Text")
                         end
+                        library:update_keybind_list()
                     end
 
                     library:connect(services.InputService.InputBegan, function(inp)
@@ -3274,12 +3413,15 @@ if not library.particle_cache.bg then library:InitParticles() end
                             else
                                 callback()
                             end
+                            library:update_keybind_list()
                         end
                     end)
 
                     flags[flag.."_KEY"] = setkey
+                    flags[flag .. "_MODE"] = setmode
 
                     set(default)
+                    setmode(key_mode)
 
                     keyholder.MouseButton1Click:Connect(function()
                         if not binding then
@@ -3302,8 +3444,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         local mouse_pos = services.InputService:GetMouseLocation()
                         local local_pos = mouse_pos - holder_pos
                         library:show_mode_picker(UDim2.new(0, local_pos.X, 0, local_pos.Y), key_mode, function(mode_name)
-                            key_mode = mode_name
-                            library.flags[flag .. "_MODE"] = key_mode
+                            setmode(mode_name)
                         end)
                     end)
 
@@ -4099,6 +4240,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 local key_mode = mode;
                 library.flags[flag .. "_MODE"] = key_mode
+                local entry = library:register_keybind(name, flag)
                 --
                 local holder = library:create("Square", {Transparency = 0, ZIndex = 15,Size = UDim2.new(1, 0, 0, 6),Parent = section_content});
                 --
@@ -4129,6 +4271,13 @@ if not library.particle_cache.bg then library:InitParticles() end
                 local key
                 local state = false
                 local binding
+                local function setmode(mode_name)
+                    if mode_name == "Hold" or mode_name == "Toggle" or mode_name == "Always" then
+                        key_mode = mode_name
+                        library.flags[flag .. "_MODE"] = mode_name
+                        library:update_keybind_list()
+                    end
+                end
 
                 local function set(newkey)
                     if c then
@@ -4167,6 +4316,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                         end
                         callback(false)
                     end
+                    library.flags[flag.."_KEY"] = key
+                    library:update_keybind_list()
                 end
 
                 local function setkey(newkey)
@@ -4193,6 +4344,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                         keytext.Text = "["..text.."]"
                         library:change_object_theme(keytext, "Un-Selected_Text")
                     end
+                    library.flags[flag.."_KEY"] = key
+                    library:update_keybind_list()
                 end
 
                 library:connect(services.InputService.InputBegan, function(inp)
@@ -4215,12 +4368,15 @@ if not library.particle_cache.bg then library:InitParticles() end
                         else
                             callback()
                         end
+                        library:update_keybind_list()
                     end
                 end)
 
                 flags[flag.."_KEY"] = setkey
+                flags[flag .. "_MODE"] = setmode
 
                 set(default)
+                setmode(key_mode)
 
                 holder.MouseButton1Click:Connect(function()
                     if not binding then
@@ -4243,8 +4399,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local mouse_pos = services.InputService:GetMouseLocation()
                     local local_pos = mouse_pos - holder_pos
                     library:show_mode_picker(UDim2.new(0, local_pos.X, 0, local_pos.Y), key_mode, function(mode_name)
-                        key_mode = mode_name
-                        library.flags[flag .. "_MODE"] = key_mode
+                        setmode(mode_name)
                     end)
                 end)
 
@@ -4557,6 +4712,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                 end
                 --
                 library:connect(button_holder.MouseButton1Click, function()
+                    library:hide_mode_picker()
                     for _,v in next, self.lines do
                         if v ~= button_accent then
                             library:change_object_theme(v, "Un-Selected");
@@ -4737,6 +4893,8 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                         local key_mode = mode;
                         library.flags[flag .. "_MODE"] = key_mode
+                        local name = cfg.name or cfg.Name or "keybind"
+                        local entry = library:register_keybind(name, flag)
 
                         local keyholder = library:create("Square", {Size = UDim2.new(0,40,1,0), Position = UDim2.new(1,-60,0,0), Transparency = 0, ZIndex = 15, Parent = holder, Thickness = 1, Filled = false})
 
@@ -4754,6 +4912,13 @@ if not library.particle_cache.bg then library:InitParticles() end
                         local key
                         local state = false
                         local binding
+                        local function setmode(mode_name)
+                            if mode_name == "Hold" or mode_name == "Toggle" or mode_name == "Always" then
+                                key_mode = mode_name
+                                library.flags[flag .. "_MODE"] = mode_name
+                                library:update_keybind_list()
+                            end
+                        end
 
                         local function set(newkey)
                             if c then
@@ -4792,6 +4957,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                                 end
                                 callback(false)
                             end
+                            library.flags[flag.."_KEY"] = key
+                            library:update_keybind_list()
                         end
 
                         local function setkey(newkey)
@@ -4818,6 +4985,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                                 keytext.Text = "["..text.."]"
                                 library:change_object_theme(keytext, "Un-Selected_Text")
                             end
+                            library:update_keybind_list()
                         end
 
                         library:connect(services.InputService.InputBegan, function(inp)
@@ -4840,12 +5008,15 @@ if not library.particle_cache.bg then library:InitParticles() end
                                 else
                                     callback()
                                 end
+                                library:update_keybind_list()
                             end
                         end)
 
                         flags[flag.."_KEY"] = setkey
+                        flags[flag .. "_MODE"] = setmode
 
                         set(default)
+                        setmode(key_mode)
 
                         keyholder.MouseButton1Click:Connect(function()
                             if not binding then
@@ -4868,8 +5039,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                             local mouse_pos = services.InputService:GetMouseLocation()
                             local local_pos = mouse_pos - holder_pos
                             library:show_mode_picker(UDim2.new(0, local_pos.X, 0, local_pos.Y), key_mode, function(mode_name)
-                                key_mode = mode_name
-                                library.flags[flag .. "_MODE"] = key_mode
+                                setmode(mode_name)
                             end)
                         end)
 
@@ -5672,6 +5842,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     end
                     local key_mode = mode;
                     library.flags[flag .. "_MODE"] = key_mode
+                    local entry = library:register_keybind(name, flag)
                     --
                     local holder = library:create("Square", {Transparency = 0, ZIndex = 15,Size = UDim2.new(1, 0, 0, 6),Parent = side});
                     --
@@ -5740,6 +5911,8 @@ if not library.particle_cache.bg then library:InitParticles() end
                             end
                             callback(false)
                         end
+                        library.flags[flag.."_KEY"] = key
+                        library:update_keybind_list()
                     end
 
                     local function setkey(newkey)
@@ -5749,24 +5922,25 @@ if not library.particle_cache.bg then library:InitParticles() end
                             newkey = Enum.UserInputType[tostring(newkey):gsub("Enum.UserInputType.", "")]
                         end
 
-                        if newkey ~= nil and not table.find(blacklist, newkey) then
-                            key = newkey
-                            library.flags[flag.."_KEY"] = newkey
+                    if newkey ~= nil and not table.find(blacklist, newkey) then
+                        key = newkey
+                        library.flags[flag.."_KEY"] = newkey
 
                             local text = (keys[newkey] or tostring(newkey):gsub("Enum.KeyCode.", ""))
 
                             keytext.Text = "["..text.."]"
                             library:change_object_theme(keytext, "Un-Selected_Text")
-                        else
-                            key = nil
-                            library.flags[flag.."_KEY"] = nil
+                    else
+                        key = nil
+                        library.flags[flag.."_KEY"] = nil
 
                             local text = "-"
 
-                            keytext.Text = "["..text.."]"
-                            library:change_object_theme(keytext, "Un-Selected_Text")
-                        end
+                        keytext.Text = "["..text.."]"
+                        library:change_object_theme(keytext, "Un-Selected_Text")
                     end
+                    library:update_keybind_list()
+                end
 
                     library:connect(services.InputService.InputBegan, function(inp)
                         if (inp.KeyCode == key or inp.UserInputType == key) and not binding then
@@ -5788,12 +5962,15 @@ if not library.particle_cache.bg then library:InitParticles() end
                             else
                                 callback()
                             end
+                            library:update_keybind_list()
                         end
                     end)
 
                     flags[flag.."_KEY"] = setkey
+                    flags[flag .. "_MODE"] = setmode
 
                     set(default)
+                    setmode(key_mode)
 
                     holder.MouseButton1Click:Connect(function()
                         if not binding then
@@ -5816,8 +5993,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         local mouse_pos = services.InputService:GetMouseLocation()
                         local local_pos = mouse_pos - holder_pos
                         library:show_mode_picker(UDim2.new(0, local_pos.X, 0, local_pos.Y), key_mode, function(mode_name)
-                            key_mode = mode_name
-                            library.flags[flag .. "_MODE"] = key_mode
+                            setmode(mode_name)
                         end)
                     end)
 
