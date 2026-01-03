@@ -345,7 +345,7 @@ function utility.dragify(object, title)
     flags[title .. ' position'] = set
     library.flags[title .. ' position'] = object.Position
 
-    local windowdrag = library:create("Square", { Parent = object, Visible = true, Transparency = 1, Color = Color3.new(0, 0, 0), Size = UDim2.new(1, 0, 0, 20), Position = UDim2.new(0, 0, 0, 0), Thickness = 0, Filled = true, ZIndex = drag_zindex })
+    local windowdrag = library:create("Square", { Parent = object, Visible = true, Transparency = 0, Color = Color3.new(0, 0, 0), Size = UDim2.new(1, 0, 0, 20), Position = UDim2.new(0, 0, 0, 0), Thickness = 0, Filled = true, ZIndex = drag_zindex })
     local dragoutline = library:create("Square", { Size = object.Size, Position = utility.getcenter(size.X, size.Y), Filled = false, Thickness = 1, Theme = "Accent", ZIndex = drag_zindex + 50, Visible = false })
 
     windowdrag.InputBegan:Connect(function(input)
@@ -621,7 +621,7 @@ function library:keybind_list_window(cfg)
 
     local window = library:create("Square", {
         Visible = visible,
-        Transparency = 1,
+        Transparency = 0,
         Color = Color3.fromRGB(0, 0, 0),
         Size = UDim2.new(0, size.X, 0, size.Y),
         Position = position,
