@@ -620,33 +620,58 @@ function library:keybind_list_window(cfg)
 
     local window = library:create("Square", {
         Visible = visible,
-        Transparency = 1,
-        Color = Color3.fromRGB(24, 24, 30),
+        Transparency = 0,
+        Color = Color3.fromRGB(0, 0, 0),
         Size = UDim2.new(0, size.X, 0, size.Y),
         Position = position,
-        Thickness = 1,
+        Thickness = 0,
         Filled = true,
         ZIndex = 120
     })
-    local outline = library:outline(window, Color3.fromRGB(48, 48, 60), 120)
-    library:outline(outline, Color3.fromRGB(0, 0, 0), 120)
+
+    local header_height = 24
+    local header = library:create("Square", {
+        Parent = window,
+        Transparency = 1,
+        Color = Color3.fromRGB(24, 24, 30),
+        Size = UDim2.new(1, 0, 0, header_height),
+        Position = UDim2.new(0, 0, 0, 0),
+        Thickness = 1,
+        Filled = true,
+        ZIndex = 121
+    })
+    local outline = library:outline(header, Color3.fromRGB(48, 48, 60), 121)
+    library:outline(outline, Color3.fromRGB(0, 0, 0), 121)
 
     local title = library:create("Text", {
-        Parent = window,
+        Parent = header,
         Text = cfg.title or "keybinds",
         Font = Drawing.Fonts.Plex,
         Size = 13,
-        Position = UDim2.new(0, 8, 0, 6),
+        Position = UDim2.new(0.5, 0, 0, 6),
         Theme = "Text",
         Outline = false,
-        ZIndex = 121
+        Center = true,
+        ZIndex = 122
     })
+
+    local header_accent = library:create("Square", {
+        Parent = header,
+        Transparency = 1,
+        Theme = "Accent",
+        Size = UDim2.new(1, -16, 0, 2),
+        Position = UDim2.new(0, 8, 1, -4),
+        Thickness = 1,
+        Filled = true,
+        ZIndex = 122
+    })
+    library:outline(header_accent, Color3.fromRGB(0, 0, 0), 122)
 
     local holder = library:create("Square", {
         Parent = window,
         Transparency = 1,
-        Size = UDim2.new(1, -16, 1, -28),
-        Position = UDim2.new(0, 8, 0, 22),
+        Size = UDim2.new(1, -16, 1, -(header_height + 10)),
+        Position = UDim2.new(0, 8, 0, header_height + 6),
         ZIndex = 121
     })
     holder:AddListLayout(6)
