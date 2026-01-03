@@ -58,6 +58,51 @@ Creates a tabbed sub-section inside the multisection.
 
 ---
 
+## Example: Building UI Elements
+
+```lua
+local window = library:new({
+    name = "Demo UI",
+    sub = "stable-live",
+    size = Vector2.new(600, 520)
+})
+
+local page = window:page({ name = "Main", default = true })
+local section = page:section({ name = "Controls", side = "left", size = "auto" })
+
+section:toggle({
+    name = "Enable Feature",
+    flag = "feature_enabled",
+    state = true,
+    callback = function(state) print("Toggle:", state) end
+})
+
+section:slider({
+    name = "Speed",
+    flag = "speed",
+    min = 0,
+    max = 100,
+    default = 50,
+    suffix = "%",
+    callback = function(value) print("Speed:", value) end
+})
+
+section:colorpicker({
+    name = "Accent Color",
+    flag = "accent_color",
+    default = Color3.fromRGB(255, 120, 200),
+    callback = function(color) print("Color:", color) end
+})
+
+section:keybind({
+    name = "Activate",
+    flag = "activate_key",
+    mode = "Hold",
+    default = Enum.KeyCode.E,
+    callback = function(active) print("Active:", active) end
+})
+```
+
 ## Widgets (Section Elements)
 
 All widgets are created via a `section` object (from either a normal section or a multisection). Most widgets support `flag` and `callback`.
@@ -223,7 +268,7 @@ The color picker UI exposes animation modes with these flags:
 
 **Interactions**
 - Left click: set the keybind.
-- Right click: cycle the mode (`Hold` → `Toggle` → `Always` → `Hold`).
+- Right click: open the mode picker (Hold/Toggle/Always).
 
 ### Textbox
 `section:textbox(cfg)`
