@@ -606,9 +606,13 @@ function library:keybind_list_window(cfg)
     cfg = cfg or {}
     local size = cfg.size or Vector2.new(240, 200)
     local position = cfg.position or UDim2.new(0, 30, 0, 300)
+    local visible = cfg.visible
+    if visible == nil then
+        visible = true
+    end
 
     local window = library:create("Square", {
-        Visible = true,
+        Visible = visible,
         Transparency = 1,
         Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(0, size.X, 0, size.Y),
@@ -3107,6 +3111,15 @@ if not library.particle_cache.bg then library:InitParticles() end
     end;
     --
     library.holder = window_outline;
+    --
+    if not library.keybind_list then
+        local keybind_list_cfg = cfg.keybind_list or {}
+        if keybind_list_cfg.visible == nil then
+            keybind_list_cfg.visible = false
+        end
+        library:keybind_list_window(keybind_list_cfg)
+    end
+    getgenv().keybinds = library.keybind_list
     --
     local window_inline = library:create("Square", {Parent = window_outline, Visible = true, Transparency = 0, Color = Color3.fromRGB(24, 24, 30), Size = UDim2.new(1,-10,1,-10), Position = UDim2.new(0,5,0,5), Thickness = 1, Filled = true, ZIndex = 11})
     --
