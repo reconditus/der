@@ -247,8 +247,8 @@ local drawing = {} do
                         end
 
                         if input.UserInputType == Enum.UserInputType.MouseButton2 and not mouseoverhighersquare(obj) then
-                            if signals.MouseButton2Clicked then
-                                signals.MouseButton2Clicked:Fire()
+                            if signals.MouseButton2Click then
+                                signals.MouseButton2Click:Fire()
                             end
 
                             if signals.MouseButton2Up then
