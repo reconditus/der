@@ -571,17 +571,24 @@ function library:add_keybind_entry(entry)
     if not self.keybind_list or not self.keybind_list.holder then
         return
     end
-    local text_obj = library:create("Text", {
+    local row = library:create("Square", {
         Parent = self.keybind_list.holder,
+        Transparency = 1,
+        Size = UDim2.new(1, 0, 0, 16),
+        ZIndex = self.keybind_list.zindex + 1
+    })
+    local text_obj = library:create("Text", {
+        Parent = row,
         Text = self:get_keybind_display(entry.flag, entry.name),
         Font = Drawing.Fonts.Plex,
         Size = 13,
-        Position = UDim2.new(0, 2, 0, 0),
+        Position = UDim2.new(0, 2, 0, 1),
         Theme = "Un-Selected_Text",
         Outline = false,
         ZIndex = self.keybind_list.zindex + 2
     })
     entry.text = text_obj
+    entry.row = row
 end
 
 function library:update_keybind_list()
