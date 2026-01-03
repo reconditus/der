@@ -3092,17 +3092,17 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local state = false
                     local binding
                     local mode_window = library:create("Square", {
-                        Parent = holder,
+                        Parent = library.holder,
                         Size = UDim2.new(0, 80, 0, 54),
-                        Position = UDim2.new(1, -80, 1, 6),
+                        Position = UDim2.new(0, 0, 0, 0),
                         Visible = false,
                         Color = Color3.fromRGB(24, 24, 30),
                         Thickness = 1,
                         Filled = true,
-                        ZIndex = 16
+                        ZIndex = 200
                     })
-                    local mode_outline = library:outline(mode_window, Color3.fromRGB(48, 48, 60), 16)
-                    library:outline(mode_outline, Color3.new(0, 0, 0), 16)
+                    local mode_outline = library:outline(mode_window, Color3.fromRGB(48, 48, 60), 200)
+                    library:outline(mode_outline, Color3.new(0, 0, 0), 200)
 
                     local mode_holder = library:create("Square", {
                         Parent = mode_window,
@@ -3150,17 +3150,17 @@ if not library.particle_cache.bg then library:InitParticles() end
                     end
                     update_mode_visuals()
                     local mode_window = library:create("Square", {
-                        Parent = keyholder,
+                        Parent = library.holder,
                         Size = UDim2.new(0, 80, 0, 54),
-                        Position = UDim2.new(0, 0, 1, 6),
+                        Position = UDim2.new(0, 0, 0, 0),
                         Visible = false,
                         Color = Color3.fromRGB(24, 24, 30),
                         Thickness = 1,
                         Filled = true,
-                        ZIndex = 16
+                        ZIndex = 200
                     })
-                    local mode_outline = library:outline(mode_window, Color3.fromRGB(48, 48, 60), 16)
-                    library:outline(mode_outline, Color3.new(0, 0, 0), 16)
+                    local mode_outline = library:outline(mode_window, Color3.fromRGB(48, 48, 60), 200)
+                    library:outline(mode_outline, Color3.new(0, 0, 0), 200)
 
                     local mode_holder = library:create("Square", {
                         Parent = mode_window,
@@ -3328,6 +3328,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                     keyholder.MouseButton2Click:Connect(function()
                         update_mode_visuals()
+                        mode_window.Position = UDim2.new(0, keyholder.AbsolutePosition.X, 0, keyholder.AbsolutePosition.Y + keyholder.AbsoluteSize.Y + 6)
                         mode_window.Visible = not mode_window.Visible
                     end)
 
@@ -4154,17 +4155,17 @@ if not library.particle_cache.bg then library:InitParticles() end
                 local state = false
                 local binding
                 local mode_window = library:create("Square", {
-                    Parent = holder,
+                    Parent = library.holder,
                     Size = UDim2.new(0, 80, 0, 54),
-                    Position = UDim2.new(1, -80, 1, 6),
+                    Position = UDim2.new(0, 0, 0, 0),
                     Visible = false,
                     Color = Color3.fromRGB(24, 24, 30),
                     Thickness = 1,
                     Filled = true,
-                    ZIndex = 16
+                    ZIndex = 200
                 })
-                local mode_outline = library:outline(mode_window, Color3.fromRGB(48, 48, 60), 16)
-                library:outline(mode_outline, Color3.new(0, 0, 0), 16)
+                local mode_outline = library:outline(mode_window, Color3.fromRGB(48, 48, 60), 200)
+                library:outline(mode_outline, Color3.new(0, 0, 0), 200)
 
                 local mode_holder = library:create("Square", {
                     Parent = mode_window,
@@ -4322,6 +4323,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                 holder.MouseButton2Click:Connect(function()
                     update_mode_visuals()
+                    mode_window.Position = UDim2.new(0, holder.AbsolutePosition.X, 0, holder.AbsolutePosition.Y + holder.AbsoluteSize.Y + 6)
                     mode_window.Visible = not mode_window.Visible
                 end)
 
@@ -4832,17 +4834,17 @@ if not library.particle_cache.bg then library:InitParticles() end
                         local state = false
                         local binding
                         local mode_window = library:create("Square", {
-                            Parent = keyholder,
+                            Parent = library.holder,
                             Size = UDim2.new(0, 80, 0, 54),
-                            Position = UDim2.new(0, 0, 1, 6),
+                            Position = UDim2.new(0, 0, 0, 0),
                             Visible = false,
                             Color = Color3.fromRGB(24, 24, 30),
                             Thickness = 1,
                             Filled = true,
-                            ZIndex = 16
+                            ZIndex = 200
                         })
-                        local mode_outline = library:outline(mode_window, Color3.fromRGB(48, 48, 60), 16)
-                        library:outline(mode_outline, Color3.new(0, 0, 0), 16)
+                        local mode_outline = library:outline(mode_window, Color3.fromRGB(48, 48, 60), 200)
+                        library:outline(mode_outline, Color3.new(0, 0, 0), 200)
 
                         local mode_holder = library:create("Square", {
                             Parent = mode_window,
@@ -5000,6 +5002,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                         keyholder.MouseButton2Click:Connect(function()
                             update_mode_visuals()
+                            mode_window.Position = UDim2.new(0, keyholder.AbsolutePosition.X, 0, keyholder.AbsolutePosition.Y + keyholder.AbsoluteSize.Y + 6)
                             mode_window.Visible = not mode_window.Visible
                         end)
 
@@ -5943,6 +5946,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
                     holder.MouseButton2Click:Connect(function()
                         update_mode_visuals()
+                        mode_window.Position = UDim2.new(0, holder.AbsolutePosition.X, 0, holder.AbsolutePosition.Y + holder.AbsoluteSize.Y + 6)
                         mode_window.Visible = not mode_window.Visible
                     end)
 
