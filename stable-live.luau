@@ -598,13 +598,36 @@ function library:update_keybind_list()
     if not self.keybind_list then
         return
     end
+    local visible_count = 0
     for _, entry in ipairs(self.keybinds) do
         if entry.text then
-            entry.text.Text = self:get_keybind_display(entry.flag, entry.name)
-            local mode = library.flags[entry.flag .. "_MODE"] or "Hold"
-            local active = mode == "Always" or library.flags[entry.flag] == true
-            library:change_object_theme(entry.text, active and "Accent" or "Un-Selected_Text")
+            local key = library.flags[entry.flag .. "_KEY"]
+            local has_key = key ~= nil
+            if entry.row then
+                entry.row.Visible = has_key
+            end
+            if has_key then
+                visible_count = visible_count + 1
+                entry.text.Text = self:get_keybind_display(entry.flag, entry.name)
+                local mode = library.flags[entry.flag .. "_MODE"] or "Hold"
+                local active = mode == "Always" or library.flags[entry.flag] == true
+                library:change_object_theme(entry.text, active and "Accent" or "Un-Selected_Text")
+            end
         end
+    end
+
+    if self.keybind_list.window and self.keybind_list.holder then
+        local row_height = self.keybind_list.row_height or 16
+        local padding = self.keybind_list.padding or 6
+        local header_height = self.keybind_list.header_height or 24
+        local list_height = visible_count > 0 and (visible_count * row_height + (visible_count - 1) * padding) or 0
+        local total_height = header_height + 10 + list_height
+        local min_height = header_height + 10
+        if total_height < min_height then
+            total_height = min_height
+        end
+        self.keybind_list.window.Size = UDim2.new(0, self.keybind_list.width, 0, total_height)
+        self.keybind_list.holder.Size = UDim2.new(1, -16, 0, list_height)
     end
 end
 
@@ -623,14 +646,16 @@ function library:keybind_list_window(cfg)
 
     local window = library:create("Square", {
         Visible = visible,
-        Transparency = 0,
-        Color = Color3.fromRGB(0, 0, 0),
+        Transparency = 1,
+        Color = Color3.fromRGB(24, 24, 30),
         Size = UDim2.new(0, size.X, 0, size.Y),
         Position = position,
-        Thickness = 0,
-        Filled = false,
+        Thickness = 1,
+        Filled = true,
         ZIndex = 120
     })
+    local window_outline = library:outline(window, Color3.fromRGB(48, 48, 60), 120)
+    library:outline(window_outline, Color3.fromRGB(0, 0, 0), 120)
 
     local header_height = 24
     local header = library:create("Square", {
@@ -678,7 +703,15 @@ function library:keybind_list_window(cfg)
 
     utility.dragify(window, "keybind list")
 
-    self.keybind_list = {window = window, holder = holder, zindex = 120}
+    self.keybind_list = {
+        window = window,
+        holder = holder,
+        zindex = 120,
+        width = size.X,
+        header_height = header_height,
+        row_height = 16,
+        padding = 6
+    }
 
     for _, entry in ipairs(self.keybinds) do
         self:add_keybind_entry(entry)
