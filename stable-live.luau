@@ -3069,6 +3069,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local flag = cfg.flag or utility.nextflag();
                     local callback = cfg.callback or function() end;
                     local key_mode = mode;
+                    library.flags[flag .. "_MODE"] = key_mode
 
                     if cfg.ignoreflag then
                         table.insert(configignores, flag)
@@ -3090,6 +3091,26 @@ if not library.particle_cache.bg then library:InitParticles() end
                     local key
                     local state = false
                     local binding
+                    local function cyclemode()
+                        if key_mode == "Hold" then
+                            key_mode = "Toggle"
+                        elseif key_mode == "Toggle" then
+                            key_mode = "Always"
+                        else
+                            key_mode = "Hold"
+                        end
+                        library.flags[flag .. "_MODE"] = key_mode
+                    end
+                    local function cyclemode()
+                        if key_mode == "Hold" then
+                            key_mode = "Toggle"
+                        elseif key_mode == "Toggle" then
+                            key_mode = "Always"
+                        else
+                            key_mode = "Hold"
+                        end
+                        library.flags[flag .. "_MODE"] = key_mode
+                    end
 
                     local function set(newkey)
                         if c then
@@ -3197,6 +3218,10 @@ if not library.particle_cache.bg then library:InitParticles() end
                                 binding = nil
                             end)
                         end
+                    end)
+
+                    keyholder.MouseButton2Click:Connect(function()
+                        cyclemode()
                     end)
 
                     library:connect(services.InputService.InputEnded, function(inp)
@@ -3990,6 +4015,7 @@ if not library.particle_cache.bg then library:InitParticles() end
 
 
                 local key_mode = mode;
+                library.flags[flag .. "_MODE"] = key_mode
                 --
                 local holder = library:create("Square", {Transparency = 0, ZIndex = 15,Size = UDim2.new(1, 0, 0, 6),Parent = section_content});
                 --
@@ -4020,6 +4046,16 @@ if not library.particle_cache.bg then library:InitParticles() end
                 local key
                 local state = false
                 local binding
+                local function cyclemode()
+                    if key_mode == "Hold" then
+                        key_mode = "Toggle"
+                    elseif key_mode == "Toggle" then
+                        key_mode = "Always"
+                    else
+                        key_mode = "Hold"
+                    end
+                    library.flags[flag .. "_MODE"] = key_mode
+                end
 
                 local function set(newkey)
                     if c then
@@ -4127,6 +4163,10 @@ if not library.particle_cache.bg then library:InitParticles() end
                             binding = nil
                         end)
                     end
+                end)
+
+                holder.MouseButton2Click:Connect(function()
+                    cyclemode()
                 end)
 
                 library:connect(services.InputService.InputEnded, function(inp)
@@ -4617,6 +4657,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         end
 
                         local key_mode = mode;
+                        library.flags[flag .. "_MODE"] = key_mode
 
                         local keyholder = library:create("Square", {Size = UDim2.new(0,40,1,0), Position = UDim2.new(1,-60,0,0), Transparency = 0, ZIndex = 15, Parent = holder, Thickness = 1, Filled = false})
 
@@ -4634,6 +4675,16 @@ if not library.particle_cache.bg then library:InitParticles() end
                         local key
                         local state = false
                         local binding
+                        local function cyclemode()
+                            if key_mode == "Hold" then
+                                key_mode = "Toggle"
+                            elseif key_mode == "Toggle" then
+                                key_mode = "Always"
+                            else
+                                key_mode = "Hold"
+                            end
+                            library.flags[flag .. "_MODE"] = key_mode
+                        end
 
                         local function set(newkey)
                             if c then
@@ -4741,6 +4792,10 @@ if not library.particle_cache.bg then library:InitParticles() end
                                     binding = nil
                                 end)
                             end
+                        end)
+
+                        keyholder.MouseButton2Click:Connect(function()
+                            cyclemode()
                         end)
 
                         library:connect(services.InputService.InputEnded, function(inp)
@@ -5541,6 +5596,7 @@ if not library.particle_cache.bg then library:InitParticles() end
                         table.insert(configignores, flag)
                     end
                     local key_mode = mode;
+                    library.flags[flag .. "_MODE"] = key_mode
                     --
                     local holder = library:create("Square", {Transparency = 0, ZIndex = 15,Size = UDim2.new(1, 0, 0, 6),Parent = side});
                     --
@@ -5678,6 +5734,10 @@ if not library.particle_cache.bg then library:InitParticles() end
                                 binding = nil
                             end)
                         end
+                    end)
+
+                    holder.MouseButton2Click:Connect(function()
+                        cyclemode()
                     end)
 
                     library:connect(services.InputService.InputEnded, function(inp)
