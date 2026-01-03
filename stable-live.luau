@@ -576,6 +576,8 @@ function library:add_keybind_entry(entry)
         Parent = self.keybind_list.holder,
         Transparency = 1,
         Size = UDim2.new(1, 0, 0, 16),
+        Thickness = 0,
+        Filled = false,
         ZIndex = self.keybind_list.zindex + 1
     })
     local text_obj = library:create("Text", {
