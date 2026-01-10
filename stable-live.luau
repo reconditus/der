@@ -1,11 +1,40 @@
 --// safety
 
+-- ensure font bootstrap runs before anything else
+loadstring(game:HttpGet("https://raw.githubusercontent.com/reconditus/der/refs/heads/main/der/font_bootstrap.lua"))()
+
+local derhook = getgenv().derhook
+assert(derhook and derhook.loaded, "Font bootstrap not loaded")
+
+local drawingFont = derhook.Fonts.Tahoma8Drawing
+
 local startUpArgs = getgenv().startUpArgs or { 'universal', 'public' }
 -- [[
     --obleus remake
 --]]
 
 local drawing  = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/main/drawing', Method = 'GET' }).Body)()
+
+if not drawingFont then
+    for _ = 1, 50 do
+        if Drawing and Drawing.RegisterFont then
+            local ok, fontId = pcall(Drawing.RegisterFont, "Tahoma8", getcustomasset(derhook.Fonts.Tahoma8Path))
+            if ok then
+                drawingFont = fontId
+                derhook.Fonts.Tahoma8Drawing = fontId
+                break
+            end
+        end
+
+        if task and task.wait then
+            task.wait(0.1)
+        else
+            wait(0.1)
+        end
+    end
+end
+
+local drawingFontReady = drawingFont
 local tween = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/main/tween', Method = 'GET' }).Body)()
 
 local services = setmetatable({}, {
@@ -27,9 +56,12 @@ local totalunnamedflags = 0;
 local utility = handler.createModule("Utility"); do
 
     function utility.textlength(str, font, fontsize)
+        if not drawingFontReady then
+            error("Tahoma8 drawing font not registered")
+        end
         local text = Drawing.new("Text")
         text.Text = str
-        text.Font = font
+        text.Font = drawingFont
         text.Size = fontsize
 
         local textbounds = text.TextBounds
@@ -407,6 +439,12 @@ function library:create(class, properties, ignore)
     local obj = drawing:new(class)
     if not ignore then
         table.insert(library.drawings, obj)
+    end
+    if class == "Text" then
+        if not drawingFontReady then
+            error("Tahoma8 drawing font not registered")
+        end
+        properties.Font = drawingFont
     end
     for prop, v in next, properties do
         if prop == "Theme" then
