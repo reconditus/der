@@ -15,6 +15,7 @@ local services = setmetatable({}, {
     end
 })
 local HttpService = game:GetService("HttpService")
+local DEFAULT_FONT_ID = Drawing.Fonts.Plex
 local FONT_ROOT = "der_test"
 local FONT_DIR = FONT_ROOT .. "/fonts"
 local FONT_TTF = FONT_DIR .. "/test.ttf"
@@ -68,7 +69,7 @@ local utility = handler.createModule("Utility"); do
     function utility.textlength(str, font, fontsize)
         local text = Drawing.new("Text")
         text.Text = str
-        text.Font = library.font_id
+        text.Font = (library and library.font_id) or DEFAULT_FONT_ID
         text.Size = fontsize
         local fontface = typeof(font) == "Font" and font or library.font_face
         if fontface then
