@@ -68,11 +68,14 @@ local utility = handler.createModule("Utility"); do
     function utility.textlength(str, font, fontsize)
         local text = Drawing.new("Text")
         text.Text = str
-        if typeof(font) == "Font" then
-            font = Drawing.Fonts.Plex
-        end
-        text.Font = font
+        text.Font = library.font_id
         text.Size = fontsize
+        local fontface = typeof(font) == "Font" and font or library.font_face
+        if fontface then
+            pcall(function()
+                text.FontFace = fontface
+            end)
+        end
 
         local textbounds = text.TextBounds
         text:Remove()
