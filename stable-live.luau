@@ -21,9 +21,8 @@ local FONT_URL = "https://raw.githubusercontent.com/reconditus/fonts/main/fs-tah
 
 local function loadUIFont()
     local required = {
-        "isfile", "writefile", "readfile",
-        "isfolder", "makefolder",
-        "getcustomasset"
+        "isfile", "writefile",
+        "isfolder", "makefolder"
     }
 
     for _, fn in ipairs(required) do
@@ -31,9 +30,6 @@ local function loadUIFont()
             error(("Missing required executor function: %s"):format(fn))
         end
     end
-
-    local identifyexecutor = identifyexecutor or function() return "unknown", "unknown" end
-    local HttpService = game:GetService("HttpService")
 
     local function ensureFolder(path)
         if not isfolder(path) then
@@ -44,59 +40,16 @@ local function loadUIFont()
     ensureFolder(FONT_FOLDER)
     ensureFolder(FONT_FOLDER .. "/fonts")
 
-    local _, exeVer = identifyexecutor()
-    local verPath = FONT_FOLDER .. "/version.txt"
-
-    if not isfile(verPath) then
-        writefile(verPath, tostring(exeVer))
+    local ttfPath = ("%s/fonts/%s.ttf"):format(FONT_FOLDER, FONT_NAME)
+    if not isfile(ttfPath) then
+        writefile(ttfPath, game:HttpGet(FONT_URL))
     end
 
-    if readfile(verPath) ~= tostring(exeVer) then
-        if isfolder(FONT_FOLDER .. "/fonts") then
-            if type(delfolder) == "function" then
-                delfolder(FONT_FOLDER .. "/fonts")
-            end
-        end
-        ensureFolder(FONT_FOLDER .. "/fonts")
-
-        if type(delfile) == "function" then
-            delfile(verPath)
-        end
-        writefile(verPath, tostring(exeVer))
+    if Drawing and Drawing.Fonts and type(Drawing.Fonts.Register) == "function" then
+        return Drawing.Fonts:Register(FONT_NAME, ttfPath)
     end
 
-    local function httpGetBinary(url)
-        return game:HttpGet(url)
-    end
-
-    local function appendTTF(name, ttfBytes)
-        local basePath = ("%s/fonts/%s"):format(FONT_FOLDER, name)
-        local ttfPath = basePath .. ".ttf"
-        local jsonPath = basePath .. ".json"
-
-        if not isfile(ttfPath) then
-            writefile(ttfPath, ttfBytes)
-        end
-
-        if isfile(jsonPath) and type(delfile) == "function" then
-            delfile(jsonPath)
-        end
-
-        local manifest = {
-            name = name,
-            faces = {{
-                name = "Regular",
-                style = "normal",
-                weight = 400,
-                assetId = getcustomasset(ttfPath),
-            }}
-        }
-
-        writefile(jsonPath, HttpService:JSONEncode(manifest))
-        return Font.new(getcustomasset(jsonPath), Enum.FontWeight.Regular, Enum.FontStyle.Normal)
-    end
-
-    return appendTTF(FONT_NAME, httpGetBinary(FONT_URL))
+    return (Drawing and Drawing.Fonts and Drawing.Fonts.Plex) or 2
 end
 
 local uiFont = loadUIFont()
