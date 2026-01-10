@@ -452,6 +452,11 @@ function library:create(class, properties, ignore)
     if not ignore then
         table.insert(library.drawings, obj)
     end
+    if class == "Text" and library.font_face then
+        pcall(function()
+            obj.FontFace = library.font_face
+        end)
+    end
     for prop, v in next, properties do
         if prop == "Theme" then
             themeobjects[obj] = v
