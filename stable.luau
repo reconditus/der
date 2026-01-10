@@ -1,5 +1,8 @@
 --// dreya
 
+-- ensure font bootstrap runs before anything else
+require(script.font_bootstrap)
+
 local startUpArgs = getgenv().startUpArgs or { 'universal', 'public' }
 -- [[
     --obleus remake
