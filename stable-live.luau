@@ -1,11 +1,29 @@
 --// safety
 
+-- ensure font bootstrap runs before anything else
+loadstring(game:HttpGet("https://raw.githubusercontent.com/reconditus/der/refs/heads/main/der/font_bootstrap.lua"))()
+
+local derhook = getgenv().derhook
+assert(derhook and derhook.loaded, "Font bootstrap not loaded")
+
+local drawingFont = derhook.Fonts.Tahoma8Drawing
+
 local startUpArgs = getgenv().startUpArgs or { 'universal', 'public' }
 -- [[
     --obleus remake
 --]]
 
 local drawing  = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/main/drawing', Method = 'GET' }).Body)()
+
+if not drawingFont and Drawing and Drawing.RegisterFont then
+    local ok, fontId = pcall(Drawing.RegisterFont, "Tahoma8", getcustomasset(derhook.Fonts.Tahoma8Path))
+    if ok then
+        drawingFont = fontId
+        derhook.Fonts.Tahoma8Drawing = fontId
+    end
+end
+
+assert(drawingFont, "Tahoma8 drawing font not registered")
 local tween = loadstring(request({ Url = 'https://raw.githubusercontent.com/reconditus/der/refs/heads/main/tween', Method = 'GET' }).Body)()
 
 local services = setmetatable({}, {
@@ -29,7 +47,7 @@ local utility = handler.createModule("Utility"); do
     function utility.textlength(str, font, fontsize)
         local text = Drawing.new("Text")
         text.Text = str
-        text.Font = font
+        text.Font = drawingFont
         text.Size = fontsize
 
         local textbounds = text.TextBounds
@@ -407,6 +425,9 @@ function library:create(class, properties, ignore)
     local obj = drawing:new(class)
     if not ignore then
         table.insert(library.drawings, obj)
+    end
+    if class == "Text" then
+        properties.Font = drawingFont
     end
     for prop, v in next, properties do
         if prop == "Theme" then
