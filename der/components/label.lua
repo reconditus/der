@@ -1,7 +1,9 @@
 -- der/components/label.lua
 
 local Theme = require(script.Parent.Parent.core.theme)
-local Fonts = require(script.Parent.Parent.core.fonts)
+local derhook = getgenv().derhook
+
+assert(derhook and derhook.loaded, "Font bootstrap not loaded")
 
 return function(props)
     local label = Instance.new("TextLabel")
@@ -10,7 +12,7 @@ return function(props)
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.TextYAlignment = Enum.TextYAlignment.Center
 
-    label.FontFace = Fonts.get(Theme.Fonts.Body)
+    label.FontFace = derhook.Fonts[Theme.Fonts.Body]
     label.TextSize = Theme.TextSize.Body
     label.TextColor3 = Theme.Colors.Text
     label.Text = props.Text or ""
