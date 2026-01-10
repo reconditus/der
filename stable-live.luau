@@ -1,7 +1,7 @@
 --// safety
 
 -- ensure font bootstrap runs before anything else
-loadstring(game:HttpGet("https://raw.githubusercontent.com/reconditus/der/refs/heads/main/der/font_bootstrap.lua"))()
+loadstring(game:HttpGet("https://github.com/reconditus/der/blob/codex/add-executor-based-ttf-font-loading/der/font_bootstrap.lua"))()
 
 local derhook = getgenv().derhook
 assert(derhook and derhook.loaded, "Font bootstrap not loaded")
